@@ -1,0 +1,1 @@
+The xsd file used to create the JAXBmodel classes should not have any mixed property in any xml element.
