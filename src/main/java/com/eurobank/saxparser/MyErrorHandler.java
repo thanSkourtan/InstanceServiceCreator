@@ -1,4 +1,4 @@
-package com.eurobank;
+package com.eurobank.saxparser;
 
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
@@ -13,7 +13,7 @@ public class MyErrorHandler implements ErrorHandler {
 
     private PrintStream out;
 
-    MyErrorHandler(PrintStream out) {
+    public MyErrorHandler(PrintStream out) {
         this.out = out;
     }
 

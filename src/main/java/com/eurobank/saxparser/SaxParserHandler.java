@@ -131,6 +131,9 @@ public class SaxParserHandler extends DefaultHandler {
 
 
     public void endDocument() throws SAXException {
+
+        //call a method to create the classes in here
+
         System.out.println("llala");
     }
 

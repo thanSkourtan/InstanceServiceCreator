@@ -7,6 +7,7 @@ package com.eurobank;
 
 import javax.xml.parsers.*;
 
+import com.eurobank.saxparser.MyErrorHandler;
 import com.eurobank.saxparser.SaxParserHandler;
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
