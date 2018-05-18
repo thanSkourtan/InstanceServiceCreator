@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="BRM" type="BRMType"/>
+  <xs:complexType name="IfType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="OnExit" use="optional"/>
+        <xs:attribute type="xs:string" name="OnTrue" use="optional"/>
+        <xs:attribute type="xs:string" name="OnFalse" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="DataSetType">
+    <xs:sequence>
+      <xs:element type="FieldType" name="Field" maxOccurs="unbounded" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>&lt;Field Name="dummyLoanMovements" MatchDataSetName="LoanMovement"/</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="Name" use="optional"/>
+    <xs:attribute type="xs:string" name="Type" use="optional"/>
+    <xs:attribute type="xs:string" name="FormatAs" use="optional"/>
+    <xs:attribute type="xs:string" name="DefaultEncode" use="optional"/>
+    <xs:attribute type="xs:string" name="MatchTargetField" use="optional"/>
+    <xs:attribute type="xs:string" name="BeanClass" use="optional"/>
+    <xs:attribute type="xs:string" name="RecordLength" use="optional"/>
+    <xs:attribute type="xs:string" name="MaxElements" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="ConnectorOutputType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="DataSetName" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="ConnectorInputType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="DataSetName" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="BeanType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="BeanClass" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="ServiceType">
+    <xs:sequence>
+      <xs:element type="ISERIESJ2CType" name="ISERIESJ2C"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="StepType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="Name" use="optional"/>
+        <xs:attribute type="xs:string" name="ServiceName" use="optional"/>
+        <xs:attribute type="xs:string" name="OnSuccess" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="BRMType">
+    <xs:sequence>
+      <xs:element type="BusinessRequestType" name="BusinessRequest" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="OperationType">
+    <xs:sequence>
+      <xs:element type="StepType" name="Step"/>
+      <xs:element type="IfType" name="If"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ISERIESJ2CType">
+    <xs:sequence>
+      <xs:element type="ConnectorInputType" name="ConnectorInput"/>
+      <xs:element type="ConnectorOutputType" name="ConnectorOutput"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="Name" use="optional"/>
+    <xs:attribute type="xs:string" name="UseService" use="optional"/>
+    <xs:attribute type="xs:string" name="Transaction" use="optional"/>
+    <xs:attribute type="xs:string" name="runInetStart" use="optional"/>
+    <xs:attribute type="xs:string" name="TransactionID" use="optional"/>
+    <xs:attribute type="xs:string" name="UserExitClass" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="BusinessRequestType">
+    <xs:sequence>
+      <xs:element type="BeanType" name="Bean"/>
+      <xs:element type="DataSetType" name="DataSet" maxOccurs="unbounded" minOccurs="0"/>
+      <xs:element type="ServiceType" name="Service"/>
+      <xs:element type="OperationType" name="Operation" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="Name" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="FieldType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="Name" use="optional"/>
+        <xs:attribute type="xs:string" name="HostFormatAs" use="optional"/>
+        <xs:attribute type="xs:string" name="FormatClassParm" use="optional"/>
+        <xs:attribute type="xs:string" name="Mandatory" use="optional"/>
+        <xs:attribute type="xs:string" name="MatchDataSetName" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+</xs:schema>
