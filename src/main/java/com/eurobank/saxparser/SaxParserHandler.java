@@ -128,13 +128,16 @@ public class SaxParserHandler extends DefaultHandler {
     }
 
 
+    public void endElement (String uri, String localName, String qName) throws SAXException
+    {
+        if(serviceFound && localName.equals("BusinessRequest")) {
+            serviceFound = false;
+        }
+    }
 
 
     public void endDocument() throws SAXException {
 
-        //call a method to create the classes in here
-
-        System.out.println("llala");
     }
 
 

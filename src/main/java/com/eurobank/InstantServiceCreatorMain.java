@@ -7,7 +7,6 @@ package com.eurobank;
 
 import javax.xml.parsers.*;
 
-import com.eurobank.filegenerators.WebServiceGenerator;
 import com.eurobank.saxparser.MyErrorHandler;
 import com.eurobank.saxparser.SaxParserHandler;
 import org.xml.sax.*;
@@ -37,6 +36,17 @@ public class InstantServiceCreatorMain extends DefaultHandler{
         System.exit(1);
     }
 
+    public static void parseXmlFile(String filename) throws IOException, SAXException, ParserConfigurationException{
+        SAXParserFactory spf = SAXParserFactory.newInstance();
+        spf.setNamespaceAware(true);
+        SAXParser saxParser = spf.newSAXParser();
+        XMLReader xmlReader = saxParser.getXMLReader();
+        xmlReader.setContentHandler(new SaxParserHandler(serviceName));
+        xmlReader.parse(convertToFileURL(filename));
+        xmlReader.setErrorHandler(new MyErrorHandler(System.err));
+
+    }
+
     public static void main(String[] args) throws Exception{
 
         String filename = null;
@@ -48,18 +58,11 @@ public class InstantServiceCreatorMain extends DefaultHandler{
         filename = args[0];
         serviceName = args[1];
 
+//      parseXmlFile(filename);
 
 
-//        SAXParserFactory spf = SAXParserFactory.newInstance();
-//        spf.setNamespaceAware(true);
-//        SAXParser saxParser = spf.newSAXParser();
-//        XMLReader xmlReader = saxParser.getXMLReader();
-//        xmlReader.setContentHandler(new SaxParserHandler(serviceName));
-//        xmlReader.parse(convertToFileURL(filename));
-//        xmlReader.setErrorHandler(new MyErrorHandler(System.err));
-
-        WebServiceGenerator wsg = new WebServiceGenerator();
-        wsg.get().buildData().writeFile();
+//      WebServiceGenerator wsg = new WebServiceGenerator();
+//      wsg.get().buildData().writeFile();
 
     }
 }
