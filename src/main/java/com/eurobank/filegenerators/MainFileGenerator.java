@@ -1,9 +1,12 @@
 package com.eurobank.filegenerators;
 
+import com.eurobank.JAXBmodel.BusinessRequestType;
 import com.sun.codemodel.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * Created by v-askourtaniotis on 21/5/2018. mailTo: thanskourtan@gmail.com
@@ -11,14 +14,35 @@ import java.io.IOException;
 public class MainFileGenerator {
 
 
-    public static void generateFile () {
-        JCodeModel codeModel = new JCodeModel();
-        JPackage jp = codeModel._package("com.sookocheff.example");
-        try{
-            JDefinedClass jc = jp._class("Thanos");
+    public static void generateFile (Object dataFromXml) {
+        if(!(dataFromXml instanceof BusinessRequestType)) {
+            System.exit(-1);
+        }
 
+        BusinessRequestType data = (BusinessRequestType) dataFromXml;
+
+        JCodeModel codeModel = new JCodeModel();
+
+        JCodeModel dummyModel = new JCodeModel(); // A model for the classes that we do not want to be created.
+        JPackage dummyPackage = dummyModel._package("it.ibm.eurobank.bean.base");
+
+
+        //Create bean class
+        String beanClassFullName = data.getBean().getBeanClass();
+        String beanPackage = beanClassFullName.substring(0, beanClassFullName.lastIndexOf('.'));
+        String beanClass = beanClassFullName.substring(beanClassFullName.lastIndexOf('.') + 1, beanClassFullName.length());
+        JPackage jp = codeModel._package(beanPackage);
+
+
+
+        System.out.println("lala");
+        try{
+            JDefinedClass jc = jp._class(beanClass);
+            JDefinedClass superclass = dummyPackage._class("ABaseAS400Bean");
+
+            jc._extends(superclass);
             //Adds javadoc
-            jc.javadoc().add("Generated class.");
+            jc.javadoc().add("Automatically created by Instant Service Creator.");
 
             //Adds variable
             JFieldVar constantField = jc.field(JMod.PUBLIC | JMod.FINAL | JMod.STATIC, String.class, "CONSTANT", JExpr.lit("VALUE"));

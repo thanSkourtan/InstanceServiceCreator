@@ -64,11 +64,11 @@ public class InstantServiceCreatorMain extends DefaultHandler{
         filename = args[0];
         serviceName = args[1];
         // TODO: test the parser here
-//        BusinessRequestType root = parseXmlFile(filename);
+        BusinessRequestType dataFromXml = parseXmlFile(filename);
 
         System.out.println("lala");
 
-        MainFileGenerator.generateFile();
+        MainFileGenerator.generateFile(dataFromXml);
 //      WebServiceGenerator wsg = new WebServiceGenerator();
 //      wsg.get().buildData().writeFile();
 
