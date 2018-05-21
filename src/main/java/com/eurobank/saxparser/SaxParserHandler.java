@@ -140,14 +140,11 @@ public class SaxParserHandler extends DefaultHandler {
 
     }
 
+    public BusinessRequestType getRoot() {
+        return root;
+    }
 
-
-
-
-
-
-
-
-
-
+    public void setRoot(BusinessRequestType root) {
+        this.root = root;
+    }
 }

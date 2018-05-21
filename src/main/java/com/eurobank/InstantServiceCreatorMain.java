@@ -7,6 +7,7 @@ package com.eurobank;
 
 import javax.xml.parsers.*;
 
+import com.eurobank.JAXBmodel.BusinessRequestType;
 import com.eurobank.saxparser.MyErrorHandler;
 import com.eurobank.saxparser.SaxParserHandler;
 import org.xml.sax.*;
@@ -36,16 +37,19 @@ public class InstantServiceCreatorMain extends DefaultHandler{
         System.exit(1);
     }
 
-    public static void parseXmlFile(String filename) throws IOException, SAXException, ParserConfigurationException{
+    public static BusinessRequestType parseXmlFile(String filename) throws IOException, SAXException, ParserConfigurationException{
         SAXParserFactory spf = SAXParserFactory.newInstance();
         spf.setNamespaceAware(true);
         SAXParser saxParser = spf.newSAXParser();
         XMLReader xmlReader = saxParser.getXMLReader();
-        xmlReader.setContentHandler(new SaxParserHandler(serviceName));
+        SaxParserHandler saxParserHandler = new SaxParserHandler(serviceName);
+        xmlReader.setContentHandler(saxParserHandler);
         xmlReader.parse(convertToFileURL(filename));
         xmlReader.setErrorHandler(new MyErrorHandler(System.err));
-
+        return saxParserHandler.getRoot();
     }
+
+
 
     public static void main(String[] args) throws Exception{
 
@@ -57,9 +61,10 @@ public class InstantServiceCreatorMain extends DefaultHandler{
 
         filename = args[0];
         serviceName = args[1];
+        // TODO: test the parser here
+//        BusinessRequestType root = parseXmlFile(filename);
 
-//      parseXmlFile(filename);
-
+        System.out.println("lala");
 
 //      WebServiceGenerator wsg = new WebServiceGenerator();
 //      wsg.get().buildData().writeFile();
