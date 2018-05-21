@@ -45,16 +45,17 @@ public class MainFileGenerator {
             jc.javadoc().add("Automatically created by Instant Service Creator.");
 
             //Adds variable
-            JFieldVar constantField = jc.field(JMod.PUBLIC | JMod.FINAL | JMod.STATIC, String.class, "CONSTANT", JExpr.lit("VALUE"));
-            JFieldVar varField = jc.field(JMod.PRIVATE, Integer.class, "var");
+            //JFieldVar constantField = jc.field(JMod.PUBLIC | JMod.FINAL | JMod.STATIC, String.class, "CONSTANT", JExpr.lit("VALUE"));
+            JFieldVar sendField = jc.field(JMod.PRIVATE, Integer.class, "send");
+            JFieldVar receiveField = jc.field(JMod.PRIVATE, Integer.class, "receive");
 
             // Adds method
-            JMethod getVar = jc.method(JMod.PUBLIC, varField.type(), "getVar");
-            getVar.body()._return(varField);
+            JMethod getVar = jc.method(JMod.PUBLIC, sendField.type(), "getSend");
+            getVar.body()._return(sendField);
 
-            JMethod setVar = jc.method(JMod.PUBLIC, codeModel.VOID, "setVar");
-            setVar.param(varField.type(), varField.name());
-            setVar.body().assign(JExpr._this().ref(varField.name()), JExpr.ref(varField.name()));
+            JMethod setVar = jc.method(JMod.PUBLIC, codeModel.VOID, "setSend");
+            setVar.param(sendField.type(), sendField.name());
+            setVar.body().assign(JExpr._this().ref(sendField.name()), JExpr.ref(sendField.name()));
 
             codeModel.build(new File("src\\main\\resources"));
 
