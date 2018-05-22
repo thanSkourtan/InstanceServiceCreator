@@ -11,10 +11,6 @@ import static com.eurobank.util.UtilityMethods.*;
  */
 public class BeanClassGenerator extends MainFileGenerator{
 
-
-    private String packageName;
-    private String className;
-
     public BeanClassGenerator (Object dataFromXml){
 
         if(!(dataFromXml instanceof BeanType)) {

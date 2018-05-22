@@ -8,6 +8,7 @@ package com.eurobank;
 import javax.xml.parsers.*;
 
 import com.eurobank.JAXBmodel.BusinessRequestType;
+import com.eurobank.filegenerators.BReqClassGenerator;
 import com.eurobank.filegenerators.BeanClassGenerator;
 import com.eurobank.filegenerators.MainFileGenerator;
 import com.eurobank.saxparser.MyErrorHandler;
@@ -71,10 +72,13 @@ public class InstantServiceCreatorMain extends DefaultHandler{
 
         System.out.println("lala");
 
-        MainFileGenerator bcg = new BeanClassGenerator(dataFromXml.getBean());
-        bcg.generateAll();
-//      WebServiceGenerator wsg = new WebServiceGenerator();
-//      wsg.get().buildData().writeFile();
+        MainFileGenerator beancg = new BeanClassGenerator(dataFromXml.getBean());
+        beancg.generateAll();
+
+
+        MainFileGenerator breqcg = new BReqClassGenerator(dataFromXml.getDataSet());
+        breqcg.generateAll();
+
 
     }
 }

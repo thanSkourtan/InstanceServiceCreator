@@ -25,6 +25,8 @@ public abstract class MainFileGenerator {
     protected JCodeModel mainModel;
     protected JPackage mainPackage;
     protected JDefinedClass jDefinedClass;
+    protected String packageName;
+    protected String className;
 
     // The classes in this model will not be created
     protected JCodeModel secondaryModel;
