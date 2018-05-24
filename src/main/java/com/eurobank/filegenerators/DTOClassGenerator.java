@@ -22,7 +22,7 @@ public class DTOClassGenerator extends MainFileGenerator{
     @Override
     public void generatePackages() {
         mainPackage = mainModel._package(packageName);
-        secondaryPackage = secondaryModel._package("it.ibm.eurobank.bean.base.data");
+        secondaryPackage = secondaryModel._package("java.io");
     }
 
     @Override
@@ -33,20 +33,15 @@ public class DTOClassGenerator extends MainFileGenerator{
     @Override
     public void generateFieldsAndMethods() {
 
-        //JFieldVar constantField = jc.field(JMod.PUBLIC | JMod.FINAL | JMod.STATIC, String.class, "CONSTANT", JExpr.lit("VALUE"));
-        JFieldVar sendField = jDefinedClass.field(JMod.PRIVATE, Integer.class, "send");
-        JFieldVar receiveField = jDefinedClass.field(JMod.PRIVATE, Integer.class, "receive");
-        JMethod getVar = jDefinedClass.method(JMod.PUBLIC, sendField.type(), "getSend");
-        getVar.body()._return(sendField);
+        fieldsGenerator.createFields(jDefinedClass, mainModel);
+        fieldsGenerator.createGetters();
+        fieldsGenerator.createSetters();
 
-        JMethod setVar = jDefinedClass.method(JMod.PUBLIC, mainModel.VOID, "setSend");
-        setVar.param(sendField.type(), sendField.name());
-        setVar.body().assign(JExpr._this().ref(sendField.name()), JExpr.ref(sendField.name()));
     }
 
     @Override
     public void generateInheritance() throws JClassAlreadyExistsException {
-        JDefinedClass superclass = secondaryPackage._class("ABaseAS400InputDataBean");
+        JDefinedClass superclass = secondaryPackage._class("Serializable");
         jDefinedClass._extends(superclass);
     }
 }

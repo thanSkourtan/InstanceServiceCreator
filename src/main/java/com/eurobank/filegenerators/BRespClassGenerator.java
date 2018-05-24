@@ -33,15 +33,11 @@ public class BRespClassGenerator extends MainFileGenerator{
     @Override
     public void generateFieldsAndMethods() {
 
-        //JFieldVar constantField = jc.field(JMod.PUBLIC | JMod.FINAL | JMod.STATIC, String.class, "CONSTANT", JExpr.lit("VALUE"));
-        JFieldVar sendField = jDefinedClass.field(JMod.PRIVATE, Integer.class, "send");
-        JFieldVar receiveField = jDefinedClass.field(JMod.PRIVATE, Integer.class, "receive");
-        JMethod getVar = jDefinedClass.method(JMod.PUBLIC, sendField.type(), "getSend");
-        getVar.body()._return(sendField);
+        fieldsGenerator.createFields(jDefinedClass, mainModel);
+        fieldsGenerator.createGetters();
+        fieldsGenerator.createSetters();
 
-        JMethod setVar = jDefinedClass.method(JMod.PUBLIC, mainModel.VOID, "setSend");
-        setVar.param(sendField.type(), sendField.name());
-        setVar.body().assign(JExpr._this().ref(sendField.name()), JExpr.ref(sendField.name()));
+
     }
 
     @Override
