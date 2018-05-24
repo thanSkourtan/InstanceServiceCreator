@@ -4,21 +4,46 @@ import com.eurobank.JAXBmodel.BeanType;
 import com.eurobank.JAXBmodel.DataSetType;
 import com.sun.codemodel.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+
+import static java.util.stream.Collectors.*;
+
 import static com.eurobank.util.UtilityMethods.getClassName;
 import static com.eurobank.util.UtilityMethods.getPackageName;
 
 /**
  * Created by v-askourtaniotis on 22/5/2018. mailTo: thanskourtan@gmail.com
+ *
+ * BReq, BResp and all DTOs are created in here
+ *
+ *
  */
-public class BReqClassGenerator extends MainFileGenerator{
+public class DataSetTypesClassGenerator extends MainFileGenerator{
 
-    public BReqClassGenerator(Object dataFromXml){
-        if(!(dataFromXml instanceof DataSetType)) {
+
+    public DataSetTypesClassGenerator(Object key, Object dataFromXml){
+
+        this.dataFromXml = dataFromXml;
+
+
+    }
+
+    @Override
+    public void dataProcessing() {
+        if(!(dataFromXml instanceof List)) {
             System.exit(-1);
         }
-        DataSetType data = (DataSetType) dataFromXml;
+        List<DataSetType> data = (List<DataSetType>) dataFromXml;
 
-        String classFullName = data.getBeanClass();
+
+
+
+//        String classFullName = data.getBeanClass();
+        String classFullName = "";
         packageName = getPackageName(classFullName);
         className = getClassName(classFullName);
     }

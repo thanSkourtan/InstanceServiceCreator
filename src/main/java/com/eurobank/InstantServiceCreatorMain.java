@@ -8,18 +8,20 @@ package com.eurobank;
 import javax.xml.parsers.*;
 
 import com.eurobank.JAXBmodel.BusinessRequestType;
-import com.eurobank.filegenerators.BReqClassGenerator;
+import com.eurobank.filegenerators.DataSetTypesClassGenerator;
 import com.eurobank.filegenerators.BeanClassGenerator;
 import com.eurobank.filegenerators.MainFileGenerator;
 import com.eurobank.saxparser.MyErrorHandler;
 import com.eurobank.saxparser.SaxParserHandler;
+import com.sun.codemodel.JClassAlreadyExistsException;
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
+import static com.eurobank.util.DataSetTypesMerger.*;
 
 
 import java.io.*;
-
-
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class InstantServiceCreatorMain extends DefaultHandler{
@@ -75,9 +77,23 @@ public class InstantServiceCreatorMain extends DefaultHandler{
         MainFileGenerator beancg = new BeanClassGenerator(dataFromXml.getBean());
         beancg.generateAll();
 
+        // a list to hold the references to the datatypes classes that will be created
+        List<MainFileGenerator> dataTypeClasses = new ArrayList<>();
 
-        MainFileGenerator breqcg = new BReqClassGenerator(dataFromXml.getDataSet());
-        breqcg.generateAll();
+        mergeDataSets(dataFromXml.getDataSet()).forEach((k, v) -> {
+            MainFileGenerator tempClass = new DataSetTypesClassGenerator(k, v);
+            try {
+                tempClass.generateAll();
+                dataTypeClasses.add(tempClass);
+            } catch (JClassAlreadyExistsException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        });
+        // MainFileGenerator breqcg = new DataSetTypesClassGenerator();
+//        breqcg.generateAll();
 
 
     }

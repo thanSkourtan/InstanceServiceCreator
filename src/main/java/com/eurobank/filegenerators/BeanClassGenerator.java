@@ -12,7 +12,11 @@ import static com.eurobank.util.UtilityMethods.*;
 public class BeanClassGenerator extends MainFileGenerator{
 
     public BeanClassGenerator (Object dataFromXml){
+        this.dataFromXml = dataFromXml;
+    }
 
+    @Override
+    public void dataProcessing() {
         if(!(dataFromXml instanceof BeanType)) {
             System.exit(-1);
         }

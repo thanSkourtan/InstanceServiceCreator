@@ -27,6 +27,7 @@ public abstract class MainFileGenerator {
     protected JDefinedClass jDefinedClass;
     protected String packageName;
     protected String className;
+    protected Object dataFromXml;
 
     // The classes in this model will not be created
     protected JCodeModel secondaryModel;
@@ -37,6 +38,7 @@ public abstract class MainFileGenerator {
         secondaryModel = new JCodeModel();
     }
 
+    public abstract void dataProcessing();
     public abstract void generatePackages();
     public abstract void generateClasses() throws JClassAlreadyExistsException;
     public abstract void generateFieldsAndMethods();
@@ -44,6 +46,7 @@ public abstract class MainFileGenerator {
     public abstract void generateJavadocs();
 
     public void generateAll() throws JClassAlreadyExistsException, IOException{
+        dataProcessing();
         generatePackages();
         generateClasses();
         generateFieldsAndMethods();
