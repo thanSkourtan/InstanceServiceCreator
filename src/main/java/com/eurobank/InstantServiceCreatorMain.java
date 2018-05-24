@@ -8,8 +8,9 @@ package com.eurobank;
 import javax.xml.parsers.*;
 
 import com.eurobank.JAXBmodel.BusinessRequestType;
-import com.eurobank.filegenerators.DataSetTypesClassGenerator;
-import com.eurobank.filegenerators.BeanClassGenerator;
+import com.eurobank.filegenerators.BReqClassGenerator;
+import com.eurobank.filegenerators.BRespClassGenerator;
+import com.eurobank.filegenerators.DTOClassGenerator;
 import com.eurobank.filegenerators.MainFileGenerator;
 import com.eurobank.saxparser.MyErrorHandler;
 import com.eurobank.saxparser.SaxParserHandler;
@@ -17,7 +18,7 @@ import com.sun.codemodel.JClassAlreadyExistsException;
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
 import static com.eurobank.util.DataSetTypesMerger.*;
-
+import static com.eurobank.util.UtilityMethods.*;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -74,14 +75,20 @@ public class InstantServiceCreatorMain extends DefaultHandler{
 
         System.out.println("lala");
 
-        MainFileGenerator beancg = new BeanClassGenerator(dataFromXml.getBean());
-        beancg.generateAll();
-
         // a list to hold the references to the datatypes classes that will be created
         List<MainFileGenerator> dataTypeClasses = new ArrayList<>();
 
+
         mergeDataSets(dataFromXml.getDataSet()).forEach((k, v) -> {
-            MainFileGenerator tempClass = new DataSetTypesClassGenerator(k, v);
+            MainFileGenerator tempClass = null;
+            if (getClassName(k).endsWith("BReq")){
+                tempClass = new BReqClassGenerator(k, v);
+            } else if (getClassName(k).endsWith("BReq")) {
+                tempClass = new BRespClassGenerator(k, v);
+            } else {
+                tempClass = new DTOClassGenerator(k, v);
+            }
+
             try {
                 tempClass.generateAll();
                 dataTypeClasses.add(tempClass);
@@ -90,8 +97,12 @@ public class InstantServiceCreatorMain extends DefaultHandler{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         });
+
+        //Create bean
+//        MainFileGenerator beancg = new BeanClassGenerator(dataFromXml.getBean());
+//        beancg.generateAll();
+
         // MainFileGenerator breqcg = new DataSetTypesClassGenerator();
 //        breqcg.generateAll();
 

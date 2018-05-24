@@ -1,51 +1,22 @@
 package com.eurobank.filegenerators;
 
-import com.eurobank.JAXBmodel.BeanType;
 import com.eurobank.JAXBmodel.DataSetType;
 import com.sun.codemodel.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-
-import static java.util.stream.Collectors.*;
-
-import static com.eurobank.util.UtilityMethods.getClassName;
-import static com.eurobank.util.UtilityMethods.getPackageName;
 
 /**
- * Created by v-askourtaniotis on 22/5/2018. mailTo: thanskourtan@gmail.com
- *
- * BReq, BResp and all DTOs are created in here
- *
- *
+ * Created by v-askourtaniotis on 24/5/2018. mailTo: thanskourtan@gmail.com
  */
-public class DataSetTypesClassGenerator extends MainFileGenerator{
+public class BRespClassGenerator extends MainFileGenerator{
 
+    private List<DataSetType> dataFromXml;
+    private FieldsGenerator fieldsGenerator;
 
-    public DataSetTypesClassGenerator(Object key, Object dataFromXml){
-
+    public BRespClassGenerator(String fullClassName, List<DataSetType> dataFromXml) {
+        super(fullClassName);
         this.dataFromXml = dataFromXml;
-
-
-    }
-
-    @Override
-    public void dataProcessing() {
-        if(!(dataFromXml instanceof List)) {
-            System.exit(-1);
-        }
-        List<DataSetType> data = (List<DataSetType>) dataFromXml;
-
-
-
-
-//        String classFullName = data.getBeanClass();
-        String classFullName = "";
-        packageName = getPackageName(classFullName);
-        className = getClassName(classFullName);
+        this.fieldsGenerator = new FieldsGenerator();
     }
 
     @Override
@@ -61,6 +32,7 @@ public class DataSetTypesClassGenerator extends MainFileGenerator{
 
     @Override
     public void generateFieldsAndMethods() {
+
         //JFieldVar constantField = jc.field(JMod.PUBLIC | JMod.FINAL | JMod.STATIC, String.class, "CONSTANT", JExpr.lit("VALUE"));
         JFieldVar sendField = jDefinedClass.field(JMod.PRIVATE, Integer.class, "send");
         JFieldVar receiveField = jDefinedClass.field(JMod.PRIVATE, Integer.class, "receive");
@@ -74,12 +46,8 @@ public class DataSetTypesClassGenerator extends MainFileGenerator{
 
     @Override
     public void generateInheritance() throws JClassAlreadyExistsException {
-        JDefinedClass superclass = secondaryPackage._class("ABaseAS400InputDataBean");
+        JDefinedClass superclass = secondaryPackage._class("ABaseAS400OutputDataBean");
         jDefinedClass._extends(superclass);
     }
 
-    @Override
-    public void generateJavadocs() {
-        jDefinedClass.javadoc().add("Automatically created by Instant Service Creator.");
-    }
 }

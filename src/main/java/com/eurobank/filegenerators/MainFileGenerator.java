@@ -1,13 +1,13 @@
 package com.eurobank.filegenerators;
 
-import com.eurobank.JAXBmodel.BeanType;
-import com.eurobank.JAXBmodel.BusinessRequestType;
 import com.sun.codemodel.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.stream.Collectors;
+
+import static com.eurobank.util.UtilityMethods.getClassName;
+import static com.eurobank.util.UtilityMethods.getPackageName;
+
 
 /**
  * Created by v-askourtaniotis on 21/5/2018. mailTo: thanskourtan@gmail.com
@@ -27,26 +27,30 @@ public abstract class MainFileGenerator {
     protected JDefinedClass jDefinedClass;
     protected String packageName;
     protected String className;
-    protected Object dataFromXml;
+    protected String fullClassName;
 
     // The classes in this model will not be created
     protected JCodeModel secondaryModel;
     protected JPackage secondaryPackage;
 
-    public MainFileGenerator(){
+    public MainFileGenerator(String fullClassName){
         mainModel = new JCodeModel();
         secondaryModel = new JCodeModel();
+        this.fullClassName = fullClassName;
+        this.packageName = getPackageName(fullClassName);
+        this.className = getClassName(fullClassName);
     }
 
-    public abstract void dataProcessing();
     public abstract void generatePackages();
     public abstract void generateClasses() throws JClassAlreadyExistsException;
     public abstract void generateFieldsAndMethods();
     public abstract void generateInheritance() throws JClassAlreadyExistsException;
-    public abstract void generateJavadocs();
+
+    public void generateJavadocs(){
+        jDefinedClass.javadoc().add("Automatically created by Instant Service Creator.");
+    }
 
     public void generateAll() throws JClassAlreadyExistsException, IOException{
-        dataProcessing();
         generatePackages();
         generateClasses();
         generateFieldsAndMethods();

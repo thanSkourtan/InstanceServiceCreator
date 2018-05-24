@@ -1,35 +1,38 @@
 package com.eurobank.filegenerators;
 
-import com.eurobank.JAXBmodel.BeanType;
-import com.eurobank.JAXBmodel.BusinessRequestType;
+import com.eurobank.JAXBmodel.DataSetType;
 import com.sun.codemodel.*;
 
-import static com.eurobank.util.UtilityMethods.*;
+import java.util.List;
 
 /**
- * Created by v-askourtaniotis on 21/5/2018. mailTo: thanskourtan@gmail.com
+ * Created by v-askourtaniotis on 24/5/2018. mailTo: thanskourtan@gmail.com
  */
-public class BeanClassGenerator extends MainFileGenerator{
+public class DTOClassGenerator extends MainFileGenerator{
 
-    BeanType dataFromXml;
-    public BeanClassGenerator (String fullClassName, BeanType dataFromXml){
+    private List<DataSetType> dataFromXml;
+    private FieldsGenerator fieldsGenerator;
+
+    public DTOClassGenerator(String fullClassName, List<DataSetType> dataFromXml) {
         super(fullClassName);
         this.dataFromXml = dataFromXml;
+        this.fieldsGenerator = new FieldsGenerator();
     }
 
     @Override
     public void generatePackages() {
         mainPackage = mainModel._package(packageName);
-        secondaryPackage = secondaryModel._package("it.ibm.eurobank.bean.base");
+        secondaryPackage = secondaryModel._package("it.ibm.eurobank.bean.base.data");
     }
 
     @Override
-    public void generateClasses() throws JClassAlreadyExistsException{
+    public void generateClasses() throws JClassAlreadyExistsException {
         jDefinedClass = mainPackage._class(className);
     }
 
     @Override
     public void generateFieldsAndMethods() {
+
         //JFieldVar constantField = jc.field(JMod.PUBLIC | JMod.FINAL | JMod.STATIC, String.class, "CONSTANT", JExpr.lit("VALUE"));
         JFieldVar sendField = jDefinedClass.field(JMod.PRIVATE, Integer.class, "send");
         JFieldVar receiveField = jDefinedClass.field(JMod.PRIVATE, Integer.class, "receive");
@@ -42,14 +45,8 @@ public class BeanClassGenerator extends MainFileGenerator{
     }
 
     @Override
-    public void generateInheritance() throws JClassAlreadyExistsException{
-        JDefinedClass superclass = secondaryPackage._class("ABaseAS400Bean");
+    public void generateInheritance() throws JClassAlreadyExistsException {
+        JDefinedClass superclass = secondaryPackage._class("ABaseAS400InputDataBean");
         jDefinedClass._extends(superclass);
     }
-
-    @Override
-    public void generateJavadocs() {
-        jDefinedClass.javadoc().add("Automatically created by Instant Service Creator.");
-    }
-
 }
