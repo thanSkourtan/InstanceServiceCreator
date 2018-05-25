@@ -3629,6 +3629,9 @@
 
     <DataSet Name="send" Type="RECORD" FormatAs="COMMAREA" DefaultEncode="EBCDIC" MatchTargetField="send" BeanClass="com.efg.brm.messages.specialProducts.GetPropertyFireInsuranceBReq">
  		<Field Name="propertyId"				HostFormatAs="COBOLTYPE" FormatClassParm=      "9(06):DISPLAY" Mandatory="YES"/>
+        <Field Name="four"				HostFormatAs="COBOLTYPE" FormatClassParm=      "9(06):DISPLAY" Mandatory="YES"/>
+        <Field Name="five"				HostFormatAs="COBOLTYPE" FormatClassParm=      "X(06):DISPLAY" Mandatory="YES"/>
+        <Field Name="six"				HostFormatAs="COBOLTYPE" FormatClassParm=      "X(06):DISPLAY" Mandatory="YES"/>
     </DataSet>
 
     <DataSet Name="receive" Type="RECORD" FormatAs="COMMAREA" DefaultEncode="EBCDIC" RecordLength="421" MatchTargetField="receive" BeanClass="com.efg.brm.messages.specialProducts.GetPropertyFireInsuranceBResp">
@@ -3638,6 +3641,8 @@
 
 	<DataSet Name="send01" Type="RECORD" FormatAs="COMMAREA" DefaultEncode="EBCDIC" MatchTargetField="send" BeanClass="com.efg.brm.messages.specialProducts.GetPropertyFireInsuranceBReq">
 		<Field Name="one"				HostFormatAs="COBOLTYPE" FormatClassParm=      "9(06):DISPLAY" Mandatory="YES"/>
+        <Field Name="seven"				HostFormatAs="COBOLTYPE" FormatClassParm=      "9(06):DISPLAY" Mandatory="YES"/>
+        <Field Name="eight"				HostFormatAs="COBOLTYPE" FormatClassParm=      "9(06):DISPLAY" Mandatory="YES"/>
 	</DataSet>
 
 	<DataSet Name="receive01" Type="RECORD" FormatAs="COMMAREA" DefaultEncode="EBCDIC" RecordLength="421" MatchTargetField="receive" BeanClass="com.efg.brm.messages.specialProducts.GetPropertyFireInsuranceBResp">

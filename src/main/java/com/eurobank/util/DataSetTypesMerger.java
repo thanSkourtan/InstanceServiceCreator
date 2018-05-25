@@ -25,13 +25,12 @@ public class DataSetTypesMerger {
                 return v;
             });
             dataSetTypesMap.computeIfAbsent(key, v -> {
-                List temp  = new ArrayList<>();
-                temp.add(v);
+                List<DataSetType> temp  = new ArrayList<>();
+                temp.add(x);
                 return temp;
             });
 
         });
-
 
         return dataSetTypesMap;
     }

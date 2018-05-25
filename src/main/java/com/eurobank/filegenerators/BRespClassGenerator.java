@@ -33,9 +33,9 @@ public class BRespClassGenerator extends MainFileGenerator{
     @Override
     public void generateFieldsAndMethods() {
 
-        fieldsGenerator.createFields(jDefinedClass, mainModel);
-        fieldsGenerator.createGetters();
-        fieldsGenerator.createSetters();
+//        fieldsGenerator.createFields(jDefinedClass, mainModel, dataFromXml);
+//        fieldsGenerator.createGetters();
+//        fieldsGenerator.createSetters();
 
 
     }

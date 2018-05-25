@@ -83,7 +83,7 @@ public class InstantServiceCreatorMain extends DefaultHandler{
             MainFileGenerator tempClass = null;
             if (getClassName(k).endsWith("BReq")){
                 tempClass = new BReqClassGenerator(k, v);
-            } else if (getClassName(k).endsWith("BReq")) {
+            } else if (getClassName(k).endsWith("BResp")) {
                 tempClass = new BRespClassGenerator(k, v);
             } else {
                 tempClass = new DTOClassGenerator(k, v);
