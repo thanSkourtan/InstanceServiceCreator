@@ -56,7 +56,7 @@ public abstract class MainFileGenerator {
         generateFieldsAndMethods();
         generateInheritance();
         generateJavadocs();
-        mainModel.build(new File("src\\main\\resources"));
+        mainModel.build(new File("src//main//resources"));
     }
 
 }

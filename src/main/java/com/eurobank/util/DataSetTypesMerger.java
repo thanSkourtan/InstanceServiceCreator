@@ -24,7 +24,12 @@ public class DataSetTypesMerger {
                 v.add(x);
                 return v;
             });
-            dataSetTypesMap.computeIfAbsent(key, v -> new ArrayList<>()).add(x);
+            dataSetTypesMap.computeIfAbsent(key, v -> {
+                List temp  = new ArrayList<>();
+                temp.add(v);
+                return temp;
+            });
+
         });
 
 
