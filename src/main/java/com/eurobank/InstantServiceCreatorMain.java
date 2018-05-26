@@ -85,6 +85,10 @@ public class InstantServiceCreatorMain extends DefaultHandler{
         String filename = cmd.getOptionValue("xml");
         serviceName = cmd.getOptionValue("service");
 
+        //test
+        System.out.println(filename);
+        System.out.println(serviceName);
+
         //TODO: Logging and Exception system
 
         /*String filename = null;
