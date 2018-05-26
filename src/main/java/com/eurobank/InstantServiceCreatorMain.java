@@ -15,6 +15,7 @@ import com.eurobank.filegenerators.MainFileGenerator;
 import com.eurobank.saxparser.MyErrorHandler;
 import com.eurobank.saxparser.SaxParserHandler;
 import com.sun.codemodel.JClassAlreadyExistsException;
+import org.apache.commons.cli.*;
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
 import static com.eurobank.util.DataSetTypesMerger.*;
@@ -62,7 +63,31 @@ public class InstantServiceCreatorMain extends DefaultHandler{
 
     public static void main(String[] args) throws Exception{
 
-        String filename = null;
+
+        Options options = new Options();
+        options.addOption("x", "xml",true,"The path of the xml file to be parsed.");
+        options.addOption("s", "service",true,"The name of the service to be handled.");
+        options.addOption("q", "Suppress ISC output");
+
+        CommandLineParser cmdParser = new DefaultParser();
+        CommandLine cmd = cmdParser.parse(options, args);
+
+        HelpFormatter formatter = new HelpFormatter();
+        formatter.printHelp("isc", "",options, "\nex: isc -x " +
+                        ".\\EuroBankiSeriesJCA.xml -s GetPropertyFireInsurance\n",
+                true);
+
+        if (!cmd.hasOption("xml") && !cmd.hasOption("service")){
+            System.out.println("Please enter lala");
+            System.exit(-1);
+        }
+
+        String filename = cmd.getOptionValue("xml");
+        serviceName = cmd.getOptionValue("service");
+
+        //TODO: Logging and Exception system
+
+        /*String filename = null;
 
         if(args.length != 2) {
             usage();
@@ -70,14 +95,15 @@ public class InstantServiceCreatorMain extends DefaultHandler{
 
         filename = args[0];
         serviceName = args[1];
+
+
+        */
+
         // TODO: test the parser here
         BusinessRequestType dataFromXml = parseXmlFile(filename);
 
-        System.out.println("lala");
-
         // a list to hold the references to the datatypes classes that will be created
         List<MainFileGenerator> dataTypeClasses = new ArrayList<>();
-
 
         mergeDataSets(dataFromXml.getDataSet()).forEach((k, v) -> {
             MainFileGenerator tempClass = null;
