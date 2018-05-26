@@ -16,38 +16,31 @@ public class FieldsGenerator {
 
         //JFieldVar constantField = jc.field(JMod.PUBLIC | JMod.FINAL | JMod.STATIC, String.class, "CONSTANT", JExpr.lit("VALUE"));
 
-        int totalNumberOfFields = 0;
-        for(DataSetType d : data) {
-            totalNumberOfFields += d.getField().size();
-        }
-
-        JFieldVar[] allFields = new JFieldVar[totalNumberOfFields];
-        int i = 0;
         for(DataSetType d : data) {
             for(FieldType f : d.getField()){
-                allFields[i++] = jDefinedClass.field(JMod.PRIVATE,
+
+
+                if(f.getMatchDataSetName() != null){
+                    //TODO:Add logic
+                    return;
+                }
+
+                //TODO: FIX double types
+                JFieldVar tempVar = jDefinedClass.field(JMod.PRIVATE,
                         f.getFormatClassParm().startsWith("X") ? String.class :
                                 f.getFormatClassParm().startsWith("9") && f.getFormatClassParm().contains("V9") ? Double.class : Integer.class,
                         f.getName());
+
+                JMethod tempGetter = jDefinedClass.method(JMod.PUBLIC, tempVar.type(), "get" + tempVar.name());
+                tempGetter.body()._return(tempVar);
+                JMethod tempSetter  = jDefinedClass.method(JMod.PUBLIC, mainModel.VOID, "set" + tempVar.name());
+                tempSetter.param(tempVar.type(), tempVar.name());
+                tempSetter.body().assign(JExpr._this().ref(tempVar.name()), JExpr.ref(tempVar.name()));
             }
 
         }
 
-//        JFieldVar sendField = jDefinedClass.field(JMod.PRIVATE, Integer.class, "send");
-//        JFieldVar receiveField = jDefinedClass.field(JMod.PRIVATE, Integer.class, "receive");
-
-
-
     }
 
-    public void createGetters(){
-//        JMethod getVar = jDefinedClass.method(JMod.PUBLIC, sendField.type(), "getSend");
-//        getVar.body()._return(sendField);
-    }
 
-    public void createSetters(){
-//        JMethod setVar = jDefinedClass.method(JMod.PUBLIC, mainModel.VOID, "setSend");
-//        setVar.param(sendField.type(), sendField.name());
-//        setVar.body().assign(JExpr._this().ref(sendField.name()), JExpr.ref(sendField.name()));
-    }
 }

@@ -34,9 +34,6 @@ public class BReqClassGenerator extends MainFileGenerator{
     public void generateFieldsAndMethods() {
 
         fieldsGenerator.createFields(jDefinedClass, mainModel, dataFromXml);
-        fieldsGenerator.createGetters();
-        fieldsGenerator.createSetters();
-
 
     }
 

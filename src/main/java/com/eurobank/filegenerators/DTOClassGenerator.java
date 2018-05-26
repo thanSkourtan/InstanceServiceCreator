@@ -33,9 +33,7 @@ public class DTOClassGenerator extends MainFileGenerator{
     @Override
     public void generateFieldsAndMethods() {
 
-//        fieldsGenerator.createFields(jDefinedClass, mainModel, dataFromXml);
-//        fieldsGenerator.createGetters();
-//        fieldsGenerator.createSetters();
+        fieldsGenerator.createFields(jDefinedClass, mainModel, dataFromXml);
 
     }
 
