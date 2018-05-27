@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public class PlacementDirectory {
 
-    private static Map<String, String> directoriesRoots = new HashMap<>();
+    private static final Map<String, String> directoriesRoots = new HashMap<>();
 
     static {
         directoriesRoots.put("EuroBankAltamiraAccounting", "PersonalAccounts");

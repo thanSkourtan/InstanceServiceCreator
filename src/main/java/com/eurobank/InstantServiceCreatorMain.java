@@ -24,11 +24,15 @@ import static com.eurobank.util.UtilityMethods.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class InstantServiceCreatorMain extends DefaultHandler{
 
     private static String serviceName;
+    private static final Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+
 
     private static String convertToFileURL(String filename) {
         String path = new File(filename).getAbsolutePath();
@@ -88,7 +92,7 @@ public class InstantServiceCreatorMain extends DefaultHandler{
         //test
         System.out.println(filename);
         System.out.println(serviceName);
-
+        logger.log(Level.INFO, "Sample logging-------------");
         //TODO: Logging and Exception system
 
         /*String filename = null;
