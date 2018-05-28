@@ -27,11 +27,11 @@ public class SaxParserHandler extends DefaultHandler {
     private boolean serviceFound;
     private BusinessRequestType root;// the root is a tree with pointers only from parents to children. so we cannot go backwards
     private Deque<Object> orderedXmlElementsStack; // this is why we need a second structrure, which is a stack
-    private static final Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+
 
     public void startDocument() throws SAXException {
         orderedXmlElementsStack = new ArrayDeque<>();
-        logger.log(Level.INFO, "Started parsing the xml document.");
+        //logger.log(Level.INFO, "Started parsing the xml document.");
     }
 
     public void startElement(String namespaceURI,String localName,
@@ -39,7 +39,7 @@ public class SaxParserHandler extends DefaultHandler {
 
         if((localName.equals("BusinessRequest") && atts.getValue("Name").equals(serviceName)) || serviceFound) {
             serviceFound = true;
-            logger.log(Level.INFO, "Parsing " + localName + " element.");
+//            logger.log(Level.INFO, "Parsing " + localName + " element.");
             try{
                 Class<?> xmlElementClass = Class.forName("com.eurobank.JAXBmodel." + localName + "Type");
                 Constructor<?> xmlElementConstructor = xmlElementClass.getConstructor();
@@ -140,7 +140,7 @@ public class SaxParserHandler extends DefaultHandler {
 
 
     public void endDocument() throws SAXException {
-        logger.log(Level.INFO, "Finished parsing the xml document.");
+//        logger.log(Level.INFO, "Finished parsing the xml document.");
     }
 
     public BusinessRequestType getRoot() {
