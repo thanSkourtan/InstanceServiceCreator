@@ -8,10 +8,7 @@ package com.eurobank;
 import javax.xml.parsers.*;
 
 import com.eurobank.JAXBmodel.BusinessRequestType;
-import com.eurobank.filegenerators.BReqClassGenerator;
-import com.eurobank.filegenerators.BRespClassGenerator;
-import com.eurobank.filegenerators.DTOClassGenerator;
-import com.eurobank.filegenerators.MainFileGenerator;
+import com.eurobank.filegenerators.*;
 import com.eurobank.saxparser.MyErrorHandler;
 import com.eurobank.saxparser.SaxParserHandler;
 import com.sun.codemodel.JClassAlreadyExistsException;
@@ -110,28 +107,39 @@ public class InstantServiceCreatorMain extends DefaultHandler{
         // TODO: test the parser here
         BusinessRequestType dataFromXml = parseXmlFile(filename);
 
-        // a list to hold the references to the datatypes classes that will be created
-        List<MainFileGenerator> dataTypeClasses = new ArrayList<>();
-
+        /*Creates BReq, BResp and DTOs*/
+        List<String> dataTypeClasses = new ArrayList<>();
         mergeDataSets(dataFromXml.getDataSet()).forEach((k, v) -> {
             MainFileGenerator tempClass = null;
             if (getClassName(k).endsWith("BReq")){
                 tempClass = new BReqClassGenerator(k, v);
+                dataTypeClasses.add(tempClass.getFullClassName());
             } else if (getClassName(k).endsWith("BResp")) {
                 tempClass = new BRespClassGenerator(k, v);
+                dataTypeClasses.add(tempClass.getFullClassName());
             } else {
                 tempClass = new DTOClassGenerator(k, v);
             }
 
             try {
                 tempClass.generateAll();
-                dataTypeClasses.add(tempClass);
+
             } catch (JClassAlreadyExistsException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
             }
         });
+
+        /*Creates Bean*/
+        if(dataTypeClasses.size() < 2){
+            // Throw some exception
+        }
+
+        MainFileGenerator beanClass = new BeanClassGenerator(dataFromXml.getBean(), dataTypeClasses);
+        beanClass.generateAll();
 
         //Create bean
 //        MainFileGenerator beancg = new BeanClassGenerator(dataFromXml.getBean());

@@ -31,6 +31,11 @@ public class BReqClassGenerator extends MainFileGenerator{
     }
 
     @Override
+    public void generateConstructors() {
+
+    }
+
+    @Override
     public void generateFieldsAndMethods() {
 
         fieldsGenerator.createFields(jDefinedClass, mainModel, dataFromXml);

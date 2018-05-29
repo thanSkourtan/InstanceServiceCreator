@@ -1,5 +1,6 @@
 package com.eurobank.filegenerators;
 
+import com.eurobank.util.UtilityMethods;
 import com.sun.codemodel.*;
 
 import java.io.File;
@@ -37,20 +38,21 @@ public abstract class MainFileGenerator {
         mainModel = new JCodeModel();
         secondaryModel = new JCodeModel();
         this.fullClassName = fullClassName;
-        this.packageName = getPackageName(fullClassName);
-        this.className = getClassName(fullClassName);
+        this.packageName = UtilityMethods.getPackageName(fullClassName);
+        this.className = UtilityMethods.getClassName(fullClassName);
     }
 
     public abstract void generatePackages();
     public abstract void generateClasses() throws JClassAlreadyExistsException;
-    public abstract void generateFieldsAndMethods();
+    public abstract void generateConstructors() throws JClassAlreadyExistsException;
+    public abstract void generateFieldsAndMethods() throws ClassNotFoundException, JClassAlreadyExistsException;
     public abstract void generateInheritance() throws JClassAlreadyExistsException;
 
     public void generateJavadocs(){
         jDefinedClass.javadoc().add("Automatically created by Instant Service Creator.");
     }
 
-    public void generateAll() throws JClassAlreadyExistsException, IOException{
+    public void generateAll() throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
         generatePackages();
         generateClasses();
         generateFieldsAndMethods();
@@ -59,4 +61,68 @@ public abstract class MainFileGenerator {
         mainModel.build(new File("src//main//resources"));
     }
 
+
+    public JCodeModel getMainModel() {
+        return mainModel;
+    }
+
+    public void setMainModel(JCodeModel mainModel) {
+        this.mainModel = mainModel;
+    }
+
+    public JPackage getMainPackage() {
+        return mainPackage;
+    }
+
+    public void setMainPackage(JPackage mainPackage) {
+        this.mainPackage = mainPackage;
+    }
+
+    public JDefinedClass getjDefinedClass() {
+        return jDefinedClass;
+    }
+
+    public void setjDefinedClass(JDefinedClass jDefinedClass) {
+        this.jDefinedClass = jDefinedClass;
+    }
+
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public String getFullClassName() {
+        return fullClassName;
+    }
+
+    public void setFullClassName(String fullClassName) {
+        this.fullClassName = fullClassName;
+    }
+
+    public JCodeModel getSecondaryModel() {
+        return secondaryModel;
+    }
+
+    public void setSecondaryModel(JCodeModel secondaryModel) {
+        this.secondaryModel = secondaryModel;
+    }
+
+    public JPackage getSecondaryPackage() {
+        return secondaryPackage;
+    }
+
+    public void setSecondaryPackage(JPackage secondaryPackage) {
+        this.secondaryPackage = secondaryPackage;
+    }
 }
