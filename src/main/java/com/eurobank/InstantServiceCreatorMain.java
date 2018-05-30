@@ -8,8 +8,9 @@ package com.eurobank;
 import javax.xml.parsers.*;
 
 import com.eurobank.JAXBmodel.BusinessRequestType;
+import com.eurobank.JAXBmodel.DataSetType;
 import com.eurobank.filegenerators.*;
-import com.eurobank.saxparser.MyErrorHandler;
+import com.eurobank.exceptions.exceptionhandlers.SaxParserErrorHandler;
 import com.eurobank.saxparser.SaxParserHandler;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import org.apache.commons.cli.*;
@@ -17,10 +18,13 @@ import org.xml.sax.*;
 import org.xml.sax.helpers.*;
 import static com.eurobank.util.DataSetTypesMerger.*;
 import static com.eurobank.util.UtilityMethods.*;
+import static com.eurobank.util.EsbClassesNamesCreator.*;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -48,7 +52,7 @@ public class InstantServiceCreatorMain extends DefaultHandler{
         System.exit(1);
     }
 
-    public static BusinessRequestType parseXmlFile(String filename) throws IOException, SAXException, ParserConfigurationException{
+    public static SaxParserHandler parseXmlFile(String filename) throws IOException, SAXException, ParserConfigurationException{
         SAXParserFactory spf = SAXParserFactory.newInstance();
         spf.setNamespaceAware(true);
         SAXParser saxParser = spf.newSAXParser();
@@ -56,8 +60,9 @@ public class InstantServiceCreatorMain extends DefaultHandler{
         SaxParserHandler saxParserHandler = new SaxParserHandler(serviceName);
         xmlReader.setContentHandler(saxParserHandler);
         xmlReader.parse(convertToFileURL(filename));
-        xmlReader.setErrorHandler(new MyErrorHandler(System.err));
-        return saxParserHandler.getRoot();
+        xmlReader.setErrorHandler(new SaxParserErrorHandler(System.err));
+
+        return saxParserHandler;
     }
 
 
@@ -105,20 +110,32 @@ public class InstantServiceCreatorMain extends DefaultHandler{
         */
 
         // TODO: test the parser here
-        BusinessRequestType dataFromXml = parseXmlFile(filename);
+        SaxParserHandler saxParserHandler = parseXmlFile(filename);
+        BusinessRequestType dataFromXml = saxParserHandler.getRoot();
+        Set<String> brmClassNamesSet = saxParserHandler.getAllClassesNames();
 
+        /*Second Part*/
         /*Creates BReq, BResp and DTOs*/
-        List<String> dataTypeClasses = new ArrayList<>();
-        mergeDataSets(dataFromXml.getDataSet()).forEach((k, v) -> {
+
+
+        Set<String> allClassNamesSet = addEsbClasses(brmClassNamesSet);
+
+        Map<String, List<DataSetType>> mergedDataSetTypes = mergeDataSets(dataFromXml.getDataSet());
+
+        Set<String>  dataTypeClasses = mergedDataSetTypes.keySet();
+
+
+
+        mergedDataSetTypes.forEach((k, v) -> {
             MainFileGenerator tempClass = null;
-            if (getClassName(k).endsWith("BReq")){
-                tempClass = new BReqClassGenerator(k, v);
-                dataTypeClasses.add(tempClass.getFullClassName());
-            } else if (getClassName(k).endsWith("BResp")) {
-                tempClass = new BRespClassGenerator(k, v);
-                dataTypeClasses.add(tempClass.getFullClassName());
+            if (isABReqClassName(getClassName(k))){
+                tempClass = new BReqClassGenerator(k, v, dataTypeClasses);
+                //dataTypeClasses.add(tempClass.getFullClassName());
+            } else if (isABRespClassName(getClassName(k))){
+                tempClass = new BRespClassGenerator(k, v, dataTypeClasses);
+                //dataTypeClasses.add(tempClass.getFullClassName());
             } else {
-                tempClass = new DTOClassGenerator(k, v);
+                tempClass = new DTOClassGenerator(k, v, dataTypeClasses);
             }
 
             try {

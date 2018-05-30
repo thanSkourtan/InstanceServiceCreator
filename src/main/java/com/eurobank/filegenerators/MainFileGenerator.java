@@ -14,13 +14,6 @@ import static com.eurobank.util.UtilityMethods.getPackageName;
  * Created by v-askourtaniotis on 21/5/2018. mailTo: thanskourtan@gmail.com
  */
 
-
-/**
- *  We need a common state, that's why we use an abstract class, not an interface.
- *
- *
- *
- */
 public abstract class MainFileGenerator {
 
     protected JCodeModel mainModel;

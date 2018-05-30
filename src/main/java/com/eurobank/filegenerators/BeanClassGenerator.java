@@ -6,6 +6,7 @@ import com.sun.codemodel.*;
 import static com.eurobank.util.UtilityMethods.*;
 
 import java.util.List;
+import java.util.Set;
 
 import com.eurobank.util.UtilityMethods;
 
@@ -20,14 +21,14 @@ public class BeanClassGenerator extends MainFileGenerator{
     private JPackage reqRespPackage;
     private String reqRespPackageName;
 
-    public BeanClassGenerator (BeanType dataFromXml, List<String> dataTypeClasses){
+    public BeanClassGenerator (BeanType dataFromXml, Set<String> dataTypeClasses){
         super(dataFromXml.getBeanClass());
         this.dataFromXml = dataFromXml;
 
         dataTypeClasses.forEach( x -> {
-            if(x.endsWith("BReq")) {
+            if(isABReqClassName(x)) {
                 this.bReqFullClassName = UtilityMethods.getClassName(x);
-            }else if(x.endsWith("BResp")){
+            }else if(isABRespClassName(x)){
                 this.bRespFullClassName = UtilityMethods.getClassName(x);
                 this.reqRespPackageName = UtilityMethods.getPackageName(x);
             }

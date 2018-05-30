@@ -14,15 +14,14 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import static com.eurobank.util.UtilityMethods.*;
 
 public class SaxParserHandler extends DefaultHandler {
 
     public SaxParserHandler (String serviceName) {
         this.serviceName = serviceName;
     }
-
+    private final Set<String> allClassesNames = new HashSet<>();
     private String serviceName;
     private boolean serviceFound;
     private BusinessRequestType root;// the root is a tree with pointers only from parents to children. so we cannot go backwards
@@ -47,10 +46,14 @@ public class SaxParserHandler extends DefaultHandler {
 
                 //Fills the attributes of the instance
                 for(int i = 0; i < atts.getLength(); i++){
-                    String tempAttributeName = atts.getLocalName(i).substring(0, 1).toLowerCase() + atts.getLocalName(i).substring(1);
+                    String attName = atts.getLocalName(i);
+                    String attValue = atts.getValue(i);
+                    storeClassNames(attName, attValue);
+
+                    String tempAttributeName = makeFirstCharacterLowercase(attName);
                     Field tempAttribute = xmlElementClass.getDeclaredField(tempAttributeName);
                     tempAttribute.setAccessible(true);
-                    tempAttribute.set(xmlElementObject, atts.getValue(i));
+                    tempAttribute.set(xmlElementObject, attValue);
                 }
 
                 //Attaches directly or indirectly the current instance to the root element(keeping the state)
@@ -138,6 +141,11 @@ public class SaxParserHandler extends DefaultHandler {
         }
     }
 
+    public void storeClassNames (String attName, String attValue ) {
+        if(attName.equals("BeanClass") || attName.equals("UserExitClass")) {
+            allClassesNames.add(attValue);
+        }
+    }
 
     public void endDocument() throws SAXException {
 //        logger.log(Level.INFO, "Finished parsing the xml document.");
@@ -149,5 +157,9 @@ public class SaxParserHandler extends DefaultHandler {
 
     public void setRoot(BusinessRequestType root) {
         this.root = root;
+    }
+
+    public Set<String> getAllClassesNames() {
+        return allClassesNames;
     }
 }

@@ -3624,51 +3624,34 @@
     </Service>
 </BusinessRequest>
 
-<BusinessRequest Name="GetPropertyFireInsurance">
-    <Bean BeanClass="com.efg.brm.beans.specialProducts.GetPropertyFireInsuranceBean"/>
-
-    <DataSet Name="send" Type="RECORD" FormatAs="COMMAREA" DefaultEncode="EBCDIC" MatchTargetField="send" BeanClass="com.efg.brm.messages.specialProducts.GetPropertyFireInsuranceBReq">
- 		<Field Name="propertyId"				HostFormatAs="COBOLTYPE" FormatClassParm=      "9(06):DISPLAY" Mandatory="YES"/>
-        <Field Name="four"				HostFormatAs="COBOLTYPE" FormatClassParm=      "9(06):DISPLAY" Mandatory="YES"/>
-        <Field Name="five"				HostFormatAs="COBOLTYPE" FormatClassParm=      "X(06):DISPLAY" Mandatory="YES"/>
-        <Field Name="six"				HostFormatAs="COBOLTYPE" FormatClassParm=      "X(06):DISPLAY" Mandatory="YES"/>
-    </DataSet>
-
-    <DataSet Name="receive" Type="RECORD" FormatAs="COMMAREA" DefaultEncode="EBCDIC" RecordLength="421" MatchTargetField="receive" BeanClass="com.efg.brm.messages.specialProducts.GetPropertyFireInsuranceBResp">
- 		<Field Name="dummypropertyId"				HostFormatAs="COBOLTYPE" FormatClassParm=      "X(06):DISPLAY" Mandatory="YES"/>
- 		<Field Name="fireInsurancesList"   			MatchDataSetName="FireInsuranceEntry"/>
-    </DataSet>
-
-	<DataSet Name="send01" Type="RECORD" FormatAs="COMMAREA" DefaultEncode="EBCDIC" MatchTargetField="send" BeanClass="com.efg.brm.messages.specialProducts.GetPropertyFireInsuranceBReq">
-		<Field Name="one"				HostFormatAs="COBOLTYPE" FormatClassParm=      "9(06):DISPLAY" Mandatory="YES"/>
-        <Field Name="seven"				HostFormatAs="COBOLTYPE" FormatClassParm=      "9(06):DISPLAY" Mandatory="YES"/>
-        <Field Name="eight"				HostFormatAs="COBOLTYPE" FormatClassParm=      "9(06):DISPLAY" Mandatory="YES"/>
-	</DataSet>
-
-	<DataSet Name="receive01" Type="RECORD" FormatAs="COMMAREA" DefaultEncode="EBCDIC" RecordLength="421" MatchTargetField="receive" BeanClass="com.efg.brm.messages.specialProducts.GetPropertyFireInsuranceBResp">
-		<Field Name="two"				HostFormatAs="COBOLTYPE" FormatClassParm=      "X(06):DISPLAY" Mandatory="YES"/>
-	</DataSet>
-
-    <DataSet Name="FireInsuranceEntry" Type="RECORDSET" FormatAs="COMMAREA" DefaultEncode="EBCDIC" RecordLength="83" MaxElements="5" MatchTargetField="fireInsurancesList" BeanClass="com.efg.brm.baseMessages.specialProducts.FireInsuranceEntry">
- 		<Field Name="propertyArea"					HostFormatAs="COBOLTYPE" FormatClassParm=      "9(08):DISPLAY" Mandatory="YES"/>
- 		<Field Name="insuranceContractId"			HostFormatAs="COBOLTYPE" FormatClassParm=      "X(10):DISPLAY" Mandatory="YES"/>
- 		<Field Name="insuranceProviderId"			HostFormatAs="COBOLTYPE" FormatClassParm=      "X(05):DISPLAY" Mandatory="YES"/>
- 		<Field Name="fireInsuranceProgramId"		HostFormatAs="COBOLTYPE" FormatClassParm=      "9(02):DISPLAY" Mandatory="YES"/>
- 		<Field Name="insuranceContractStartDate"	HostFormatAs="COBOLTYPE" FormatClassParm=      "9(08):DISPLAY" Mandatory="YES"/>
- 		<Field Name="insuranceContractEndDate"		HostFormatAs="COBOLTYPE" FormatClassParm=      "9(08):DISPLAY" Mandatory="YES"/>
- 		<Field Name="insuredAmount"					HostFormatAs="COBOLTYPE" FormatClassParm=      "9(10)V9(2):DISPLAY" Mandatory="YES"/>
- 		<Field Name="fireInsuredAmount"				HostFormatAs="COBOLTYPE" FormatClassParm=      "9(10)V9(2):DISPLAY" Mandatory="YES"/>
- 		<Field Name="insurerId"						HostFormatAs="COBOLTYPE" FormatClassParm=      "X(08):DISPLAY" Mandatory="YES"/>
- 		<Field Name="grossInsuranceCost"			HostFormatAs="COBOLTYPE" FormatClassParm=	   "9(08)V9(2):DISPLAY" Mandatory="YES"/>
-	</DataSet>
-
-   <Service>
-        <ISERIESJ2C Name="Srv930" UseService="ISERIESJ2CCommonService" Transaction="NO" runInetStart="TRUE" TransactionID="930" UserExitClass="com.efg.brm.userExits.specialProducts.GetPropertyFireInsuranceOperationExit">
-            <ConnectorInput  DataSetName="send"/>
-            <ConnectorOutput DataSetName="receive"/>
-        </ISERIESJ2C>
-    </Service>
-</BusinessRequest>
+	<BusinessRequest Name="GetPropertyFireInsurance">
+		<Bean BeanClass="com.efg.brm.beans.specialProducts.GetPropertyFireInsuranceBean"/>
+		<DataSet Name="send" Type="RECORD" FormatAs="COMMAREA" DefaultEncode="EBCDIC" MatchTargetField="send" BeanClass="com.efg.brm.messages.specialProducts.GetPropertyFireInsuranceBReq">
+			<Field Name="propertyId"				HostFormatAs="COBOLTYPE" FormatClassParm=      "9(06):DISPLAY" Mandatory="YES"/>
+		</DataSet>
+		<DataSet Name="receive" Type="RECORD" FormatAs="COMMAREA" DefaultEncode="EBCDIC" RecordLength="421" MatchTargetField="receive" BeanClass="com.efg.brm.messages.specialProducts.GetPropertyFireInsuranceBResp">
+			<Field Name="dummypropertyId"				HostFormatAs="COBOLTYPE" FormatClassParm=      "X(06):DISPLAY" Mandatory="YES"/>
+			<Field Name="fireInsurancesList"   			MatchDataSetName="FireInsuranceEntry"/>
+		</DataSet>
+		<DataSet Name="FireInsuranceEntry" Type="RECORDSET" FormatAs="COMMAREA" DefaultEncode="EBCDIC" RecordLength="83" MaxElements="5" MatchTargetField="fireInsurancesList" BeanClass="com.efg.brm.baseMessages.specialProducts.FireInsuranceEntry">
+			<Field Name="propertyArea"					HostFormatAs="COBOLTYPE" FormatClassParm=      "9(08):DISPLAY" Mandatory="YES"/>
+			<Field Name="insuranceContractId"			HostFormatAs="COBOLTYPE" FormatClassParm=      "X(10):DISPLAY" Mandatory="YES"/>
+			<Field Name="insuranceProviderId"			HostFormatAs="COBOLTYPE" FormatClassParm=      "X(05):DISPLAY" Mandatory="YES"/>
+			<Field Name="fireInsuranceProgramId"		HostFormatAs="COBOLTYPE" FormatClassParm=      "9(02):DISPLAY" Mandatory="YES"/>
+			<Field Name="insuranceContractStartDate"	HostFormatAs="COBOLTYPE" FormatClassParm=      "9(08):DISPLAY" Mandatory="YES"/>
+			<Field Name="insuranceContractEndDate"		HostFormatAs="COBOLTYPE" FormatClassParm=      "9(08):DISPLAY" Mandatory="YES"/>
+			<Field Name="insuredAmount"					HostFormatAs="COBOLTYPE" FormatClassParm=      "9(10)V9(2):DISPLAY" Mandatory="YES"/>
+			<Field Name="fireInsuredAmount"				HostFormatAs="COBOLTYPE" FormatClassParm=      "9(10)V9(2):DISPLAY" Mandatory="YES"/>
+			<Field Name="insurerId"						HostFormatAs="COBOLTYPE" FormatClassParm=      "X(08):DISPLAY" Mandatory="YES"/>
+			<Field Name="grossInsuranceCost"			HostFormatAs="COBOLTYPE" FormatClassParm=	   "9(08)V9(2):DISPLAY" Mandatory="YES"/>
+		</DataSet>
+		<Service>
+			<ISERIESJ2C Name="Srv930" UseService="ISERIESJ2CCommonService" Transaction="NO" runInetStart="TRUE" TransactionID="930" UserExitClass="com.efg.brm.userExits.specialProducts.GetPropertyFireInsuranceOperationExit">
+				<ConnectorInput  DataSetName="send"/>
+				<ConnectorOutput DataSetName="receive"/>
+			</ISERIESJ2C>
+		</Service>
+	</BusinessRequest>
 
 
 </BRM>
