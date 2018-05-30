@@ -1,7 +1,6 @@
 package com.eurobank.util;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.Set;
 
 import static com.eurobank.util.UtilityMethods.*;
@@ -18,12 +17,24 @@ public class EsbClassesNamesCreator {
                                         .orElseThrow(NoSuchElementException::new);
         String bRespClassName = brmClassNamesSet
                                         .stream()
-                                        .filter(UtilityMethods::isABReqClassName)
+                                        .filter(UtilityMethods::isABRespClassName)
+                                        .findAny()
+                                        .orElseThrow(NoSuchElementException::new);
+        String DTOClassName = brmClassNamesSet
+                                        .stream()
+                                        .filter(UtilityMethods::isDTOClass)
+                                        .findAny()
+                                        .orElseThrow(NoSuchElementException::new);
+        String exitClassName = brmClassNamesSet
+                                        .stream()
+                                        .filter(UtilityMethods::isExitClass)
                                         .findAny()
                                         .orElseThrow(NoSuchElementException::new);
 
-        brmClassNamesSet.add(convertbrmDTOClassToEsbClass(bReqClassName));
-        brmClassNamesSet.add(convertbrmDTOClassToEsbClass(bRespClassName));
+        brmClassNamesSet.add(convertBrmObjectClassToEsbClass(bReqClassName));
+        brmClassNamesSet.add(convertBrmObjectClassToEsbClass(bRespClassName));
+        brmClassNamesSet.add(convertBrmDTOObjectClassToEsbClass(DTOClassName));
+        brmClassNamesSet.add(convertBrmExitClassToEsbSPClass(exitClassName));
 
         return brmClassNamesSet;
     }

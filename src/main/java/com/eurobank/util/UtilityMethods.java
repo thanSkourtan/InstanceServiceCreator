@@ -25,10 +25,28 @@ public class UtilityMethods {
         return className.endsWith("BReq");
     }
 
-    public static String convertbrmDTOClassToEsbClass(String brmClassName) {
+    public static String convertBrmObjectClassToEsbClass(String brmClassName) {
         return brmClassName.replace("brm","esb")
                 .replace("BReq", "SReq")
                 .replace("BResp", "SResp");
+    }
+
+    public static boolean isDTOClass (String brmClassName){
+        return !isABReqClassName(brmClassName) && !isABRespClassName(brmClassName)
+                && !brmClassName.endsWith("Exit") && !brmClassName.endsWith("Bean");
+    }
+
+    public static String convertBrmDTOObjectClassToEsbClass(String brmClassName) {
+        return brmClassName.replace("brm","esb");
+    }
+
+    public static boolean isExitClass (String brmClassName){
+        return brmClassName.endsWith("Exit");
+    }
+
+    public static String convertBrmExitClassToEsbSPClass(String brmClassName) {
+        return brmClassName.replace("brm","esb")
+                .replace("userExits", "services") + "SP";
     }
 
 }
