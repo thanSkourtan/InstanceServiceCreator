@@ -51,6 +51,9 @@ public class BeanClassGenerator extends MainFileGenerator{
     @Override
     public void generateFieldsAndMethods() throws ClassNotFoundException, JClassAlreadyExistsException {
 
+        /*Constant*/
+        jDefinedClass.field(JMod.PRIVATE | JMod.FINAL | JMod.STATIC, mainModel.LONG, "serialVersionUID", JExpr.lit(1L));
+
         /*Fields, Getters and Setters*/
         JDefinedClass bReqClass = reqRespPackage._class(bReqFullClassName);
         JDefinedClass bRespClass = reqRespPackage._class(bRespFullClassName);

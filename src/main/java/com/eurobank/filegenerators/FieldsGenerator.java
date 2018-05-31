@@ -18,6 +18,8 @@ public class FieldsGenerator {
     //todo: erase mainModel, dataTypeClasses if not needed
     public void createFields(JDefinedClass jDefinedClass, JCodeModel mainModel, List<DataSetType> data, Set<String> dataTypeClasses) throws ClassNotFoundException, JClassAlreadyExistsException {
 
+        jDefinedClass.field(JMod.PRIVATE | JMod.FINAL | JMod.STATIC, mainModel.LONG, "serialVersionUID", JExpr.lit(1L));
+
         for(DataSetType d : data) {
             for(FieldType f : d.getField()){
 
@@ -36,7 +38,7 @@ public class FieldsGenerator {
                     JDefinedClass tempClass  = jp._class(getClassName(dtoClassFullName));
 
                     tempVar1 = jDefinedClass.field(JMod.PRIVATE, Vector.class, f.getName());
-                    tempVar2 = jDefinedClass.field(JMod.PRIVATE, tempClass.array(), f.getMatchDataSetName());
+                    tempVar2 = jDefinedClass.field(JMod.PRIVATE, tempClass.array(), makeFirstCharacterLowercase(f.getMatchDataSetName()));
 
                     createGettersAndSettersMethods (jDefinedClass, tempVar1);
                     createGettersAndSettersMethods (jDefinedClass, tempVar2);
