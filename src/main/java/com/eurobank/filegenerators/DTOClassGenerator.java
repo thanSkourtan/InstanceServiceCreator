@@ -25,7 +25,7 @@ public class DTOClassGenerator extends MainFileGenerator{
     @Override
     public void generatePackages() {
         mainPackage = mainModel._package(currentPackageName);
-        secondaryPackage = secondaryModel._package("java.io");
+        helperPackage1 = secondaryModel._package("java.io");
     }
 
     @Override
@@ -42,7 +42,7 @@ public class DTOClassGenerator extends MainFileGenerator{
 
     @Override
     public void generateInheritance() throws JClassAlreadyExistsException {
-        JDefinedClass superclass = secondaryPackage._class("Serializable");
+        JDefinedClass superclass = helperPackage1._class("Serializable");
         jDefinedClass._extends(superclass);
     }
 }

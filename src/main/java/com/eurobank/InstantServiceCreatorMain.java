@@ -148,12 +148,13 @@ public class InstantServiceCreatorMain extends DefaultHandler{
             // Throw some exception
         }
 
+        //Create bean
         MainFileGenerator beanClass = new BeanClassGenerator(dataFromXml.getBean(), allClassNamesSet);
         beanClass.generateAll();
 
-        //Create bean
-//        MainFileGenerator beancg = new BeanClassGenerator(dataFromXml.getBean());
-//        beancg.generateAll();
+        //Create OperationExit
+        MainFileGenerator exitClass = new OperationExitClassGenerator(dataFromXml.getService().getISERIESJ2C(), allClassNamesSet);
+        exitClass.generateAll();
 
         // MainFileGenerator breqcg = new DataSetTypesClassGenerator();
 //        breqcg.generateAll();

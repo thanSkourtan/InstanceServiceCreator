@@ -39,7 +39,7 @@ public class BeanClassGenerator extends MainFileGenerator{
     @Override
     public void generatePackages() {
         mainPackage = mainModel._package(currentPackageName);
-        secondaryPackage = secondaryModel._package("it.ibm.eurobank.bean.base");
+        helperPackage1 = secondaryModel._package("it.ibm.eurobank.bean.base");
         reqRespPackage = secondaryModel._package(reqRespPackageName);
     }
 
@@ -94,7 +94,7 @@ public class BeanClassGenerator extends MainFileGenerator{
 
     @Override
     public void generateInheritance() throws JClassAlreadyExistsException{
-        JDefinedClass superclass = secondaryPackage._class("ABaseAS400Bean");
+        JDefinedClass superclass = helperPackage1._class("ABaseAS400Bean");
         jDefinedClass._extends(superclass);
     }
 

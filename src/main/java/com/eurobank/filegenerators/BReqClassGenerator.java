@@ -25,7 +25,7 @@ public class BReqClassGenerator extends MainFileGenerator{
     @Override
     public void generatePackages() {
         mainPackage = mainModel._package(currentPackageName);
-        secondaryPackage = secondaryModel._package("it.ibm.eurobank.bean.base.data");
+        helperPackage1 = secondaryModel._package("it.ibm.eurobank.bean.base.data");
     }
 
     @Override
@@ -42,7 +42,7 @@ public class BReqClassGenerator extends MainFileGenerator{
 
     @Override
     public void generateInheritance() throws JClassAlreadyExistsException {
-        JDefinedClass superclass = secondaryPackage._class("ABaseAS400InputDataBean");
+        JDefinedClass superclass = helperPackage1._class("ABaseAS400InputDataBean");
         jDefinedClass._extends(superclass);
     }
 

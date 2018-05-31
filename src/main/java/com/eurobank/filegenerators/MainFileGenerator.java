@@ -25,7 +25,7 @@ public abstract class MainFileGenerator {
 
     // The classes in this model will not be created
     protected JCodeModel secondaryModel;
-    protected JPackage secondaryPackage;
+    protected JPackage helperPackage1;
 
     public MainFileGenerator(String fullClassName){
         mainModel = new JCodeModel();
@@ -111,10 +111,10 @@ public abstract class MainFileGenerator {
     }
 
     public JPackage getSecondaryPackage() {
-        return secondaryPackage;
+        return helperPackage1;
     }
 
     public void setSecondaryPackage(JPackage secondaryPackage) {
-        this.secondaryPackage = secondaryPackage;
+        this.helperPackage1 = secondaryPackage;
     }
 }
