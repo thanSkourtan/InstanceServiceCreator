@@ -33,7 +33,9 @@ public class UtilityMethods {
 
     public static boolean isDTOClass (String brmClassName){
         return !isABReqClassName(brmClassName) && !isABRespClassName(brmClassName)
-                && !brmClassName.endsWith("Exit") && !brmClassName.endsWith("Bean");
+                && !isExitClass(brmClassName) && !brmClassName.endsWith("Bean")
+                && !brmClassName.endsWith("SP") && !brmClassName.endsWith("SReq")
+                && !brmClassName.endsWith("SResp");
     }
 
     public static String convertBrmDTOObjectClassToEsbClass(String brmClassName) {

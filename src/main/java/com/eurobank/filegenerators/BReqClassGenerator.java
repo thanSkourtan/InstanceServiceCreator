@@ -24,18 +24,13 @@ public class BReqClassGenerator extends MainFileGenerator{
 
     @Override
     public void generatePackages() {
-        mainPackage = mainModel._package(packageName);
+        mainPackage = mainModel._package(currentPackageName);
         secondaryPackage = secondaryModel._package("it.ibm.eurobank.bean.base.data");
     }
 
     @Override
     public void generateClasses() throws JClassAlreadyExistsException {
-        jDefinedClass = mainPackage._class(className);
-    }
-
-    @Override
-    public void generateConstructors() {
-
+        jDefinedClass = mainPackage._class(currentClassName);
     }
 
     @Override

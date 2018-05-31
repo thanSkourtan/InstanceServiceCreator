@@ -27,10 +27,10 @@ public class BeanClassGenerator extends MainFileGenerator{
 
         dataTypeClasses.forEach( x -> {
             if(isABReqClassName(x)) {
-                this.bReqFullClassName = UtilityMethods.getClassName(x);
+                this.bReqFullClassName = getClassName(x);
             }else if(isABRespClassName(x)){
-                this.bRespFullClassName = UtilityMethods.getClassName(x);
-                this.reqRespPackageName = UtilityMethods.getPackageName(x);
+                this.bRespFullClassName = getClassName(x);
+                this.reqRespPackageName = getPackageName(x);
             }
         });
 
@@ -38,25 +38,20 @@ public class BeanClassGenerator extends MainFileGenerator{
 
     @Override
     public void generatePackages() {
-        mainPackage = mainModel._package(packageName);
+        mainPackage = mainModel._package(currentPackageName);
         secondaryPackage = secondaryModel._package("it.ibm.eurobank.bean.base");
         reqRespPackage = secondaryModel._package(reqRespPackageName);
     }
 
     @Override
     public void generateClasses() throws JClassAlreadyExistsException{
-        jDefinedClass = mainPackage._class(className);
-    }
-
-    @Override
-    public void generateConstructors() throws JClassAlreadyExistsException {
-
-
+        jDefinedClass = mainPackage._class(currentClassName);
     }
 
     @Override
     public void generateFieldsAndMethods() throws ClassNotFoundException, JClassAlreadyExistsException {
 
+        /*Fields, Getters and Setters*/
         JDefinedClass bReqClass = reqRespPackage._class(bReqFullClassName);
         JDefinedClass bRespClass = reqRespPackage._class(bRespFullClassName);
 
@@ -77,7 +72,7 @@ public class BeanClassGenerator extends MainFileGenerator{
         setReceiveMethod.param(receiveField.type(), receiveField.name());
         setReceiveMethod.body().assign(JExpr._this().ref(receiveField.name()), JExpr.ref(receiveField.name()));
 
-        /*Constructors*/
+        /*The 3 Constructors*/
         JMethod firstConstructor = jDefinedClass.constructor(JMod.PUBLIC);
         firstConstructor.param(sendField.type(), "send");
         firstConstructor.param(receiveField.type(), "receive");

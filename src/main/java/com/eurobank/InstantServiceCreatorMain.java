@@ -119,23 +119,16 @@ public class InstantServiceCreatorMain extends DefaultHandler{
 
 
         Set<String> allClassNamesSet = addEsbClasses(brmClassNamesSet);
-
         Map<String, List<DataSetType>> mergedDataSetTypes = mergeDataSets(dataFromXml.getDataSet());
-
-        Set<String>  dataTypeClasses = mergedDataSetTypes.keySet();
-
-
 
         mergedDataSetTypes.forEach((k, v) -> {
             MainFileGenerator tempClass = null;
             if (isABReqClassName(getClassName(k))){
-                tempClass = new BReqClassGenerator(k, v, dataTypeClasses);
-                //dataTypeClasses.add(tempClass.getFullClassName());
+                tempClass = new BReqClassGenerator(k, v, allClassNamesSet);
             } else if (isABRespClassName(getClassName(k))){
-                tempClass = new BRespClassGenerator(k, v, dataTypeClasses);
-                //dataTypeClasses.add(tempClass.getFullClassName());
+                tempClass = new BRespClassGenerator(k, v, allClassNamesSet);
             } else {
-                tempClass = new DTOClassGenerator(k, v, dataTypeClasses);
+                tempClass = new DTOClassGenerator(k, v, allClassNamesSet);
             }
 
             try {
@@ -151,11 +144,11 @@ public class InstantServiceCreatorMain extends DefaultHandler{
         });
 
         /*Creates Bean*/
-        if(dataTypeClasses.size() < 2){
+        if(allClassNamesSet.size() < 2){
             // Throw some exception
         }
 
-        MainFileGenerator beanClass = new BeanClassGenerator(dataFromXml.getBean(), dataTypeClasses);
+        MainFileGenerator beanClass = new BeanClassGenerator(dataFromXml.getBean(), allClassNamesSet);
         beanClass.generateAll();
 
         //Create bean

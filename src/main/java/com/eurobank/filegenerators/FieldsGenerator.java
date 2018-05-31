@@ -15,21 +15,31 @@ import java.util.Vector;
  */
 public class FieldsGenerator {
 
-
+    //todo: erase mainModel, dataTypeClasses if not needed
     public void createFields(JDefinedClass jDefinedClass, JCodeModel mainModel, List<DataSetType> data, Set<String> dataTypeClasses) throws ClassNotFoundException, JClassAlreadyExistsException {
-        Optional<String> dtoClass = dataTypeClasses.stream().filter(x -> !isABRespClassName(x) && !isABReqClassName(x)).findFirst();
-        //JFieldVar constantField = jc.field(JMod.PUBLIC | JMod.FINAL | JMod.STATIC, String.class, "CONSTANT", JExpr.lit("VALUE"));
-        JDefinedClass dtoClassString = mainModel._class(dtoClass.get());
 
         for(DataSetType d : data) {
             for(FieldType f : d.getField()){
 
-                JFieldVar tempVar1 = null;
-                JFieldVar tempVar2 = null;
+                JFieldVar tempVar1;
                 if(f.getMatchDataSetName() != null){
-                    //TODO:Add logic
+
+                    JFieldVar tempVar2;
+                    String dtoClassFullName = dataTypeClasses
+                            .stream()
+                            .filter(x -> isDTOClass(x) &&  x.contains("brm"))
+                            .findFirst()
+                            .orElseThrow(IllegalArgumentException::new);
+
+                    JCodeModel tempModel = new JCodeModel();
+                    JPackage jp = tempModel._package(getPackageName(dtoClassFullName));
+                    JDefinedClass tempClass  = jp._class(getClassName(dtoClassFullName));
+
                     tempVar1 = jDefinedClass.field(JMod.PRIVATE, Vector.class, f.getName());
-                    tempVar2 = jDefinedClass.field(JMod.PRIVATE, dtoClassString, f.getMatchDataSetName());
+                    tempVar2 = jDefinedClass.field(JMod.PRIVATE, tempClass.array(), f.getMatchDataSetName());
+
+                    createGettersAndSettersMethods (jDefinedClass, tempVar1);
+                    createGettersAndSettersMethods (jDefinedClass, tempVar2);
                 } else {
                     Class<?> fieldClass = null;
                     if(f.getFormatClassParm().startsWith("X")) {
@@ -43,17 +53,22 @@ public class FieldsGenerator {
 
                     }
                     tempVar1 = jDefinedClass.field(JMod.PRIVATE, fieldClass, f.getName());
+                    createGettersAndSettersMethods (jDefinedClass, tempVar1);
                 }
-
-                JMethod tempGetter = jDefinedClass.method(JMod.PUBLIC, tempVar1.type(), "get" + tempVar1.name());
-                tempGetter.body()._return(tempVar1);
-                JMethod tempSetter  = jDefinedClass.method(JMod.PUBLIC, mainModel.VOID, "set" + tempVar1.name());
-                tempSetter.param(tempVar1.type(), tempVar1.name());
-                tempSetter.body().assign(JExpr._this().ref(tempVar1.name()), JExpr.ref(tempVar1.name()));
-
             }
             return;
         }
+
+    }
+
+
+    public void createGettersAndSettersMethods (JDefinedClass jDefinedClass, JFieldVar x) {
+        JMethod tempGetter = jDefinedClass.method(JMod.PUBLIC, x.type(), "get" + x.name());
+        tempGetter.body()._return(x);
+        JMethod tempSetter  = jDefinedClass.method(JMod.PUBLIC, jDefinedClass.owner().VOID, "set" + x.name());
+        tempSetter.param(x.type(), x.name());
+        tempSetter.body().assign(JExpr._this().ref(x.name()), JExpr.ref(x.name()));
+
 
     }
 

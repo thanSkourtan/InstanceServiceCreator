@@ -24,18 +24,13 @@ public class DTOClassGenerator extends MainFileGenerator{
 
     @Override
     public void generatePackages() {
-        mainPackage = mainModel._package(packageName);
+        mainPackage = mainModel._package(currentPackageName);
         secondaryPackage = secondaryModel._package("java.io");
     }
 
     @Override
     public void generateClasses() throws JClassAlreadyExistsException {
-        jDefinedClass = mainPackage._class(className);
-    }
-
-    @Override
-    public void generateConstructors() {
-
+        jDefinedClass = mainPackage._class(currentClassName);
     }
 
     @Override

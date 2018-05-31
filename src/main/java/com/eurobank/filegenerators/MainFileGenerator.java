@@ -19,8 +19,8 @@ public abstract class MainFileGenerator {
     protected JCodeModel mainModel;
     protected JPackage mainPackage;
     protected JDefinedClass jDefinedClass;
-    protected String packageName;
-    protected String className;
+    protected String currentPackageName;
+    protected String currentClassName;
     protected String fullClassName;
 
     // The classes in this model will not be created
@@ -31,13 +31,12 @@ public abstract class MainFileGenerator {
         mainModel = new JCodeModel();
         secondaryModel = new JCodeModel();
         this.fullClassName = fullClassName;
-        this.packageName = UtilityMethods.getPackageName(fullClassName);
-        this.className = UtilityMethods.getClassName(fullClassName);
+        this.currentPackageName = getPackageName(fullClassName);
+        this.currentClassName = getClassName(fullClassName);
     }
 
     public abstract void generatePackages();
     public abstract void generateClasses() throws JClassAlreadyExistsException;
-    public abstract void generateConstructors() throws JClassAlreadyExistsException;
     public abstract void generateFieldsAndMethods() throws ClassNotFoundException, JClassAlreadyExistsException;
     public abstract void generateInheritance() throws JClassAlreadyExistsException;
 
@@ -79,20 +78,20 @@ public abstract class MainFileGenerator {
         this.jDefinedClass = jDefinedClass;
     }
 
-    public String getPackageName() {
-        return packageName;
+    public String getCurrentPackageName() {
+        return currentPackageName;
     }
 
-    public void setPackageName(String packageName) {
-        this.packageName = packageName;
+    public void setCurrentPackageName(String currentPackageName) {
+        this.currentPackageName = currentPackageName;
     }
 
-    public String getClassName() {
-        return className;
+    public String getCurrentClassName() {
+        return currentClassName;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
+    public void setCurrentClassName(String currentClassName) {
+        this.currentClassName = currentClassName;
     }
 
     public String getFullClassName() {
