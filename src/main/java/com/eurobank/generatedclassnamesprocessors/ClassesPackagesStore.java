@@ -43,10 +43,10 @@ public class ClassesPackagesStore {
             } else if (isAnSPClassName(x)){
                 SPPackage = getPackageName(x);
                 SPClass = getClassName(x);
-            } else if (isAnSPRespClassName(x)){
+            } else if (isAnSRespClassName(x)){
                 SRespPackage = getPackageName(x);
                 SRespClass = getClassName(x);
-            } else if (isAnSPReqClassName(x)){
+            } else if (isAnSReqClassName(x)){
                 SReqPackage = getPackageName(x);
                 SReqClass = getClassName(x);
             } else if (isABRMDTOClassName(x)){

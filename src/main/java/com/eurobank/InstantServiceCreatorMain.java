@@ -23,6 +23,9 @@ import static com.eurobank.generatedclassnamesprocessors.EsbClassesNamesCreator.
 import static com.eurobank.directoryrouters.PlacementDirectory.*;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -122,19 +125,49 @@ public class InstantServiceCreatorMain extends DefaultHandler{
         */
 
         // TODO: test the parser here
+        /*First Part: Parsing*/
         SaxParserHandler saxParserHandler = parseXmlFile(filename);
         BusinessRequestType dataFromXml = saxParserHandler.getRoot();
         Set<String> brmClassNamesSet = saxParserHandler.getAllClassesNames();
 
-        /*Second Part*/
-        /*Creates BReq, BResp and DTOs*/
-
-
+        /*Second Part: Build the JObjects*/
         Set<String> allClassNamesSet = addEsbClasses(brmClassNamesSet);
-        ClassesPackagesStore classesPackagesStore = new ClassesPackagesStore(allClassNamesSet);
 
-        System.out.println(classesPackagesStore);
+        Map<String, Object> jClassesMap = new HashMap<>(); //add the jclasses
+
+        allClassNamesSet.forEach(x -> {
+            try {
+                Class<?> tempClass = Class.forName("com.eurobank.jclasses.J" + getTypeofClass(x) + "ClassData");
+                Object tempjClassObject = tempClass.getConstructor(String.class, BusinessRequestType.class)
+                        .newInstance(x, dataFromXml);
+                jClassesMap.put(x, tempjClassObject);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        });
+/********************************************************************************************************/
+//        JMainFileClassData jBResq = new JBRespClassData();
+//        JMainFileClassData jBReq = new JBReqClassData();
+//        JMainFileClassData jBRean = new JBeanClassData();
+
+        /*Third part: construct the classes*/
+
+
+        MainFileGenerator mfg = new BReqClassGenerator(jClassesMap.get());
+
+/*
+
+        ClassesPackagesStore classesPackagesStore = new ClassesPackagesStore(allClassNamesSet);
         Map<String, List<DataSetType>> mergedDataSetTypes = mergeDataSets(dataFromXml.getDataSet());
+
 
         mergedDataSetTypes.forEach((k, v) -> {
             MainFileGenerator tempClass = null;
@@ -157,19 +190,22 @@ public class InstantServiceCreatorMain extends DefaultHandler{
                 e.printStackTrace();
             }
         });
-
+*/
         /*Creates Bean*/
-        if(allClassNamesSet.size() < 2){
-            // Throw some exception
-        }
-
-        //Create bean
-        MainFileGenerator beanClass = new BeanClassGenerator(dataFromXml.getBean(), allClassNamesSet);
-        beanClass.generateAll();
-
-        //Create OperationExit
-        MainFileGenerator exitClass = new OperationExitClassGenerator(dataFromXml.getService().getISERIESJ2C(), classesPackagesStore);
-        exitClass.generateAll();
+//        if(allClassNamesSet.size() < 2){
+//            // Throw some exception
+//        }
+//
+//        //Create bean
+//        MainFileGenerator beanClass = new BeanClassGenerator(dataFromXml.getBean(), allClassNamesSet);
+//        beanClass.generateAll();
+//
+//        //Create OperationExit
+//        MainFileGenerator exitClass = new OperationExitClassGenerator(dataFromXml.getService().getISERIESJ2C(),
+//                                                                      classesPackagesStore,
+//                                                                      getReqDataSetTypes(mergedDataSetTypes),
+//                                                                      getRespDataSetTypes(mergedDataSetTypes));
+//        exitClass.generateAll();
 
         // MainFileGenerator breqcg = new DataSetTypesClassGenerator();
 //        breqcg.generateAll();

@@ -1,5 +1,7 @@
 package com.eurobank.filegenerators;
 
+import com.eurobank.jclasses.JBReqClassData;
+import com.eurobank.jclasses.JMainFileClassData;
 import com.eurobank.util.UtilityMethods;
 import com.sun.codemodel.*;
 
@@ -16,105 +18,47 @@ import static com.eurobank.util.UtilityMethods.getPackageName;
 
 public abstract class MainFileGenerator {
 
-    protected JCodeModel mainModel;
-    protected JPackage mainPackage;
-    protected JDefinedClass jDefinedClass;
-    protected String currentPackageName;
-    protected String currentClassName;
-    protected String fullClassName;
+    protected JCodeModel outerModel;
+    protected JMainFileClassData mainclassdata;
 
-    // The classes in this model will not be created
-    protected JCodeModel secondaryModel;
-    protected JPackage helperPackage1;
-
-    public MainFileGenerator(String fullClassName){
-        mainModel = new JCodeModel();
-        secondaryModel = new JCodeModel();
-        this.fullClassName = fullClassName;
-        this.currentPackageName = getPackageName(fullClassName);
-        this.currentClassName = getClassName(fullClassName);
+    public MainFileGenerator(JBReqClassData mainclassdata){
+        outerModel = new JCodeModel();
+        this.mainclassdata = mainclassdata;
     }
 
-    public abstract void generatePackages();
+    public abstract void generateOuterPackages();
+    //todo:delete the method below
     public abstract void generateClasses() throws JClassAlreadyExistsException;
-    public abstract void generateFieldsAndMethods() throws ClassNotFoundException, JClassAlreadyExistsException;
+    public abstract void generateOuterFieldsAndMethods();
     public abstract void generateInheritance() throws JClassAlreadyExistsException;
 
     public void generateJavadocs(){
-        jDefinedClass.javadoc().add("Automatically created by Instant Service Creator.");
+        mainclassdata.getjDefinedClass().javadoc().add("Automatically created by Instant Service Creator.");
     }
 
     public void generateAll() throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
-        generatePackages();
+        generateOuterPackages();
         generateClasses();
-        generateFieldsAndMethods();
+        generateOuterFieldsAndMethods();
         generateInheritance();
         generateJavadocs();
-        mainModel.build(new File("src//main//resources"));
+        //todo: remove it from here, we will call it once at the end
+        mainclassdata.getMainModel().build(new File("src//main//resources"));
     }
 
-
-    public JCodeModel getMainModel() {
-        return mainModel;
+    public JCodeModel getOuterModel() {
+        return outerModel;
     }
 
-    public void setMainModel(JCodeModel mainModel) {
-        this.mainModel = mainModel;
+    public void setOuterModel(JCodeModel outerModel) {
+        this.outerModel = outerModel;
     }
 
-    public JPackage getMainPackage() {
-        return mainPackage;
+    public JMainFileClassData getMainclassdata() {
+        return mainclassdata;
     }
 
-    public void setMainPackage(JPackage mainPackage) {
-        this.mainPackage = mainPackage;
-    }
-
-    public JDefinedClass getjDefinedClass() {
-        return jDefinedClass;
-    }
-
-    public void setjDefinedClass(JDefinedClass jDefinedClass) {
-        this.jDefinedClass = jDefinedClass;
-    }
-
-    public String getCurrentPackageName() {
-        return currentPackageName;
-    }
-
-    public void setCurrentPackageName(String currentPackageName) {
-        this.currentPackageName = currentPackageName;
-    }
-
-    public String getCurrentClassName() {
-        return currentClassName;
-    }
-
-    public void setCurrentClassName(String currentClassName) {
-        this.currentClassName = currentClassName;
-    }
-
-    public String getFullClassName() {
-        return fullClassName;
-    }
-
-    public void setFullClassName(String fullClassName) {
-        this.fullClassName = fullClassName;
-    }
-
-    public JCodeModel getSecondaryModel() {
-        return secondaryModel;
-    }
-
-    public void setSecondaryModel(JCodeModel secondaryModel) {
-        this.secondaryModel = secondaryModel;
-    }
-
-    public JPackage getSecondaryPackage() {
-        return helperPackage1;
-    }
-
-    public void setSecondaryPackage(JPackage secondaryPackage) {
-        this.helperPackage1 = secondaryPackage;
+    public void setMainclassdata(JMainFileClassData mainclassdata) {
+        this.mainclassdata = mainclassdata;
     }
 }

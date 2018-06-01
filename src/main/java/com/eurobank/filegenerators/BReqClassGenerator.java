@@ -1,6 +1,8 @@
 package com.eurobank.filegenerators;
 
 import com.eurobank.JAXBmodel.DataSetType;
+import com.eurobank.jclasses.JBReqClassData;
+import com.eurobank.jclasses.JMainFileClassData;
 import com.sun.codemodel.*;
 
 import java.util.List;
@@ -11,39 +13,31 @@ import java.util.Set;
  */
 public class BReqClassGenerator extends MainFileGenerator{
 
-    private List<DataSetType> dataFromXml;
-    private FieldsGenerator fieldsGenerator;
-    private Set<String> dataTypeClasses;
+    private JPackage outerPackage1;
 
-    public BReqClassGenerator(String fullClassName, List<DataSetType> dataFromXml, Set<String> dataTypeClasses) {
-        super(fullClassName);
-        this.dataFromXml = dataFromXml;
-        this.fieldsGenerator = new FieldsGenerator();
-        this.dataTypeClasses = dataTypeClasses;
+    public BReqClassGenerator( JBReqClassData mainclassdata) {
+        super(mainclassdata);
     }
 
     @Override
-    public void generatePackages() {
-        mainPackage = mainModel._package(currentPackageName);
-        helperPackage1 = secondaryModel._package("it.ibm.eurobank.bean.base.data");
+    public void generateOuterPackages() {
+        outerPackage1 = outerModel._package("it.ibm.eurobank.bean.base.data");
     }
 
     @Override
     public void generateClasses() throws JClassAlreadyExistsException {
-        jDefinedClass = mainPackage._class(currentClassName);
+
     }
 
     @Override
-    public void generateFieldsAndMethods() throws ClassNotFoundException, JClassAlreadyExistsException {
-
-        fieldsGenerator.createFields(jDefinedClass, mainModel, dataFromXml, dataTypeClasses);
-
+    public void generateOuterFieldsAndMethods()  {
+        ;
     }
 
     @Override
     public void generateInheritance() throws JClassAlreadyExistsException {
-        JDefinedClass superclass = helperPackage1._class("ABaseAS400InputDataBean");
-        jDefinedClass._extends(superclass);
+        JDefinedClass superclass = outerPackage1._class("ABaseAS400InputDataBean");
+        mainclassdata.getjDefinedClass()._extends(superclass);
     }
 
 

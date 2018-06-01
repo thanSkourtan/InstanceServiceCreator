@@ -1,5 +1,10 @@
 package com.eurobank.util;
 
+import com.eurobank.JAXBmodel.DataSetType;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
 /**
  * Created by v-askourtaniotis on 22/5/2018. mailTo: thanskourtan@gmail.com
  */
@@ -41,11 +46,11 @@ public class UtilityMethods {
         return brmClassName.endsWith("SP");
     }
 
-    public static boolean isAnSPRespClassName(String brmClassName){
+    public static boolean isAnSRespClassName(String brmClassName){
         return brmClassName.endsWith("SResp");
     }
 
-    public static boolean isAnSPReqClassName(String brmClassName){
+    public static boolean isAnSReqClassName(String brmClassName){
         return brmClassName.endsWith("SReq");
     }
 
@@ -60,8 +65,8 @@ public class UtilityMethods {
     public static boolean isADTOClassName (String x) {
         return !isABReqClassName(x) && !isABRespClassName(x)
                 && !isAnExitClassName(x) && !isABeanClassName(x)
-                && !isAnSPClassName(x) && !isAnSPReqClassName(x)
-                && !isAnSPRespClassName(x);
+                && !isAnSPClassName(x) && !isAnSReqClassName(x)
+                && !isAnSRespClassName(x);
     }
 
     public static String convertBrmDTOObjectClassToEsbClass(String brmClassName) {
@@ -80,5 +85,51 @@ public class UtilityMethods {
                 .replace("BReq", "SReq")
                 .replace("BResp", "SResp");
     }
+
+    public static List<DataSetType> getReqDataSetTypes (Map<String, List<DataSetType>> m) {
+         return m.keySet().stream()
+                  .filter(UtilityMethods::isABReqClassName)
+                  .map(m::get)
+                  .flatMap(Collection::stream)
+                  .collect(Collectors.toList());
+    }
+
+    public static List<DataSetType> getRespDataSetTypes (Map<String, List<DataSetType>> m) {
+        return m.keySet().stream()
+                .filter(UtilityMethods::isABRespClassName)
+                .map(m::get)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+    }
+
+    public static List<DataSetType> getBRMDTODataSetTypes (Map<String, List<DataSetType>> m) {
+        return m.keySet().stream()
+                .filter(UtilityMethods::isABRMDTOClassName)
+                .map(m::get)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+    }
+
+    //TODO: for now there are not esb dtos, only brms.
+    public static List<DataSetType> getESBDTODataSetTypes (Map<String, List<DataSetType>> m) {
+        return m.keySet().stream()
+                .filter(UtilityMethods::isAnESBDTOClassName)
+                .map(m::get)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+    }
+
+    public static String getTypeofClass(String fullClassName) {
+        if(isABRespClassName(fullClassName)) return "BResp";
+        else if(isABReqClassName(fullClassName)) return "BReq";
+        else if(isABeanClassName(fullClassName)) return "Bean";
+        else if(isAnExitClassName(fullClassName)) return "Exit";
+        else if(isAnSPClassName(fullClassName)) return "SP";
+        else if(isAnSReqClassName(fullClassName)) return "SReq";
+        else if(isAnSRespClassName(fullClassName)) return "SResp";
+        else if(isADTOClassName(fullClassName)) return "DTO";
+        else return "";
+    }
+
 
 }

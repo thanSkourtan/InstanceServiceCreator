@@ -1,10 +1,13 @@
 package com.eurobank.filegenerators;
 
+import com.eurobank.JAXBmodel.DataSetType;
 import com.eurobank.JAXBmodel.ISERIESJ2CType;
 import com.eurobank.generatedclassnamesprocessors.ClassesPackagesStore;
 import com.sun.codemodel.*;
 
 
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -24,11 +27,18 @@ public class OperationExitClassGenerator extends MainFileGenerator{
     private JDefinedClass jBReqClass;
     private JPackage jBeanPackage;
     private JDefinedClass jBeanClass;
-    ClassesPackagesStore store;
+    private ClassesPackagesStore store;
+    private List<DataSetType> ReqDataSets;
+    private List<DataSetType> RespDataSets;
 
-    public OperationExitClassGenerator(ISERIESJ2CType dataFromXml, ClassesPackagesStore store) {
+    public OperationExitClassGenerator(ISERIESJ2CType dataFromXml,
+                                       ClassesPackagesStore store,
+                                       List<DataSetType> ReqDataSets,
+                                       List<DataSetType> RespDataSets) {
         super(dataFromXml.getUserExitClass());
         this.store = store;
+        this.ReqDataSets = ReqDataSets;
+        this.RespDataSets = RespDataSets;
     }
 
     @Override
@@ -67,16 +77,30 @@ public class OperationExitClassGenerator extends MainFileGenerator{
         JEnumConstant BRM_LAST_BEFORE_CONSTANT = BRMErrorTypeClass.enumConstant("BRM_LAST_BEFORE");
 
 
+
+
+
         String[] methodNames = new String[] {"executeAfterCall", "executeBeforeCall"};
 
         for(int i = 0 ; i < methodNames.length ; i++) {
             JMethod executeBeforeCallMethod = jDefinedClass.method(JMod.PUBLIC, mainModel.INT, methodNames[i]);
+            /* Order of calls matters.*/
+            if (methodNames[i].equals("executeAfterCall")){
+                fillInBlock(executeBeforeCallMethod.body());
+            }
             executeBeforeCallMethod.annotate(Override.class);
             executeBeforeCallMethod.param(Object.class, "mainBean");
             executeBeforeCallMethod._throws(brmExceptionClass);
 
             JTryBlock jTryBlock = executeBeforeCallMethod.body()._try();
-            fillInTryBlock(jTryBlock.body());
+
+            // Code specific only for second method
+            if(methodNames[i].equals("executeBeforeCall")){
+                JVar beanVar = fillInBlock(jTryBlock.body());
+
+
+
+            }
 
             JCatchBlock jCatchBlock =  jTryBlock._catch(exceptionClass);
             JVar exException = jCatchBlock.param("ex");
@@ -103,16 +127,18 @@ public class OperationExitClassGenerator extends MainFileGenerator{
 
     }
 
-    public void fillInTryBlock (JBlock body) throws JClassAlreadyExistsException {
+    public JVar fillInBlock (JBlock body) throws JClassAlreadyExistsException {
 
         JMethod tempMethod1 = jBeanClass.method(JMod.PUBLIC, jBRespClass, "getSend");
         JMethod tempMethod2 = jBeanClass.method(JMod.PUBLIC, jBRespClass, "getReceive");
 
-        JVar tempVar = body.decl(jBeanClass, "myBean");
-        tempVar.init(JExpr.cast(jBeanClass , JExpr.ref("mainBean")));
+        JVar myBeanVar = body.decl(jBeanClass, "myBean");
+        myBeanVar.init(JExpr.cast(jBeanClass , JExpr.ref("mainBean")));
 
-        body.decl(jBReqClass, "mySend").init(tempVar.invoke(tempMethod1));
-        body.decl(jBRespClass, "myReceive").init(tempVar.invoke(tempMethod2));
+        body.decl(jBReqClass, "mySend").init(myBeanVar.invoke(tempMethod1));
+        body.decl(jBRespClass, "myReceive").init(myBeanVar.invoke(tempMethod2));
+
+        return myBeanVar;
     }
 
     @Override
