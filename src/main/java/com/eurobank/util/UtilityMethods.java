@@ -56,17 +56,18 @@ public class UtilityMethods {
     }
 
     public static boolean isABRMDTOClassName(String x){
-        return !isABReqClassName(x) && !isABRespClassName(x)
-                && !isAnExitClassName(x) && !isABeanClassName(x)
-                && !isAnSPClassName(x) && !isAnSPReqClassName(x)
-                && !isAnSPRespClassName(x) && x.contains("\\.brm\\.");
+        return isADTOClassName(x) && x.contains("\\.brm\\.");
     }
 
     public static boolean isAnESBDTOClassName(String x){
+        return isADTOClassName(x) && x.contains("\\.esb\\.");
+    }
+
+    public static boolean isADTOClassName (String x) {
         return !isABReqClassName(x) && !isABRespClassName(x)
                 && !isAnExitClassName(x) && !isABeanClassName(x)
                 && !isAnSPClassName(x) && !isAnSPReqClassName(x)
-                && !isAnSPRespClassName(x) && x.contains("\\.esb\\.");
+                && !isAnSPRespClassName(x);
     }
 
     public static String convertBrmDTOObjectClassToEsbClass(String brmClassName) {

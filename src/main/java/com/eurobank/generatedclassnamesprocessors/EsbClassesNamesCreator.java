@@ -12,6 +12,7 @@ public class EsbClassesNamesCreator {
 
         //TODO: Exception handling, replace the exception
         //Todo: test a case with two DTO objects
+        //todo: change this to if statement
         String bReqClassName = brmClassNamesSet
                                         .stream()
                                         .filter(UtilityMethods::isABReqClassName)
