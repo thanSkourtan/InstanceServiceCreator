@@ -18,9 +18,6 @@ public class OperationExitClassGenerator extends MainFileGenerator{
     private JPackage helperPackage5;
     private JPackage helperPackage6;
     private JPackage helperPackage7;
-    private JPackage helperPackage8;
-    private JPackage helperPackage9;
-    private JPackage helperPackage10;
     private JPackage jBRespPackage;
     private JDefinedClass jBRespClass;
     private JPackage jBReqPackage;
@@ -52,9 +49,9 @@ public class OperationExitClassGenerator extends MainFileGenerator{
     @Override
     public void generateClasses() throws JClassAlreadyExistsException {
         jDefinedClass = mainPackage._class(currentClassName);
-        this.jBRespClass = helperPackage8._class(store.getBRespClass());
-        this.jBReqClass = helperPackage9._class(store.getBReqClass());
-        this.jBeanClass = helperPackage10._class(store.getBeanClass());
+        this.jBRespClass = jBRespPackage._class(store.getBRespClass());
+        this.jBReqClass = jBReqPackage._class(store.getBReqClass());
+        this.jBeanClass = jBeanPackage._class(store.getBeanClass());
     }
 
     @Override
