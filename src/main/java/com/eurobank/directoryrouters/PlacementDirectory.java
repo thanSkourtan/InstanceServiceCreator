@@ -30,7 +30,11 @@ public class PlacementDirectory {
         directoriesRoots.put("EuroBankOther", "PersonalAccounts");
     }
 
-// Unfortunately there is not a default location for Services declared in ___.xml Please provide the
+    public static Map<String, String> getDirectoriesRoots() {
+        return directoriesRoots;
+    }
+
+    // Unfortunately there is not a default location for Services declared in ___.xml Please provide the
 // stem(root) of the project name as third argument. For example if you want the several files of you Service to be located
 // into the packages BRMEstatements, BRMEStatementsExits, ESBEstatements and ESBEstatementsImpl the write
 // java jar .... <nameofxmlfile> <servicename> <Estatements>. Do the same if for any reason you want to override the default location.

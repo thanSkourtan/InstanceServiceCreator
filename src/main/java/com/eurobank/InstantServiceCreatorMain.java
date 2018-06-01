@@ -11,6 +11,7 @@ import com.eurobank.JAXBmodel.BusinessRequestType;
 import com.eurobank.JAXBmodel.DataSetType;
 import com.eurobank.filegenerators.*;
 import com.eurobank.exceptions.exceptionhandlers.SaxParserErrorHandler;
+import com.eurobank.generatedclassnamesprocessors.FullClassesNamesSplitter;
 import com.eurobank.saxparser.SaxParserHandler;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import org.apache.commons.cli.*;
@@ -18,10 +19,10 @@ import org.xml.sax.*;
 import org.xml.sax.helpers.*;
 import static com.eurobank.util.DataSetTypesMerger.*;
 import static com.eurobank.util.UtilityMethods.*;
-import static com.eurobank.util.EsbClassesNamesCreator.*;
+import static com.eurobank.generatedclassnamesprocessors.EsbClassesNamesCreator.*;
+import static com.eurobank.directoryrouters.PlacementDirectory.*;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -73,7 +74,10 @@ public class InstantServiceCreatorMain extends DefaultHandler{
         Options options = new Options();
         options.addOption("x", "xml",true,"The path of the xml file to be parsed.");
         options.addOption("s", "service",true,"The name of the service to be handled.");
-        options.addOption("q", "Suppress ISC output");
+        options.addOption("p", "project", true,"The name (stem actually) of the project folders to place the classes.");
+        options.addOption("v", "verbose",false,"Shows logs.");
+        options.addOption("d","delete", false, "Deletes the classes related to the declared service.");
+
 
         CommandLineParser cmdParser = new DefaultParser();
         CommandLine cmd = cmdParser.parse(options, args);
@@ -87,6 +91,14 @@ public class InstantServiceCreatorMain extends DefaultHandler{
             System.out.println("Please enter lala");
             System.exit(-1);
         }
+        //todo:exception handling here
+        String project = cmd.hasOption("project")?
+                cmd.getOptionValue("project"):
+                getDirectoriesRoots().get(getXmlFileName(cmd.getOptionValue("xml")));
+
+
+
+        System.out.println(project);
 
         String filename = cmd.getOptionValue("xml");
         serviceName = cmd.getOptionValue("service");
@@ -119,6 +131,8 @@ public class InstantServiceCreatorMain extends DefaultHandler{
 
 
         Set<String> allClassNamesSet = addEsbClasses(brmClassNamesSet);
+        FullClassesNamesSplitter fullClassesNamesSplitter = new FullClassesNamesSplitter(allClassNamesSet);
+
         Map<String, List<DataSetType>> mergedDataSetTypes = mergeDataSets(dataFromXml.getDataSet());
 
         mergedDataSetTypes.forEach((k, v) -> {

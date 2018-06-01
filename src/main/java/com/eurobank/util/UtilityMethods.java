@@ -5,6 +5,10 @@ package com.eurobank.util;
  */
 public class UtilityMethods {
 
+    public static String getXmlFileName (String x) {
+        return x.substring(x.lastIndexOf("/") + 1, x.indexOf("."));
+    }
+
     public static String getPackageName(String fullClassName){
         return fullClassName.substring(0, fullClassName.lastIndexOf('.'));
     }
