@@ -11,7 +11,7 @@ import com.eurobank.JAXBmodel.BusinessRequestType;
 import com.eurobank.JAXBmodel.DataSetType;
 import com.eurobank.filegenerators.*;
 import com.eurobank.exceptions.exceptionhandlers.SaxParserErrorHandler;
-import com.eurobank.generatedclassnamesprocessors.FullClassesNamesSplitter;
+import com.eurobank.generatedclassnamesprocessors.ClassesPackagesStore;
 import com.eurobank.saxparser.SaxParserHandler;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import org.apache.commons.cli.*;
@@ -131,8 +131,9 @@ public class InstantServiceCreatorMain extends DefaultHandler{
 
 
         Set<String> allClassNamesSet = addEsbClasses(brmClassNamesSet);
-        FullClassesNamesSplitter fullClassesNamesSplitter = new FullClassesNamesSplitter(allClassNamesSet);
+        ClassesPackagesStore classesPackagesStore = new ClassesPackagesStore(allClassNamesSet);
 
+        System.out.println(classesPackagesStore);
         Map<String, List<DataSetType>> mergedDataSetTypes = mergeDataSets(dataFromXml.getDataSet());
 
         mergedDataSetTypes.forEach((k, v) -> {
@@ -167,7 +168,7 @@ public class InstantServiceCreatorMain extends DefaultHandler{
         beanClass.generateAll();
 
         //Create OperationExit
-        MainFileGenerator exitClass = new OperationExitClassGenerator(dataFromXml.getService().getISERIESJ2C(), allClassNamesSet);
+        MainFileGenerator exitClass = new OperationExitClassGenerator(dataFromXml.getService().getISERIESJ2C(), classesPackagesStore);
         exitClass.generateAll();
 
         // MainFileGenerator breqcg = new DataSetTypesClassGenerator();

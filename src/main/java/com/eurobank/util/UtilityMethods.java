@@ -49,18 +49,12 @@ public class UtilityMethods {
         return brmClassName.endsWith("SReq");
     }
 
-    public static String convertBrmObjectClassToEsbClass(String brmClassName) {
-        return brmClassName.replace("brm","esb")
-                .replace("BReq", "SReq")
-                .replace("BResp", "SResp");
-    }
-
     public static boolean isABRMDTOClassName(String x){
-        return isADTOClassName(x) && x.contains("\\.brm\\.");
+        return isADTOClassName(x) && x.contains(".brm.");
     }
 
     public static boolean isAnESBDTOClassName(String x){
-        return isADTOClassName(x) && x.contains("\\.esb\\.");
+        return isADTOClassName(x) && x.contains(".esb.");
     }
 
     public static boolean isADTOClassName (String x) {
@@ -79,6 +73,12 @@ public class UtilityMethods {
                 .replace("userExits", "services")
                 .replace("OperationExit", "SP")
                 .replace("UserExit", "SP");
+    }
+
+    public static String convertBrmObjectClassToEsbClass(String brmClassName) {
+        return brmClassName.replace("brm","esb")
+                .replace("BReq", "SReq")
+                .replace("BResp", "SResp");
     }
 
 }
