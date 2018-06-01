@@ -6,7 +6,6 @@ import com.sun.codemodel.*;
 import static com.eurobank.util.UtilityMethods.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.Vector;
 
@@ -29,7 +28,7 @@ public class FieldsGenerator {
                     JFieldVar tempVar2;
                     String dtoClassFullName = dataTypeClasses
                             .stream()
-                            .filter(x -> isDTOClass(x) &&  x.contains("brm"))
+                            .filter(x -> isADTOClassName(x) &&  x.contains("brm"))
                             .findFirst()
                             .orElseThrow(IllegalArgumentException::new);
 

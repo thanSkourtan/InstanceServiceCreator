@@ -29,25 +29,48 @@ public class UtilityMethods {
         return className.endsWith("BReq");
     }
 
+    public static boolean isABeanClassName(String className) {
+        return className.endsWith("Bean");
+    }
+
+    public static boolean isAnExitClassName(String brmClassName){
+        return brmClassName.endsWith("Exit");
+    }
+
+    public static boolean isAnSPClassName(String brmClassName){
+        return brmClassName.endsWith("SP");
+    }
+
+    public static boolean isAnSPRespClassName(String brmClassName){
+        return brmClassName.endsWith("SResp");
+    }
+
+    public static boolean isAnSPReqClassName(String brmClassName){
+        return brmClassName.endsWith("SReq");
+    }
+
     public static String convertBrmObjectClassToEsbClass(String brmClassName) {
         return brmClassName.replace("brm","esb")
                 .replace("BReq", "SReq")
                 .replace("BResp", "SResp");
     }
 
-    public static boolean isDTOClass (String brmClassName){
-        return !isABReqClassName(brmClassName) && !isABRespClassName(brmClassName)
-                && !isExitClass(brmClassName) && !brmClassName.endsWith("Bean")
-                && !brmClassName.endsWith("SP") && !brmClassName.endsWith("SReq")
-                && !brmClassName.endsWith("SResp");
+    public static boolean isABRMDTOClassName(String x){
+        return !isABReqClassName(x) && !isABRespClassName(x)
+                && !isAnExitClassName(x) && !isABeanClassName(x)
+                && !isAnSPClassName(x) && !isAnSPReqClassName(x)
+                && !isAnSPRespClassName(x) && x.contains("\\.brm\\.");
+    }
+
+    public static boolean isAnESBDTOClassName(String x){
+        return !isABReqClassName(x) && !isABRespClassName(x)
+                && !isAnExitClassName(x) && !isABeanClassName(x)
+                && !isAnSPClassName(x) && !isAnSPReqClassName(x)
+                && !isAnSPRespClassName(x) && x.contains("\\.esb\\.");
     }
 
     public static String convertBrmDTOObjectClassToEsbClass(String brmClassName) {
         return brmClassName.replace("brm","esb");
-    }
-
-    public static boolean isExitClass (String brmClassName){
-        return brmClassName.endsWith("Exit");
     }
 
     public static String convertBrmExitClassToEsbSPClass(String brmClassName) {
