@@ -6,6 +6,7 @@ import com.sun.codemodel.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 
 /**
@@ -17,29 +18,25 @@ public abstract class MainFileGenerator {
     protected JCodeModel outerModel;
     protected JMainFileClassData mainclassdata;
 
-    public MainFileGenerator(JRequestResponseObjectsClassData mainclassdata){
+    public MainFileGenerator( JMainFileClassData jClassData){
         outerModel = new JCodeModel();
-        this.mainclassdata = mainclassdata;
+        this.mainclassdata = jClassData;
     }
 
     public abstract void generateOuterPackages();
     //todo:delete the method below
-    public abstract void generateClasses() throws JClassAlreadyExistsException;
+
     public abstract void generateOuterFieldsAndMethods() throws JClassAlreadyExistsException;
     public abstract void generateInheritance() throws JClassAlreadyExistsException;
-
     public void generateJavadocs(){
         mainclassdata.getjDefinedClass().javadoc().add("Automatically created by Instant Service Creator.");
     }
 
     public void generateAll() throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
         generateOuterPackages();
-        generateClasses();
         generateOuterFieldsAndMethods();
         generateInheritance();
         generateJavadocs();
-        //todo: remove it from here, we will call it once at the end
-        mainclassdata.getMainModel().build(new File("src//main//resources"));
     }
 
     public JCodeModel getOuterModel() {

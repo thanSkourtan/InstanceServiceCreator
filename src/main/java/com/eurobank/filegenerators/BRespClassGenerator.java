@@ -28,11 +28,6 @@ public class BRespClassGenerator extends MainFileGenerator{
     }
 
     @Override
-    public void generateClasses() throws JClassAlreadyExistsException {
-
-    }
-
-    @Override
     public void generateOuterFieldsAndMethods() {
 
 //        fieldsGenerator.createFields(jDefinedClass, mainModel, dataFromXml, dataTypeClasses);

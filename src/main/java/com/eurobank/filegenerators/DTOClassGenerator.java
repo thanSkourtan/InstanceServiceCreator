@@ -1,10 +1,13 @@
 package com.eurobank.filegenerators;
 
 import com.eurobank.JAXBmodel.DataSetType;
+import com.eurobank.jclasses.JMainFileClassData;
 import com.eurobank.jclasses.JRequestResponseObjectsClassData;
 import com.sun.codemodel.*;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -13,9 +16,12 @@ import java.util.Set;
 public class DTOClassGenerator extends MainFileGenerator{
 
     private JPackage outerPackage1;
+    Map<String, JMainFileClassData> jClassesMap;
 
-    public DTOClassGenerator( JRequestResponseObjectsClassData mainclassdata) {
-        super(mainclassdata);
+    public DTOClassGenerator(Map<String, JMainFileClassData> jClassesMap, String canonicalName) throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
+        super(jClassesMap.get(canonicalName));
+        this.jClassesMap = jClassesMap;
+        generateAll();
     }
 
     @Override
@@ -24,14 +30,7 @@ public class DTOClassGenerator extends MainFileGenerator{
     }
 
     @Override
-    public void generateClasses() throws JClassAlreadyExistsException {
-
-    }
-
-    @Override
     public void generateOuterFieldsAndMethods() {
-
-//        fieldsGenerator.createFields(jDefinedClass, mainModel, dataFromXml, dataTypeClasses);
 
     }
 

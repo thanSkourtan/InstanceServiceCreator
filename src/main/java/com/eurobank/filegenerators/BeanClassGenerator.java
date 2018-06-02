@@ -46,11 +46,6 @@ public class BeanClassGenerator extends MainFileGenerator{
     }
 
     @Override
-    public void generateClasses() throws JClassAlreadyExistsException {
-
-    }
-
-    @Override
     public void generateOuterFieldsAndMethods() {
 
     }

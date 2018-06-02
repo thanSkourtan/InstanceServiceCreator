@@ -12,6 +12,7 @@ import com.eurobank.JAXBmodel.DataSetType;
 import com.eurobank.filegenerators.*;
 import com.eurobank.exceptions.exceptionhandlers.SaxParserErrorHandler;
 import com.eurobank.generatedclassnamesprocessors.ClassesPackagesStore;
+import com.eurobank.jclasses.JMainFileClassData;
 import com.eurobank.saxparser.SaxParserHandler;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import org.apache.commons.cli.*;
@@ -130,15 +131,17 @@ public class InstantServiceCreatorMain extends DefaultHandler{
         BusinessRequestType dataFromXml = saxParserHandler.getRoot();
         Set<String> brmClassNamesSet = saxParserHandler.getAllClassesNames();
 
-        /*Second Part: Build the JObjects*/
-        Map<Integer, String> allClassNamesSet = addEsbClasses(brmClassNamesSet);
+/********************************************************************************************************/
 
-        Map<String, Object> jClassesMap = new HashMap<>(); //add the jclasses
+        /*Second Part: Build the JObjects model. */
+        Map<Integer, String> allClassesNamesSet = addEsbClasses(brmClassNamesSet);
 
-        allClassNamesSet.forEach((k,v) -> {
+        Map<String, JMainFileClassData> jClassesMap = new HashMap<>(); //add the jclasses
+
+        allClassesNamesSet.forEach((k,v) -> {
             try {
                 Class<?> tempClass = Class.forName("com.eurobank.jclasses.J" + getTypeofClass(v) + "ClassData");
-                Object tempjClassObject = tempClass.getConstructor(String.class, BusinessRequestType.class)
+                JMainFileClassData tempjClassObject = (JMainFileClassData) tempClass.getConstructor(String.class, BusinessRequestType.class)
                         .newInstance(v, dataFromXml);
                 jClassesMap.put(v, tempjClassObject);
             } catch (ClassNotFoundException e) {
@@ -153,62 +156,30 @@ public class InstantServiceCreatorMain extends DefaultHandler{
                 e.printStackTrace();
             }
         });
+
 /********************************************************************************************************/
-//        JMainFileClassData jBResq = new JBRespClassData();
-//        JMainFileClassData jBReq = new JRequestResponseObjectsClassData();
-//        JMainFileClassData jBRean = new JBeanClassData();
-
         /*Third part: construct the classes*/
-
 
        // MainFileGenerator mfg = new BReqClassGenerator(jClassesMap.get());
 
-/*
-
-        ClassesPackagesStore classesPackagesStore = new ClassesPackagesStore(allClassNamesSet);
-        Map<String, List<DataSetType>> mergedDataSetTypes = mergeDataSets(dataFromXml.getDataSet());
-
-
-        mergedDataSetTypes.forEach((k, v) -> {
-            MainFileGenerator tempClass = null;
-            if (isABReqClassName(getClassName(k))){
-                tempClass = new BReqClassGenerator(k, v, allClassNamesSet);
-            } else if (isABRespClassName(getClassName(k))){
-                tempClass = new BRespClassGenerator(k, v, allClassNamesSet);
-            } else {
-                tempClass = new DTOClassGenerator(k, v, allClassNamesSet);
-            }
-
+        allClassesNamesSet.forEach((k,v) -> {
             try {
-                tempClass.generateAll();
-
-            } catch (JClassAlreadyExistsException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+                Class<?> tempClass = Class.forName("com.eurobank.filegenerators." + getTypeofClass(v) + "ClassGenerator");
+                Object tempClassObject = tempClass.getConstructor(Map.class, String.class).newInstance(jClassesMap, v);
             } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
                 e.printStackTrace();
             }
         });
-*/
-        /*Creates Bean*/
-//        if(allClassNamesSet.size() < 2){
-//            // Throw some exception
-//        }
-//
-//        //Create bean
-//        MainFileGenerator beanClass = new BeanClassGenerator(dataFromXml.getBean(), allClassNamesSet);
-//        beanClass.generateAll();
-//
-//        //Create OperationExit
-//        MainFileGenerator exitClass = new OperationExitClassGenerator(dataFromXml.getService().getISERIESJ2C(),
-//                                                                      classesPackagesStore,
-//                                                                      getReqDataSetTypes(mergedDataSetTypes),
-//                                                                      getRespDataSetTypes(mergedDataSetTypes));
-//        exitClass.generateAll();
 
-        // MainFileGenerator breqcg = new DataSetTypesClassGenerator();
-//        breqcg.generateAll();
+        JMainFileClassData.getMainModel().build(new File("src//main//resources"));
 
 
     }

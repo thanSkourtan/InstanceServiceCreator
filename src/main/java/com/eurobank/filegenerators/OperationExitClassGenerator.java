@@ -52,13 +52,6 @@ public class OperationExitClassGenerator extends MainFileGenerator{
     }
 
     @Override
-    public void generateClasses() throws JClassAlreadyExistsException {
-        this.jBRespClass = jBRespPackage._class(store.getBRespClass());
-        this.jBReqClass = jBReqPackage._class(store.getBReqClass());
-        this.jBeanClass = jBeanPackage._class(store.getBeanClass());
-    }
-
-    @Override
     public void generateOuterFieldsAndMethods() throws JClassAlreadyExistsException {
         JDefinedClass brmExceptionClass = outerPackage2._class("BRMException");
         JDefinedClass exceptionClass = outerPackage3._class("Exception");
