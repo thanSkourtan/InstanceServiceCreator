@@ -25,7 +25,7 @@ public abstract class MainFileGenerator {
     public abstract void generateOuterPackages();
     //todo:delete the method below
     public abstract void generateClasses() throws JClassAlreadyExistsException;
-    public abstract void generateOuterFieldsAndMethods();
+    public abstract void generateOuterFieldsAndMethods() throws JClassAlreadyExistsException;
     public abstract void generateInheritance() throws JClassAlreadyExistsException;
 
     public void generateJavadocs(){

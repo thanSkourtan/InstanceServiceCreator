@@ -25,8 +25,12 @@ public class JRequestResponseObjectsClassData extends JMainFileClassData{
 
     @Override
     public Object dataProcessing() {
+        String tempName = canonicalName; //So that we do not change the canonical name
         Map<String, List<DataSetType>> mergedDataSetTypes = mergeDataSets(dataFromXml.getDataSet());
-        List<DataSetType> classSpecificDataSetsList = mergedDataSetTypes.get(canonicalName);
+        List<DataSetType> classSpecificDataSetsList = mergedDataSetTypes.get(isAnESBDTOClassName(tempName)?
+                                                            convertEsbDTOObjectClassToBrmClass(tempName):
+                                                            isAnSReqClassName(tempName) || isAnSRespClassName(tempName)?
+                                                            convertEsbObjectClassToBrmClass(tempName):tempName);
         return classSpecificDataSetsList;
     }
 

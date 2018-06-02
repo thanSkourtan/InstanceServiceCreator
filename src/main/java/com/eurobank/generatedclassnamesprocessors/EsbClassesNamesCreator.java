@@ -30,7 +30,7 @@ public class EsbClassesNamesCreator {
             } else if(isABRespClassName(x)) {
                 temp = convertBrmObjectClassToEsbClass(x);
                 priorityNumberBrmClass = getClassOrderingMap().get("BResp");
-                priorityNumberEsbClass = getClassOrderingMap().get("BResp");
+                priorityNumberEsbClass = getClassOrderingMap().get("SResp");
             } else if (isABeanClassName(x)) {
                 priorityNumberBrmClass = getClassOrderingMap().get("Bean");
             }  else if (isAnExitClassName(x)) {

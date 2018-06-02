@@ -27,7 +27,7 @@ public abstract class JMainFileClassData {
     public JMainFileClassData(String canonicalName, BusinessRequestType dataFromXml) throws JClassAlreadyExistsException {
         this.canonicalName = canonicalName;
         this.jPackage = mainModel._package(getPackageName(canonicalName));
-        this.jDefinedClass = mainModel._class(getClassName(canonicalName));
+        this.jDefinedClass = jPackage._class(getClassName(canonicalName));
         this.dataFromXml = dataFromXml;
     }
 

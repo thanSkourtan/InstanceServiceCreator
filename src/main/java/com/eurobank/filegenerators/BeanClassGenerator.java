@@ -2,6 +2,7 @@ package com.eurobank.filegenerators;
 
 import com.eurobank.JAXBmodel.BeanType;
 import com.eurobank.JAXBmodel.BusinessRequestType;
+import com.eurobank.jclasses.JRequestResponseObjectsClassData;
 import com.sun.codemodel.*;
 import static com.eurobank.util.UtilityMethods.*;
 
@@ -14,33 +15,56 @@ import com.eurobank.util.UtilityMethods;
  * Created by v-askourtaniotis on 21/5/2018. mailTo: thanskourtan@gmail.com
  */
 public class BeanClassGenerator extends MainFileGenerator{
+    public BeanClassGenerator(JRequestResponseObjectsClassData mainclassdata) {
+        super(mainclassdata);
+    }
 
-    private BeanType dataFromXml;
+    /*private BeanType dataFromXml;
     private String bRespFullClassName;
     private String bReqFullClassName;
     private JPackage reqRespPackage;
-    private String reqRespPackageName;
+    private String reqRespPackageName;*/
 
-    public BeanClassGenerator (BeanType dataFromXml, Set<String> dataTypeClasses){
-        super(dataFromXml.getBeanClass());
-        this.dataFromXml = dataFromXml;
+//    public BeanClassGenerator (BeanType dataFromXml, Set<String> dataTypeClasses){
+//        super(dataFromXml.getBeanClass());
+//        this.dataFromXml = dataFromXml;
+//
+//        dataTypeClasses.forEach( x -> {
+//            if(isABReqClassName(x)) {
+//                this.bReqFullClassName = getClassName(x);
+//            }else if(isABRespClassName(x)){
+//                this.bRespFullClassName = getClassName(x);
+//                this.reqRespPackageName = getPackageName(x);
+//            }
+//        });
+//
+//    }
 
-        dataTypeClasses.forEach( x -> {
-            if(isABReqClassName(x)) {
-                this.bReqFullClassName = getClassName(x);
-            }else if(isABRespClassName(x)){
-                this.bRespFullClassName = getClassName(x);
-                this.reqRespPackageName = getPackageName(x);
-            }
-        });
+    @Override
+    public void generateOuterPackages() {
 
     }
 
     @Override
+    public void generateClasses() throws JClassAlreadyExistsException {
+
+    }
+
+    @Override
+    public void generateOuterFieldsAndMethods() {
+
+    }
+
+    @Override
+    public void generateInheritance() throws JClassAlreadyExistsException {
+
+    }
+/*
+    @Override
     public void generateOuterPackages() {
         mainPackage = mainModel._package(currentPackageName);
-        helperPackage1 = secondaryModel._package("it.ibm.eurobank.bean.base");
-        reqRespPackage = secondaryModel._package(reqRespPackageName);
+        helperPackage1 = outerModel._package("it.ibm.eurobank.bean.base");
+        reqRespPackage = outerModel._package(reqRespPackageName);
     }
 
     @Override
@@ -51,10 +75,10 @@ public class BeanClassGenerator extends MainFileGenerator{
     @Override
     public void generateOuterFieldsAndMethods() throws ClassNotFoundException, JClassAlreadyExistsException {
 
-        /*Constant*/
+
         jDefinedClass.field(JMod.PRIVATE | JMod.FINAL | JMod.STATIC, mainModel.LONG, "serialVersionUID", JExpr.lit(1L));
 
-        /*Fields, Getters and Setters*/
+        //Fields, Getters and Setters
         JDefinedClass bReqClass = reqRespPackage._class(bReqFullClassName);
         JDefinedClass bRespClass = reqRespPackage._class(bRespFullClassName);
 
@@ -75,7 +99,7 @@ public class BeanClassGenerator extends MainFileGenerator{
         setReceiveMethod.param(receiveField.type(), receiveField.name());
         setReceiveMethod.body().assign(JExpr._this().ref(receiveField.name()), JExpr.ref(receiveField.name()));
 
-        /*The 3 Constructors*/
+        //The 3 Constructors
         JMethod firstConstructor = jDefinedClass.constructor(JMod.PUBLIC);
         firstConstructor.param(sendField.type(), "send");
         firstConstructor.param(receiveField.type(), "receive");
@@ -97,5 +121,5 @@ public class BeanClassGenerator extends MainFileGenerator{
         JDefinedClass superclass = helperPackage1._class("ABaseAS400Bean");
         jDefinedClass._extends(superclass);
     }
-
+*/
 }

@@ -73,6 +73,10 @@ public class UtilityMethods {
         return brmClassName.replace("brm","esb");
     }
 
+    public static String convertEsbDTOObjectClassToBrmClass(String brmClassName) {
+        return brmClassName.replace("esb","brm");
+    }
+
     public static String convertBrmExitClassToEsbSPClass(String brmClassName) {
         return brmClassName.replace("brm","esb")
                 .replace("userExits", "services")
@@ -84,6 +88,12 @@ public class UtilityMethods {
         return brmClassName.replace("brm","esb")
                 .replace("BReq", "SReq")
                 .replace("BResp", "SResp");
+    }
+
+    public static String convertEsbObjectClassToBrmClass(String brmClassName) {
+        return brmClassName.replace("esb","brm")
+                .replace("SReq", "BReq")
+                .replace("SResp", "BResp");
     }
 
     public static List<DataSetType> getReqDataSetTypes (Map<String, List<DataSetType>> m) {

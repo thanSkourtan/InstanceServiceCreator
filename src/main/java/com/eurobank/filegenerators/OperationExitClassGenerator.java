@@ -3,6 +3,7 @@ package com.eurobank.filegenerators;
 import com.eurobank.JAXBmodel.DataSetType;
 import com.eurobank.JAXBmodel.ISERIESJ2CType;
 import com.eurobank.generatedclassnamesprocessors.ClassesPackagesStore;
+import com.eurobank.jclasses.JRequestResponseObjectsClassData;
 import com.sun.codemodel.*;
 
 
@@ -15,12 +16,13 @@ import java.util.Set;
  */
 public class OperationExitClassGenerator extends MainFileGenerator{
 
-    private JPackage helperPackage2;
-    private JPackage helperPackage3;
-    private JPackage helperPackage4;
-    private JPackage helperPackage5;
-    private JPackage helperPackage6;
-    private JPackage helperPackage7;
+    private JPackage outerPackage1;
+    private JPackage outerPackage2;
+    private JPackage outerPackage3;
+    private JPackage outerPackage4;
+    private JPackage outerPackage5;
+    private JPackage outerPackage6;
+    private JPackage outerPackage7;
     private JPackage jBRespPackage;
     private JDefinedClass jBRespClass;
     private JPackage jBReqPackage;
@@ -31,26 +33,19 @@ public class OperationExitClassGenerator extends MainFileGenerator{
     private List<DataSetType> ReqDataSets;
     private List<DataSetType> RespDataSets;
 
-    public OperationExitClassGenerator(ISERIESJ2CType dataFromXml,
-                                       ClassesPackagesStore store,
-                                       List<DataSetType> ReqDataSets,
-                                       List<DataSetType> RespDataSets) {
-        super(dataFromXml.getUserExitClass());
-        this.store = store;
-        this.ReqDataSets = ReqDataSets;
-        this.RespDataSets = RespDataSets;
+    public OperationExitClassGenerator( JRequestResponseObjectsClassData mainclassdata) {
+        super(mainclassdata);
     }
 
     @Override
-    public void generatePackages() {
-        mainPackage = mainModel._package(currentPackageName);
-        helperPackage1 = outerModel._package("com.ibm.brm.server.operation");
-        helperPackage2 = outerModel._package("com.ibm.brm.exception");
-        helperPackage3 = outerModel._package("java.lang");
-        helperPackage4 = outerModel._package("com.ibm.brm.efg.exception");
-        helperPackage5 = outerModel._package("it.ibm.eurobank.bean.base");
-        helperPackage6 = outerModel._package("com.efg.errors");
-        helperPackage7 = outerModel._package("com.efg.errors");
+    public void generateOuterPackages() {
+        outerPackage1 = outerModel._package("com.ibm.brm.server.operation");
+        outerPackage2 = outerModel._package("com.ibm.brm.exception");
+        outerPackage3 = outerModel._package("java.lang");
+        outerPackage4 = outerModel._package("com.ibm.brm.efg.exception");
+        outerPackage5 = outerModel._package("it.ibm.eurobank.bean.base");
+        outerPackage6 = outerModel._package("com.efg.errors");
+        outerPackage7 = outerModel._package("com.efg.errors");
         jBRespPackage = outerModel._package(store.getBRespPackage());
         jBReqPackage = outerModel._package(store.getBReqPackage());
         jBeanPackage = outerModel._package(store.getBeanPackage());
@@ -58,22 +53,21 @@ public class OperationExitClassGenerator extends MainFileGenerator{
 
     @Override
     public void generateClasses() throws JClassAlreadyExistsException {
-        jDefinedClass = mainPackage._class(currentClassName);
         this.jBRespClass = jBRespPackage._class(store.getBRespClass());
         this.jBReqClass = jBReqPackage._class(store.getBReqClass());
         this.jBeanClass = jBeanPackage._class(store.getBeanClass());
     }
 
     @Override
-    public void generateFieldsAndMethods() throws ClassNotFoundException, JClassAlreadyExistsException {
-        JDefinedClass brmExceptionClass = helperPackage2._class("BRMException");
-        JDefinedClass exceptionClass = helperPackage3._class("Exception");
-        JDefinedClass efgBrmApplicationException = helperPackage4._class("EFGBrmApplicationException");
-        JDefinedClass aBaseBeanClass = helperPackage5._class("ABaseBean");
-        JMethod getBRMTransactionNameMethod = aBaseBeanClass.method(JMod.PUBLIC, mainModel.VOID, "getBRMTransactionName");
-        JDefinedClass efgHostErrorClass = helperPackage6._class("EFGHostError");
+    public void generateOuterFieldsAndMethods() throws JClassAlreadyExistsException {
+        JDefinedClass brmExceptionClass = outerPackage2._class("BRMException");
+        JDefinedClass exceptionClass = outerPackage3._class("Exception");
+        JDefinedClass efgBrmApplicationException = outerPackage4._class("EFGBrmApplicationException");
+        JDefinedClass aBaseBeanClass = outerPackage5._class("ABaseBean");
+        JMethod getBRMTransactionNameMethod = aBaseBeanClass.method(JMod.PUBLIC, mainclassdata.getMainModel().VOID, "getBRMTransactionName");
+        JDefinedClass efgHostErrorClass = outerPackage6._class("EFGHostError");
         JMethod efgHostErrorStaticMethod = efgHostErrorClass.method(JMod.PUBLIC, efgHostErrorClass,"createEFGHostErrorForBRM");
-        JDefinedClass BRMErrorTypeClass = helperPackage7._enum("BRMErrorType");
+        JDefinedClass BRMErrorTypeClass = outerPackage7._enum("BRMErrorType");
         JEnumConstant BRM_LAST_BEFORE_CONSTANT = BRMErrorTypeClass.enumConstant("BRM_LAST_BEFORE");
 
 
@@ -83,7 +77,7 @@ public class OperationExitClassGenerator extends MainFileGenerator{
         String[] methodNames = new String[] {"executeAfterCall", "executeBeforeCall"};
 
         for(int i = 0 ; i < methodNames.length ; i++) {
-            JMethod executeBeforeCallMethod = jDefinedClass.method(JMod.PUBLIC, mainModel.INT, methodNames[i]);
+            JMethod executeBeforeCallMethod = mainclassdata.getjDefinedClass().method(JMod.PUBLIC, mainclassdata.getMainModel().INT, methodNames[i]);
             /* Order of calls matters.*/
             if (methodNames[i].equals("executeAfterCall")){
                 fillInBlock(executeBeforeCallMethod.body());
@@ -143,7 +137,7 @@ public class OperationExitClassGenerator extends MainFileGenerator{
 
     @Override
     public void generateInheritance() throws JClassAlreadyExistsException {
-        JDefinedClass implementingInterface = helperPackage1._class("OperationStepExitInterface");
-        jDefinedClass._implements(implementingInterface);
+        JDefinedClass implementingInterface = outerPackage1._class("OperationStepExitInterface");
+        mainclassdata.getjDefinedClass()._implements(implementingInterface);
     }
 }
