@@ -44,16 +44,16 @@ public class OperationExitClassGenerator extends MainFileGenerator{
     @Override
     public void generatePackages() {
         mainPackage = mainModel._package(currentPackageName);
-        helperPackage1 = secondaryModel._package("com.ibm.brm.server.operation");
-        helperPackage2 = secondaryModel._package("com.ibm.brm.exception");
-        helperPackage3 = secondaryModel._package("java.lang");
-        helperPackage4 = secondaryModel._package("com.ibm.brm.efg.exception");
-        helperPackage5 = secondaryModel._package("it.ibm.eurobank.bean.base");
-        helperPackage6 = secondaryModel._package("com.efg.errors");
-        helperPackage7 = secondaryModel._package("com.efg.errors");
-        jBRespPackage = secondaryModel._package(store.getBRespPackage());
-        jBReqPackage = secondaryModel._package(store.getBReqPackage());
-        jBeanPackage = secondaryModel._package(store.getBeanPackage());
+        helperPackage1 = outerModel._package("com.ibm.brm.server.operation");
+        helperPackage2 = outerModel._package("com.ibm.brm.exception");
+        helperPackage3 = outerModel._package("java.lang");
+        helperPackage4 = outerModel._package("com.ibm.brm.efg.exception");
+        helperPackage5 = outerModel._package("it.ibm.eurobank.bean.base");
+        helperPackage6 = outerModel._package("com.efg.errors");
+        helperPackage7 = outerModel._package("com.efg.errors");
+        jBRespPackage = outerModel._package(store.getBRespPackage());
+        jBReqPackage = outerModel._package(store.getBReqPackage());
+        jBeanPackage = outerModel._package(store.getBeanPackage());
     }
 
     @Override

@@ -131,16 +131,16 @@ public class InstantServiceCreatorMain extends DefaultHandler{
         Set<String> brmClassNamesSet = saxParserHandler.getAllClassesNames();
 
         /*Second Part: Build the JObjects*/
-        Set<String> allClassNamesSet = addEsbClasses(brmClassNamesSet);
+        Map<Integer, String> allClassNamesSet = addEsbClasses(brmClassNamesSet);
 
         Map<String, Object> jClassesMap = new HashMap<>(); //add the jclasses
 
-        allClassNamesSet.forEach(x -> {
+        allClassNamesSet.forEach((k,v) -> {
             try {
-                Class<?> tempClass = Class.forName("com.eurobank.jclasses.J" + getTypeofClass(x) + "ClassData");
+                Class<?> tempClass = Class.forName("com.eurobank.jclasses.J" + getTypeofClass(v) + "ClassData");
                 Object tempjClassObject = tempClass.getConstructor(String.class, BusinessRequestType.class)
-                        .newInstance(x, dataFromXml);
-                jClassesMap.put(x, tempjClassObject);
+                        .newInstance(v, dataFromXml);
+                jClassesMap.put(v, tempjClassObject);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (NoSuchMethodException e) {
@@ -155,13 +155,13 @@ public class InstantServiceCreatorMain extends DefaultHandler{
         });
 /********************************************************************************************************/
 //        JMainFileClassData jBResq = new JBRespClassData();
-//        JMainFileClassData jBReq = new JBReqClassData();
+//        JMainFileClassData jBReq = new JRequestResponseObjectsClassData();
 //        JMainFileClassData jBRean = new JBeanClassData();
 
         /*Third part: construct the classes*/
 
 
-        MainFileGenerator mfg = new BReqClassGenerator(jClassesMap.get());
+       // MainFileGenerator mfg = new BReqClassGenerator(jClassesMap.get());
 
 /*
 

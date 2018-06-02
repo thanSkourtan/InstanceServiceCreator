@@ -1,15 +1,11 @@
 package com.eurobank.filegenerators;
 
-import com.eurobank.jclasses.JBReqClassData;
+import com.eurobank.jclasses.JRequestResponseObjectsClassData;
 import com.eurobank.jclasses.JMainFileClassData;
-import com.eurobank.util.UtilityMethods;
 import com.sun.codemodel.*;
 
 import java.io.File;
 import java.io.IOException;
-
-import static com.eurobank.util.UtilityMethods.getClassName;
-import static com.eurobank.util.UtilityMethods.getPackageName;
 
 
 /**
@@ -21,7 +17,7 @@ public abstract class MainFileGenerator {
     protected JCodeModel outerModel;
     protected JMainFileClassData mainclassdata;
 
-    public MainFileGenerator(JBReqClassData mainclassdata){
+    public MainFileGenerator(JRequestResponseObjectsClassData mainclassdata){
         outerModel = new JCodeModel();
         this.mainclassdata = mainclassdata;
     }

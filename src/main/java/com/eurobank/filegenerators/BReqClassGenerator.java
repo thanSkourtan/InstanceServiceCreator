@@ -1,12 +1,7 @@
 package com.eurobank.filegenerators;
 
-import com.eurobank.JAXBmodel.DataSetType;
-import com.eurobank.jclasses.JBReqClassData;
-import com.eurobank.jclasses.JMainFileClassData;
+import com.eurobank.jclasses.JRequestResponseObjectsClassData;
 import com.sun.codemodel.*;
-
-import java.util.List;
-import java.util.Set;
 
 /**
  * Created by v-askourtaniotis on 24/5/2018. mailTo: thanskourtan@gmail.com
@@ -15,7 +10,7 @@ public class BReqClassGenerator extends MainFileGenerator{
 
     private JPackage outerPackage1;
 
-    public BReqClassGenerator( JBReqClassData mainclassdata) {
+    public BReqClassGenerator( JRequestResponseObjectsClassData mainclassdata) {
         super(mainclassdata);
     }
 
