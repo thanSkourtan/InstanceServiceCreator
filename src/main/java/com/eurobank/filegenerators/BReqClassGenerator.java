@@ -12,7 +12,7 @@ import java.util.Map;
 public class BReqClassGenerator extends MainFileGenerator{
 
     private JPackage outerPackage1;
-    Map<String, JMainFileClassData> jClassesMap;
+    private Map<String, JMainFileClassData> jClassesMap;
 
     public BReqClassGenerator( Map<String, JMainFileClassData> jClassesMap, String canonicalName) {
         super(jClassesMap.get(canonicalName));

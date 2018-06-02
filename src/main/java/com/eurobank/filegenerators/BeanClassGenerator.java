@@ -2,11 +2,13 @@ package com.eurobank.filegenerators;
 
 import com.eurobank.JAXBmodel.BeanType;
 import com.eurobank.JAXBmodel.BusinessRequestType;
+import com.eurobank.jclasses.JMainFileClassData;
 import com.eurobank.jclasses.JRequestResponseObjectsClassData;
 import com.sun.codemodel.*;
 import static com.eurobank.util.UtilityMethods.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.eurobank.util.UtilityMethods;
@@ -15,8 +17,12 @@ import com.eurobank.util.UtilityMethods;
  * Created by v-askourtaniotis on 21/5/2018. mailTo: thanskourtan@gmail.com
  */
 public class BeanClassGenerator extends MainFileGenerator{
-    public BeanClassGenerator(JRequestResponseObjectsClassData mainclassdata) {
-        super(mainclassdata);
+    private JPackage outerPackage1;
+    private Map<String, JMainFileClassData> jClassesMap;
+
+    public BeanClassGenerator( Map<String, JMainFileClassData> jClassesMap, String canonicalName) {
+        super(jClassesMap.get(canonicalName));
+        this.jClassesMap = jClassesMap;
     }
 
     /*private BeanType dataFromXml;

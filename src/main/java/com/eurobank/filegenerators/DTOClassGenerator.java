@@ -16,7 +16,7 @@ import java.util.Set;
 public class DTOClassGenerator extends MainFileGenerator{
 
     private JPackage outerPackage1;
-    Map<String, JMainFileClassData> jClassesMap;
+    private Map<String, JMainFileClassData> jClassesMap;
 
     public DTOClassGenerator(Map<String, JMainFileClassData> jClassesMap, String canonicalName) throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
         super(jClassesMap.get(canonicalName));

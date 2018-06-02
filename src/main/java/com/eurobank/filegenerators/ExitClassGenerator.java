@@ -3,6 +3,7 @@ package com.eurobank.filegenerators;
 import com.eurobank.JAXBmodel.DataSetType;
 import com.eurobank.JAXBmodel.ISERIESJ2CType;
 import com.eurobank.generatedclassnamesprocessors.ClassesPackagesStore;
+import com.eurobank.jclasses.JMainFileClassData;
 import com.eurobank.jclasses.JRequestResponseObjectsClassData;
 import com.sun.codemodel.*;
 
@@ -14,7 +15,7 @@ import java.util.Set;
 /**
  * Created by v-askourtaniotis on 22/5/2018. mailTo: thanskourtan@gmail.com
  */
-public class OperationExitClassGenerator extends MainFileGenerator{
+public class ExitClassGenerator extends MainFileGenerator{
 
     private JPackage outerPackage1;
     private JPackage outerPackage2;
@@ -32,9 +33,11 @@ public class OperationExitClassGenerator extends MainFileGenerator{
     private ClassesPackagesStore store;
     private List<DataSetType> ReqDataSets;
     private List<DataSetType> RespDataSets;
+    private Map<String, JMainFileClassData> jClassesMap;
 
-    public OperationExitClassGenerator( JRequestResponseObjectsClassData mainclassdata) {
-        super(mainclassdata);
+    public ExitClassGenerator(Map<String, JMainFileClassData> jClassesMap, String canonicalName) {
+        super(jClassesMap.get(canonicalName));
+        this.jClassesMap = jClassesMap;
     }
 
     @Override
