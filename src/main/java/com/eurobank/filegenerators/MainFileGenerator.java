@@ -18,14 +18,12 @@ public abstract class MainFileGenerator {
     protected JCodeModel outerModel;
     protected JMainFileClassData mainclassdata;
 
-    public MainFileGenerator( JMainFileClassData jClassData){
+    public MainFileGenerator(JMainFileClassData jClassData){
         outerModel = new JCodeModel();
         this.mainclassdata = jClassData;
     }
 
     public abstract void generateOuterPackages();
-    //todo:delete the method below
-
     public abstract void generateOuterFieldsAndMethods() throws JClassAlreadyExistsException;
     public abstract void generateInheritance() throws JClassAlreadyExistsException;
     public void generateJavadocs(){

@@ -8,6 +8,7 @@ import com.eurobank.jclasses.JRequestResponseObjectsClassData;
 import com.sun.codemodel.*;
 
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -35,9 +36,10 @@ public class ExitClassGenerator extends MainFileGenerator{
     private List<DataSetType> RespDataSets;
     private Map<String, JMainFileClassData> jClassesMap;
 
-    public ExitClassGenerator(Map<String, JMainFileClassData> jClassesMap, String canonicalName) {
+    public ExitClassGenerator(Map<String, JMainFileClassData> jClassesMap, String canonicalName) throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
         super(jClassesMap.get(canonicalName));
         this.jClassesMap = jClassesMap;
+        generateAll();
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.eurobank.jclasses.JRequestResponseObjectsClassData;
 import com.sun.codemodel.JClassAlreadyExistsException;
 import com.sun.codemodel.JPackage;
 
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -14,9 +15,10 @@ public class SPClassGenerator extends MainFileGenerator{
     private JPackage outerPackage1;
     private Map<String, JMainFileClassData> jClassesMap;
 
-    public SPClassGenerator( Map<String, JMainFileClassData> jClassesMap, String canonicalName) {
+    public SPClassGenerator( Map<String, JMainFileClassData> jClassesMap, String canonicalName) throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
         super(jClassesMap.get(canonicalName));
         this.jClassesMap = jClassesMap;
+        generateAll();
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.eurobank.jclasses.JMainFileClassData;
 import com.eurobank.jclasses.JRequestResponseObjectsClassData;
 import com.sun.codemodel.*;
 
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -14,9 +15,10 @@ public class BReqClassGenerator extends MainFileGenerator{
     private JPackage outerPackage1;
     private Map<String, JMainFileClassData> jClassesMap;
 
-    public BReqClassGenerator( Map<String, JMainFileClassData> jClassesMap, String canonicalName) {
+    public BReqClassGenerator( Map<String, JMainFileClassData> jClassesMap, String canonicalName) throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
         super(jClassesMap.get(canonicalName));
         this.jClassesMap = jClassesMap;
+        generateAll();
     }
 
     @Override
@@ -26,7 +28,8 @@ public class BReqClassGenerator extends MainFileGenerator{
 
     @Override
     public void generateOuterFieldsAndMethods()  {
-        ;
+
+
     }
 
     @Override

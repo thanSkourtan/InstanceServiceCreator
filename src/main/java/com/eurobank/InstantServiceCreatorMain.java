@@ -96,7 +96,7 @@ public class InstantServiceCreatorMain extends DefaultHandler{
 
 
 
-        System.out.println(project);
+        System.out.println("stem " + project);
 
         String filename = cmd.getOptionValue("xml");
         serviceName = cmd.getOptionValue("service");
@@ -179,7 +179,7 @@ public class InstantServiceCreatorMain extends DefaultHandler{
         JMainFileClassData.getBrmMessagesCodeModel().build(new File("src//main//resources//resources2"));
         JMainFileClassData.getEsbBusinessLogicCodeModel().build(new File("src//main//resources//resources3"));
         JMainFileClassData.getEsbMessagesCodeModel().build(new File("src//main//resources//resources4"));
-        //JMainFileClassData.getMainModel()._getClass  ara edw spaw to model sta 4
+
 
 
     }

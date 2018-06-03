@@ -31,7 +31,6 @@ public class DTOClassGenerator extends MainFileGenerator{
 
     @Override
     public void generateOuterFieldsAndMethods() {
-
     }
 
     @Override

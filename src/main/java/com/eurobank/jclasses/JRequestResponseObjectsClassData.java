@@ -18,6 +18,8 @@ import static com.eurobank.util.UtilityMethods.*;
  */
 public class JRequestResponseObjectsClassData extends JMainFileClassData{
 
+    private String matchDataSetName;
+
     public JRequestResponseObjectsClassData(String canonicalName, BusinessRequestType dataFromXml) throws JClassAlreadyExistsException {
         super(canonicalName, dataFromXml);
         buildJFieldsAndJMethods(dataProcessing());
@@ -37,35 +39,20 @@ public class JRequestResponseObjectsClassData extends JMainFileClassData{
     @Override
     public void buildJFieldsAndJMethods(Object classSpecificDataSetsList) throws JClassAlreadyExistsException {
 
+        jDefinedClass.field(JMod.PRIVATE | JMod.FINAL | JMod.STATIC, mainModel.LONG, "serialVersionUID", JExpr.lit(1L));
         List<DataSetType> data = (List<DataSetType>) classSpecificDataSetsList;
 
         for (DataSetType d : data) {
             for (FieldType f : d.getField()) {
-
-                JFieldVar tempVar1;
-                if (f.getMatchDataSetName() != null) {
-                    JFieldVar tempVar2;
-//                    String dtoClassFullName = dataTypeClasses
-//                            .stream()
-//                            .filter(x -> isADTOClassName(x) && x.contains("brm"))
-//                            .findFirst()
-//                            .orElseThrow(IllegalArgumentException::new);
-//
-//                    JCodeModel tempModel = new JCodeModel();
-//                    JPackage jp = tempModel._package(getPackageName(dtoClassFullName));
-//                    JDefinedClass tempClass = jp._class(getClassName(dtoClassFullName));
-
-
-//                    tempVar1 = jDefinedClass.field(JMod.PRIVATE, Vector.class, f.getName());
-//                    tempVar2 = jDefinedClass.field(JMod.PRIVATE, tempClass.array(), makeFirstCharacterLowercase(f.getMatchDataSetName()));
-//
-//                    createGettersAndSettersMethods(jDefinedClass, tempVar1);
-//                    createGettersAndSettersMethods(jDefinedClass, tempVar2);
-                } else {
+                if(f.getMatchDataSetName() == null){
                     Class<?> fieldClass = getFieldClass(f);
-                    tempVar1 = jDefinedClass.field(JMod.PRIVATE, fieldClass, f.getName());
+                    JFieldVar tempVar1 = jDefinedClass.field(JMod.PRIVATE, fieldClass, f.getName());
                     fieldsMap.put(f.getName(), tempVar1);
                     createGettersAndSettersMethods(jDefinedClass, tempVar1);
+                } else {
+                    JFieldVar tempVar1 = jDefinedClass.field(JMod.PRIVATE, Vector.class, f.getName());
+                    createGettersAndSettersMethods(jDefinedClass, tempVar1);
+                    matchDataSetName = f.getMatchDataSetName();
                 }
             }
             return;
@@ -98,4 +85,11 @@ public class JRequestResponseObjectsClassData extends JMainFileClassData{
 
     }
 
+    public String getMatchDataSetName() {
+        return matchDataSetName;
+    }
+
+    public void setMatchDataSetName(String matchDataSetName) {
+        this.matchDataSetName = matchDataSetName;
+    }
 }

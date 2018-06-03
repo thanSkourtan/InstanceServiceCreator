@@ -129,4 +129,12 @@ public abstract class JMainFileClassData {
     public static void setEsbBusinessLogicCodeModel(JCodeModel esbBusinessLogicCodeModel) {
         JMainFileClassData.esbBusinessLogicCodeModel = esbBusinessLogicCodeModel;
     }
+
+    public String getCanonicalName() {
+        return canonicalName;
+    }
+
+    public void setCanonicalName(String canonicalName) {
+        this.canonicalName = canonicalName;
+    }
 }
