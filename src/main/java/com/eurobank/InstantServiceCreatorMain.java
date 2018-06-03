@@ -8,25 +8,20 @@ package com.eurobank;
 import javax.xml.parsers.*;
 
 import com.eurobank.JAXBmodel.BusinessRequestType;
-import com.eurobank.JAXBmodel.DataSetType;
-import com.eurobank.filegenerators.*;
 import com.eurobank.exceptions.exceptionhandlers.SaxParserErrorHandler;
 import com.eurobank.jclasses.JMainFileClassData;
 import com.eurobank.saxparser.SaxParserHandler;
-import com.sun.codemodel.JClassAlreadyExistsException;
 import org.apache.commons.cli.*;
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
-import static com.eurobank.util.DataSetTypesMerger.*;
+
 import static com.eurobank.util.UtilityMethods.*;
 import static com.eurobank.generatedclassnamesprocessors.EsbClassesNamesCreator.*;
 import static com.eurobank.directoryrouters.PlacementDirectory.*;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
@@ -178,7 +173,13 @@ public class InstantServiceCreatorMain extends DefaultHandler{
             }
         });
 
-        JMainFileClassData.getMainModel().build(new File("src//main//resources"));
+/********************************************************************************************************/
+
+        JMainFileClassData.getBrmBusinessLogicCodeModel().build(new File("src//main//resources//resources1"));
+        JMainFileClassData.getBrmMessagesCodeModel().build(new File("src//main//resources//resources2"));
+        JMainFileClassData.getEsbBusinessLogicCodeModel().build(new File("src//main//resources//resources3"));
+        JMainFileClassData.getEsbMessagesCodeModel().build(new File("src//main//resources//resources4"));
+        //JMainFileClassData.getMainModel()._getClass  ara edw spaw to model sta 4
 
 
     }

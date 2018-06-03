@@ -14,6 +14,10 @@ public abstract class JMainFileClassData {
 
     protected JPackage jPackage;
     protected JDefinedClass jDefinedClass;
+    private static JCodeModel brmMessagesCodeModel;
+    private static JCodeModel brmBusinessLogicCodeModel;
+    private static JCodeModel esbMessagesCodeModel;
+    private static JCodeModel esbBusinessLogicCodeModel;
     protected static JCodeModel mainModel;
     protected final Map<String, JVar> fieldsMap = new HashMap<>();
     protected final Map<String, JMethod> methodsMap = new HashMap<>();
@@ -21,14 +25,34 @@ public abstract class JMainFileClassData {
     protected String canonicalName;
 
     static {
-        mainModel = new JCodeModel();
+        brmMessagesCodeModel = new JCodeModel();
+        brmBusinessLogicCodeModel = new JCodeModel();
+        esbMessagesCodeModel = new JCodeModel();
+        esbBusinessLogicCodeModel = new JCodeModel();
     }
 
     public JMainFileClassData(String canonicalName, BusinessRequestType dataFromXml) throws JClassAlreadyExistsException {
         this.canonicalName = canonicalName;
+        /*makes mainModel object point to the correct JCodeModel object. In such a way
+        * we have 4 different models for the 4 different packages but 1 access object*/
+        _defineJCodeModel();
         this.jPackage = mainModel._package(getPackageName(canonicalName));
         this.jDefinedClass = jPackage._class(getClassName(canonicalName));
         this.dataFromXml = dataFromXml;
+    }
+
+    // Todo:not finished!! check if these rules are the correct ones
+    private void _defineJCodeModel(){
+
+        if(isABReqClassName(canonicalName) || isABRespClassName(canonicalName) || isABRMDTOClassName(canonicalName)) {
+            mainModel = brmMessagesCodeModel;
+        } else if (isAnSReqClassName(canonicalName) || isAnSRespClassName(canonicalName)|| isAnESBDTOClassName(canonicalName)) {
+            mainModel = esbMessagesCodeModel;
+        } else if (isAnExitClassName(canonicalName) || isABeanClassName(canonicalName)) {
+            mainModel = brmBusinessLogicCodeModel;
+        } else if (isAnSPClassName(canonicalName)){
+            mainModel = esbBusinessLogicCodeModel;
+        }
     }
 
     public abstract Object dataProcessing();
@@ -72,5 +96,37 @@ public abstract class JMainFileClassData {
 
     public void setDataFromXml(BusinessRequestType dataFromXml) {
         this.dataFromXml = dataFromXml;
+    }
+
+    public static JCodeModel getBrmMessagesCodeModel() {
+        return brmMessagesCodeModel;
+    }
+
+    public static void setBrmMessagesCodeModel(JCodeModel brmMessagesCodeModel) {
+        JMainFileClassData.brmMessagesCodeModel = brmMessagesCodeModel;
+    }
+
+    public static JCodeModel getBrmBusinessLogicCodeModel() {
+        return brmBusinessLogicCodeModel;
+    }
+
+    public static void setBrmBusinessLogicCodeModel(JCodeModel brmBusinessLogicCodeModel) {
+        JMainFileClassData.brmBusinessLogicCodeModel = brmBusinessLogicCodeModel;
+    }
+
+    public static JCodeModel getEsbMessagesCodeModel() {
+        return esbMessagesCodeModel;
+    }
+
+    public static void setEsbMessagesCodeModel(JCodeModel esbMessagesCodeModel) {
+        JMainFileClassData.esbMessagesCodeModel = esbMessagesCodeModel;
+    }
+
+    public static JCodeModel getEsbBusinessLogicCodeModel() {
+        return esbBusinessLogicCodeModel;
+    }
+
+    public static void setEsbBusinessLogicCodeModel(JCodeModel esbBusinessLogicCodeModel) {
+        JMainFileClassData.esbBusinessLogicCodeModel = esbBusinessLogicCodeModel;
     }
 }

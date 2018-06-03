@@ -14,10 +14,7 @@ public class DataSetTypesMerger {
 
     public static Map<String, List<DataSetType>> mergeDataSets(List<DataSetType> data){
 
-        /*The comparator ensures that DTO classes will always be the first to be constructed*/
-        SortedMap<String, List<DataSetType>> dataSetTypesMap =
-                new TreeMap<>();
-               // new TreeMap<>((a, b) -> isABReqClassName(a) || isABRespClassName(a)? 1 : -1);
+        SortedMap<String, List<DataSetType>> dataSetTypesMap = new TreeMap<>();
 
         //TODO: Check with datatypes with the same bean name
         data.forEach(x -> {
