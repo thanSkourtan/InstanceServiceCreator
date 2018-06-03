@@ -1,17 +1,14 @@
 package com.eurobank.filegenerators;
 
 import com.eurobank.JAXBmodel.DataSetType;
-import com.eurobank.JAXBmodel.ISERIESJ2CType;
-import com.eurobank.generatedclassnamesprocessors.ClassesPackagesStore;
 import com.eurobank.jclasses.JMainFileClassData;
-import com.eurobank.jclasses.JRequestResponseObjectsClassData;
 import com.sun.codemodel.*;
-
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
+import static com.eurobank.util.UtilityMethods.getTypeofClassExpanded;
 
 /**
  * Created by v-askourtaniotis on 22/5/2018. mailTo: thanskourtan@gmail.com
@@ -25,19 +22,10 @@ public class ExitClassGenerator extends MainFileGenerator{
     private JPackage outerPackage5;
     private JPackage outerPackage6;
     private JPackage outerPackage7;
-    private JPackage jBRespPackage;
-    private JDefinedClass jBRespClass;
-    private JPackage jBReqPackage;
-    private JDefinedClass jBReqClass;
-    private JPackage jBeanPackage;
-    private JDefinedClass jBeanClass;
-    private ClassesPackagesStore store;
-    private List<DataSetType> ReqDataSets;
-    private List<DataSetType> RespDataSets;
     private Map<String, JMainFileClassData> jClassesMap;
 
     public ExitClassGenerator(Map<String, JMainFileClassData> jClassesMap, String canonicalName) throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
-        super(jClassesMap.get(canonicalName));
+        super(jClassesMap.get(getTypeofClassExpanded(canonicalName)));
         this.jClassesMap = jClassesMap;
         generateAll();
     }
@@ -51,9 +39,6 @@ public class ExitClassGenerator extends MainFileGenerator{
         outerPackage5 = outerModel._package("it.ibm.eurobank.bean.base");
         outerPackage6 = outerModel._package("com.efg.errors");
         outerPackage7 = outerModel._package("com.efg.errors");
-        jBRespPackage = outerModel._package(store.getBRespPackage());
-        jBReqPackage = outerModel._package(store.getBReqPackage());
-        jBeanPackage = outerModel._package(store.getBeanPackage());
     }
 
     @Override
@@ -67,10 +52,6 @@ public class ExitClassGenerator extends MainFileGenerator{
         JMethod efgHostErrorStaticMethod = efgHostErrorClass.method(JMod.PUBLIC, efgHostErrorClass,"createEFGHostErrorForBRM");
         JDefinedClass BRMErrorTypeClass = outerPackage7._enum("BRMErrorType");
         JEnumConstant BRM_LAST_BEFORE_CONSTANT = BRMErrorTypeClass.enumConstant("BRM_LAST_BEFORE");
-
-
-
-
 
         String[] methodNames = new String[] {"executeAfterCall", "executeBeforeCall"};
 
@@ -111,24 +92,18 @@ public class ExitClassGenerator extends MainFileGenerator{
             executeBeforeCallMethod.body()._return(JExpr.lit(0));
         }
 
-
-
-
-
-
-
     }
 
     public JVar fillInBlock (JBlock body) throws JClassAlreadyExistsException {
 
-        JMethod tempMethod1 = jBeanClass.method(JMod.PUBLIC, jBRespClass, "getSend");
-        JMethod tempMethod2 = jBeanClass.method(JMod.PUBLIC, jBRespClass, "getReceive");
+        JMethod tempMethod1 = jClassesMap.get("Bean").getjDefinedClass().method(JMod.PUBLIC, jClassesMap.get("BResp").getjDefinedClass(), "getSend");
+        JMethod tempMethod2 = jClassesMap.get("Bean").getjDefinedClass().method(JMod.PUBLIC, jClassesMap.get("BResp").getjDefinedClass(), "getReceive");
 
-        JVar myBeanVar = body.decl(jBeanClass, "myBean");
-        myBeanVar.init(JExpr.cast(jBeanClass , JExpr.ref("mainBean")));
+        JVar myBeanVar = body.decl(jClassesMap.get("Bean").getjDefinedClass(), "myBean");
+        myBeanVar.init(JExpr.cast(jClassesMap.get("Bean").getjDefinedClass() , JExpr.ref("mainBean")));
 
-        body.decl(jBReqClass, "mySend").init(myBeanVar.invoke(tempMethod1));
-        body.decl(jBRespClass, "myReceive").init(myBeanVar.invoke(tempMethod2));
+        body.decl(jClassesMap.get("BReq").getjDefinedClass(), "mySend").init(myBeanVar.invoke(tempMethod1));
+        body.decl(jClassesMap.get("BResp").getjDefinedClass(), "myReceive").init(myBeanVar.invoke(tempMethod2));
 
         return myBeanVar;
     }

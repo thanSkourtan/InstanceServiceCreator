@@ -137,7 +137,7 @@ public class InstantServiceCreatorMain extends DefaultHandler{
                 Class<?> tempClass = Class.forName("com.eurobank.jclasses.J" + getTypeofClass(v) + "ClassData");
                 JMainFileClassData tempjClassObject = (JMainFileClassData) tempClass.getConstructor(String.class, BusinessRequestType.class)
                         .newInstance(v, dataFromXml);
-                jClassesMap.put(v, tempjClassObject);
+                jClassesMap.put(getTypeofClassExpanded(v), tempjClassObject);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (NoSuchMethodException e) {
@@ -153,8 +153,6 @@ public class InstantServiceCreatorMain extends DefaultHandler{
 
 /********************************************************************************************************/
         /*Third part: construct the classes*/
-
-       // MainFileGenerator mfg = new BReqClassGenerator(jClassesMap.get());
 
         allClassesNamesSet.forEach((k,v) -> {
             try {
@@ -175,11 +173,11 @@ public class InstantServiceCreatorMain extends DefaultHandler{
 
 /********************************************************************************************************/
 
-        JMainFileClassData.getBrmBusinessLogicCodeModel().build(new File("src//main//resources//resources1"));
+
         JMainFileClassData.getBrmMessagesCodeModel().build(new File("src//main//resources//resources2"));
         JMainFileClassData.getEsbBusinessLogicCodeModel().build(new File("src//main//resources//resources3"));
         JMainFileClassData.getEsbMessagesCodeModel().build(new File("src//main//resources//resources4"));
-
+        JMainFileClassData.getBrmBusinessLogicCodeModel().build(new File("src//main//resources//resources1"));
 
 
     }

@@ -141,5 +141,19 @@ public class UtilityMethods {
         else return "";
     }
 
+    public static String getTypeofClassExpanded(String fullClassName) {
+        if(isABRespClassName(fullClassName)) return "BResp";
+        else if(isABReqClassName(fullClassName)) return "BReq";
+        else if(isABeanClassName(fullClassName)) return "Bean";
+        else if(isAnExitClassName(fullClassName)) return "Exit";
+        else if(isAnSPClassName(fullClassName)) return "SP";
+        else if(isAnSReqClassName(fullClassName)) return "SReq";
+        else if(isAnSRespClassName(fullClassName)) return "SResp";
+        else if(isABRMDTOClassName(fullClassName)) return "BRMDTO";
+        else if(isAnESBDTOClassName(fullClassName)) return "ESBDTO";
+        else return "";
+    }
+
+
 
 }

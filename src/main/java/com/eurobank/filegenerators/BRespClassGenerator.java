@@ -18,7 +18,7 @@ public class BRespClassGenerator extends MainFileGenerator{
     private Map<String, JMainFileClassData> jClassesMap;
 
     public BRespClassGenerator( Map<String, JMainFileClassData> jClassesMap, String canonicalName) throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
-        super(jClassesMap.get(canonicalName));
+        super(jClassesMap.get(getTypeofClassExpanded(canonicalName)));
         this.jClassesMap = jClassesMap;
         generateAll();
     }
@@ -33,24 +33,23 @@ public class BRespClassGenerator extends MainFileGenerator{
         JDefinedClass mainClassTempInstance = mainclassdata.getjDefinedClass();
 
         JRequestResponseObjectsClassData mainClassCasted = (JRequestResponseObjectsClassData) mainclassdata;
-        JDefinedClass DTOClass = null;
+
         if (mainClassCasted.getMatchDataSetName() != null) {
-            for(String key : jClassesMap.keySet()){
-                if ((isABRespClassName(mainClassTempInstance.name()) ||
-                    isABReqClassName(mainClassTempInstance.name()) )&&
-                    isABRMDTOClassName(key)){
-                    DTOClass = jClassesMap.get(key).getjPackage()._getClass(getClassName(key));
-                } else if ((isAnSReqClassName(mainClassTempInstance.name()) ||
-                           isAnSRespClassName(mainClassTempInstance.name())) &&
-                        isAnESBDTOClassName(key)){
-                    DTOClass = jClassesMap.get(key).getjPackage()._getClass(getClassName(key));
-                }
+            JDefinedClass DTOClass = null;
+
+            if (isABRespClassName(mainClassTempInstance.name()) || isABReqClassName(mainClassTempInstance.name())){
+                DTOClass = jClassesMap.get("BRMDTO").getjDefinedClass();
+            } else if (isAnSReqClassName(mainClassTempInstance.name()) || isAnSRespClassName(mainClassTempInstance.name())){
+                DTOClass = jClassesMap.get("ESBDTO").getjDefinedClass();
             }
 
             JFieldVar tempVar2 = mainClassTempInstance.field(JMod.PRIVATE,
                                                             DTOClass.array(),
                                                             makeFirstCharacterLowercase(mainClassCasted.getMatchDataSetName()));
             _createGettersAndSettersMethods (mainClassTempInstance, tempVar2);
+
+
+
         }
 
     }

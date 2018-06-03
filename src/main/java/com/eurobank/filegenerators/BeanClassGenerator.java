@@ -24,7 +24,7 @@ public class BeanClassGenerator extends MainFileGenerator{
     private String canonicalName;
 
     public BeanClassGenerator( Map<String, JMainFileClassData> jClassesMap, String canonicalName) throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
-        super(jClassesMap.get(canonicalName));
+        super(jClassesMap.get(getTypeofClassExpanded(canonicalName)));
         this.jClassesMap = jClassesMap;
         this.canonicalName = canonicalName;
         generateAll();
@@ -42,15 +42,8 @@ public class BeanClassGenerator extends MainFileGenerator{
 
         //Fields, Getters and Setters
 
-        JDefinedClass bReqClass = null;
-        JDefinedClass bRespClass = null;
-        for(String key : jClassesMap.keySet()){
-            if (isABRespClassName(key)) bRespClass = jClassesMap.get(key).getjPackage()._getClass(getClassName(key));
-            else if (isABReqClassName(key)) bReqClass = jClassesMap.get(key).getjPackage()._getClass(getClassName(key));
-        }
-
-        JFieldVar sendField = mainClassTempInstance.field(JMod.PRIVATE, bReqClass, "send");
-        JFieldVar receiveField = mainClassTempInstance.field(JMod.PRIVATE, bRespClass, "receive");
+        JFieldVar sendField = mainClassTempInstance.field(JMod.PRIVATE, jClassesMap.get("BReq").getjDefinedClass(), "send");
+        JFieldVar receiveField = mainClassTempInstance.field(JMod.PRIVATE, jClassesMap.get("BReq").getjDefinedClass(), "receive");
 
         JMethod getSendMethod = mainClassTempInstance.method(JMod.PUBLIC, sendField.type(), "getSend");
         getSendMethod.body()._return(sendField);
@@ -79,11 +72,11 @@ public class BeanClassGenerator extends MainFileGenerator{
         JMethod secondConstructor = mainClassTempInstance.constructor(JMod.PUBLIC);
         secondConstructor.param(sendField.type(), "send");
         secondConstructor.body().assign(JExpr._this().ref(sendField.name()), JExpr.ref(sendField.name()));
-        secondConstructor.body().assign(JExpr._this().ref(receiveField.name()), JExpr._new(bRespClass));
+        secondConstructor.body().assign(JExpr._this().ref(receiveField.name()), JExpr._new(jClassesMap.get("BReq").getjDefinedClass()));
 
         JMethod thirdConstructor = mainClassTempInstance.constructor(JMod.PUBLIC);
-        thirdConstructor.body().assign(JExpr._this().ref(sendField.name()), JExpr._new(bReqClass));
-        thirdConstructor.body().assign(JExpr._this().ref(receiveField.name()), JExpr._new(bRespClass));
+        thirdConstructor.body().assign(JExpr._this().ref(sendField.name()), JExpr._new(jClassesMap.get("BReq").getjDefinedClass()));
+        thirdConstructor.body().assign(JExpr._this().ref(receiveField.name()), JExpr._new(jClassesMap.get("BReq").getjDefinedClass()));
     }
 
     @Override

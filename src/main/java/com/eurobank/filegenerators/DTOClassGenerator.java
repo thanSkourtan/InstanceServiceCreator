@@ -2,7 +2,7 @@ package com.eurobank.filegenerators;
 
 import com.eurobank.JAXBmodel.DataSetType;
 import com.eurobank.jclasses.JMainFileClassData;
-import com.eurobank.jclasses.JRequestResponseObjectsClassData;
+import static com.eurobank.util.UtilityMethods.*;
 import com.sun.codemodel.*;
 
 import java.io.IOException;
@@ -19,7 +19,7 @@ public class DTOClassGenerator extends MainFileGenerator{
     private Map<String, JMainFileClassData> jClassesMap;
 
     public DTOClassGenerator(Map<String, JMainFileClassData> jClassesMap, String canonicalName) throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
-        super(jClassesMap.get(canonicalName));
+        super(jClassesMap.get(getTypeofClassExpanded(canonicalName)));
         this.jClassesMap = jClassesMap;
         generateAll();
     }
