@@ -1,12 +1,16 @@
 package com.eurobank.filegenerators;
 
 import com.eurobank.JAXBmodel.DataSetType;
+import com.eurobank.jclasses.JExitClassData;
 import com.eurobank.jclasses.JMainFileClassData;
 import com.sun.codemodel.*;
+import static com.eurobank.util.UtilityMethods.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import static com.eurobank.util.UtilityMethods.getTypeofClassExpanded;
 
@@ -43,6 +47,7 @@ public class ExitClassGenerator extends MainFileGenerator{
 
     @Override
     public void generateOuterFieldsAndMethods() throws JClassAlreadyExistsException {
+        JExitClassData tempMainClass = (JExitClassData) mainclassdata;
         JDefinedClass brmExceptionClass = outerPackage2._class("BRMException");
         JDefinedClass exceptionClass = outerPackage3._class("Exception");
         JDefinedClass efgBrmApplicationException = outerPackage4._class("EFGBrmApplicationException");
@@ -57,9 +62,10 @@ public class ExitClassGenerator extends MainFileGenerator{
 
         for(int i = 0 ; i < methodNames.length ; i++) {
             JMethod executeBeforeCallMethod = mainclassdata.getjDefinedClass().method(JMod.PUBLIC, mainclassdata.getMainModel().INT, methodNames[i]);
-            /* Order of calls matters.*/
+            // Code specific only for first method
+            JVar[] declaredJVars1 = new JVar[0];
             if (methodNames[i].equals("executeAfterCall")){
-                fillInBlock(executeBeforeCallMethod.body());
+                declaredJVars1 = fillInBlock(executeBeforeCallMethod.body());
             }
             executeBeforeCallMethod.annotate(Override.class);
             executeBeforeCallMethod.param(Object.class, "mainBean");
@@ -67,12 +73,65 @@ public class ExitClassGenerator extends MainFileGenerator{
 
             JTryBlock jTryBlock = executeBeforeCallMethod.body()._try();
 
+            // Code specific only for first method
+            if (methodNames[i].equals("executeAfterCall")){
+                JClass arrayListClass = mainclassdata.getMainModel().ref(ArrayList.class);//narrow if I want generics
+                JVar arrayListJVar = jTryBlock.body().decl(arrayListClass, "tempArrayList", JExpr._new(arrayListClass));
+
+                // For Loop
+                JForLoop forLoop = jTryBlock.body()._for();
+                JVar ivar = forLoop.init(mainclassdata.getMainModel().INT, "i", JExpr.lit(0));
+
+                String vectorMethodsName = null;
+                for (Map.Entry<String, JMethod> temp: jClassesMap.get("BResp").getMethodsMap().entrySet()) {
+                    if(temp.getValue().type().name().equals("Vector")){
+                        vectorMethodsName = temp.getValue().name();
+                    }
+                }
+
+                System.out.println(vectorMethodsName);
+                forLoop.test(ivar.lt(JExpr.invoke(declaredJVars1[1], vectorMethodsName).invoke("size")));
+                forLoop.update(ivar.assignPlus(JExpr.lit(1)));
+
+                //todo : see here what happens in case of two DTOs, IF SUCH CASE CAN EXIST
+                JType tempJtype = jClassesMap.get("BRMDTO").getjDefinedClass();
+                JVar entryJVar = forLoop.body().decl(tempJtype,"currentEntry");
+                entryJVar.init(JExpr.cast(tempJtype, JExpr.invoke(declaredJVars1[1], vectorMethodsName).invoke("get").arg(ivar)));
+                forLoop.body().invoke(arrayListJVar,"add").arg(entryJVar);
+
+
+                JVar tempDTOArray = jTryBlock.body().decl(tempJtype.array(),
+                        makeFirstCharacterLowercase(tempJtype.name()) + "Array");
+                tempDTOArray.init(JExpr.cast(tempJtype.array() , arrayListJVar.invoke("toArray").arg(JExpr.newArray(tempJtype, arrayListJVar.invoke("size")))));
+
+
+                String tempMethodName = null;
+
+                for(Map.Entry<String, JMethod> temp : jClassesMap.get("BResp").getMethodsMap().entrySet()) {
+                    if (temp.getValue().params().size()!=0 &&
+                            temp.getValue().params().get(0).type().name()
+                                    .startsWith(getClassName(jClassesMap.get("BRMDTO").getCanonicalName()))) {
+                        tempMethodName = temp.getValue().name();
+                    }
+                }
+                jTryBlock.body().invoke(declaredJVars1[1], tempMethodName).arg(tempDTOArray);
+
+
+            }
+
             // Code specific only for second method
             if(methodNames[i].equals("executeBeforeCall")){
-                JVar beanVar = fillInBlock(jTryBlock.body());
+                JVar[] declaredJVars2 = fillInBlock(jTryBlock.body());
 
+                jTryBlock.body().invoke(declaredJVars2[0],"setActionCode").arg("00");
+                jTryBlock.body().invoke(declaredJVars2[0],"setTransaction").arg(tempMainClass.getTransactionId());
 
-
+                Map<String, JMethod> bReqMethodsMap = jClassesMap.get("BReq").getMethodsMap();
+                bReqMethodsMap.forEach((k,v) -> {
+                    if(k.startsWith("set"))
+                        jTryBlock.body().invoke(declaredJVars2[0],k)
+                                .arg(JExpr.invoke(declaredJVars2[0], k.replace("set", "get")));
+                });
             }
 
             JCatchBlock jCatchBlock =  jTryBlock._catch(exceptionClass);
@@ -94,18 +153,20 @@ public class ExitClassGenerator extends MainFileGenerator{
 
     }
 
-    public JVar fillInBlock (JBlock body) throws JClassAlreadyExistsException {
+    public JVar[] fillInBlock (JBlock body) throws JClassAlreadyExistsException {
 
         JMethod tempMethod1 = jClassesMap.get("Bean").getjDefinedClass().method(JMod.PUBLIC, jClassesMap.get("BResp").getjDefinedClass(), "getSend");
         JMethod tempMethod2 = jClassesMap.get("Bean").getjDefinedClass().method(JMod.PUBLIC, jClassesMap.get("BResp").getjDefinedClass(), "getReceive");
 
-        JVar myBeanVar = body.decl(jClassesMap.get("Bean").getjDefinedClass(), "myBean");
-        myBeanVar.init(JExpr.cast(jClassesMap.get("Bean").getjDefinedClass() , JExpr.ref("mainBean")));
+        JVar myBeanJVar = body.decl(jClassesMap.get("Bean").getjDefinedClass(), "myBean");
+        myBeanJVar.init(JExpr.cast(jClassesMap.get("Bean").getjDefinedClass() , JExpr.ref("mainBean")));
 
-        body.decl(jClassesMap.get("BReq").getjDefinedClass(), "mySend").init(myBeanVar.invoke(tempMethod1));
-        body.decl(jClassesMap.get("BResp").getjDefinedClass(), "myReceive").init(myBeanVar.invoke(tempMethod2));
+        JVar mySendJVar = body.decl(jClassesMap.get("BReq").getjDefinedClass(), "mySend");
+        mySendJVar.init(myBeanJVar.invoke(tempMethod1));
+        JVar myReceiveVar = body.decl(jClassesMap.get("BResp").getjDefinedClass(), "myReceive");
+        myReceiveVar.init(myBeanJVar.invoke(tempMethod2));
 
-        return myBeanVar;
+        return new JVar[]{mySendJVar, myReceiveVar, myBeanJVar};
     }
 
     @Override

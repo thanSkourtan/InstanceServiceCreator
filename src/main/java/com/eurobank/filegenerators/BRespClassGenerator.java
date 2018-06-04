@@ -55,11 +55,17 @@ public class BRespClassGenerator extends MainFileGenerator{
     }
 
     private void _createGettersAndSettersMethods (JDefinedClass jDefinedClass, JFieldVar x) {
-        JMethod tempGetter = jDefinedClass.method(JMod.PUBLIC, x.type(), "get" + x.name());
+        JMethod tempGetter = jDefinedClass.method(JMod.PUBLIC, x.type(),
+                "get" + makeFirstCharacterCapitalcase(x.name()));
         tempGetter.body()._return(x);
-        JMethod tempSetter  = jDefinedClass.method(JMod.PUBLIC, jDefinedClass.owner().VOID, "set" + x.name());
+        JMethod tempSetter  = jDefinedClass.method(JMod.PUBLIC, jDefinedClass.owner().VOID,
+                "set" + makeFirstCharacterCapitalcase(x.name()));
+
+        mainclassdata.getMethodsMap().put("get" + makeFirstCharacterCapitalcase(x.name()), tempGetter);
         tempSetter.param(x.type(), x.name());
-        tempSetter.body().assign(JExpr._this().ref(x.name()), JExpr.ref(x.name()));
+        tempSetter.body().assign(JExpr._this().ref("get" + makeFirstCharacterCapitalcase(x.name())), JExpr.ref(x.name()));
+        mainclassdata.getMethodsMap().put("set" + makeFirstCharacterCapitalcase(x.name()), tempSetter);
+
     }
 
     @Override

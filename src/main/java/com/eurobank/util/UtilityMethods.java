@@ -26,6 +26,10 @@ public class UtilityMethods {
         return x.substring(0, 1).toLowerCase() + x.substring(1);
     }
 
+    public static String makeFirstCharacterCapitalcase(String x) {
+        return x.substring(0, 1).toUpperCase() + x.substring(1);
+    }
+
     public static boolean isABRespClassName(String className){
         return className.endsWith("BResp");
     }

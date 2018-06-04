@@ -22,6 +22,7 @@ import static com.eurobank.directoryrouters.PlacementDirectory.*;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
@@ -129,8 +130,8 @@ public class InstantServiceCreatorMain extends DefaultHandler{
 
         /*Second Part: Build the JObjects model. */
         Map<Integer, String> allClassesNamesSet = addEsbClasses(brmClassNamesSet);
-
-        Map<String, JMainFileClassData> jClassesMap = new HashMap<>(); //add the jclasses
+        //keeps the insertion order
+        Map<String, JMainFileClassData> jClassesMap = new LinkedHashMap<>(); //add the jclasses
 
         allClassesNamesSet.forEach((k,v) -> {
             try {

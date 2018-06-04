@@ -74,13 +74,13 @@ public class JRequestResponseObjectsClassData extends JMainFileClassData{
     }
 
     public void createGettersAndSettersMethods (JDefinedClass jDefinedClass, JFieldVar x) {
-        JMethod tempGetter = jDefinedClass.method(JMod.PUBLIC, x.type(), "get" + x.name());
+        JMethod tempGetter = jDefinedClass.method(JMod.PUBLIC, x.type(), "get" + makeFirstCharacterCapitalcase(x.name()));
         tempGetter.body()._return(x);
-        methodsMap.put("get" + x.name(), tempGetter);
-        JMethod tempSetter  = jDefinedClass.method(JMod.PUBLIC, jDefinedClass.owner().VOID, "set" + x.name());
+        methodsMap.put("get" + makeFirstCharacterCapitalcase(x.name()), tempGetter);
+        JMethod tempSetter  = jDefinedClass.method(JMod.PUBLIC, jDefinedClass.owner().VOID, "set" + makeFirstCharacterCapitalcase(x.name()));
         tempSetter.param(x.type(), x.name());
         tempSetter.body().assign(JExpr._this().ref(x.name()), JExpr.ref(x.name()));
-        methodsMap.put("set" + x.name(), tempSetter);
+        methodsMap.put("set" + makeFirstCharacterCapitalcase(x.name()), tempSetter);
 
 
     }
