@@ -74,7 +74,6 @@ public class OptionsProcessor {
         cmdData.filename = cmd.getOptionValue("xml");
         cmdData.serviceName = cmd.getOptionValue("service");
 
-        //test
         return cmdData;
     }
 }

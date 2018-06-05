@@ -1,6 +1,8 @@
 package com.eurobank.util;
 
 import com.eurobank.JAXBmodel.DataSetType;
+import com.eurobank.jclasses.JMainFileClassData;
+import com.sun.codemodel.JDefinedClass;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -156,6 +158,10 @@ public class UtilityMethods {
         else if(isABRMDTOClassName(fullClassName)) return "BRMDTO";
         else if(isAnESBDTOClassName(fullClassName)) return "ESBDTO";
         else return "";
+    }
+
+    public static JDefinedClass getJModelClass(Map<String, JMainFileClassData> jClassesMap, String x) {
+        return jClassesMap.get(x).getjDefinedClass();
     }
 
 
