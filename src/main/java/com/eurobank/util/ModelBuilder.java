@@ -17,7 +17,7 @@ import static com.eurobank.util.UtilityMethods.getTypeofClassExpanded;
  */
 public class ModelBuilder {
 
-    public static void createModel(Set<String> brmClassNamesSet, BusinessRequestType dataFromXml)
+    public static void createModelAndClasses(Set<String> brmClassNamesSet, BusinessRequestType dataFromXml)
                             throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
                                     InstantiationException, InvocationTargetException{
         Map<Integer, String> allClassesNamesSet = addEsbClasses(brmClassNamesSet);
