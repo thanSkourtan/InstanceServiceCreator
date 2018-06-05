@@ -16,12 +16,11 @@ import org.xml.sax.*;
 import org.xml.sax.helpers.*;
 
 import static com.eurobank.util.UtilityMethods.*;
-import static com.eurobank.generatedclassnamesprocessors.EsbClassesNamesCreator.*;
-import static com.eurobank.directoryrouters.PlacementDirectory.*;
+import static com.eurobank.util.EsbClassesNamesCreator.*;
+import static com.eurobank.routing.PlacementDirectory.*;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -31,7 +30,7 @@ import java.util.logging.Logger;
 
 public class InstantServiceCreatorMain extends DefaultHandler{
 
-    private static String serviceName;
+
     private static final Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
 
@@ -52,7 +51,7 @@ public class InstantServiceCreatorMain extends DefaultHandler{
         System.exit(1);
     }
 
-    public static SaxParserHandler parseXmlFile(String filename) throws IOException, SAXException, ParserConfigurationException{
+    public static SaxParserHandler parseXmlFile(String filename, String serviceName) throws IOException, SAXException, ParserConfigurationException{
         SAXParserFactory spf = SAXParserFactory.newInstance();
         spf.setNamespaceAware(true);
         SAXParser saxParser = spf.newSAXParser();
@@ -70,59 +69,15 @@ public class InstantServiceCreatorMain extends DefaultHandler{
     public static void main(String[] args) throws Exception{
 
 
-        Options options = new Options();
-        options.addOption("x", "xml",true,"The path of the xml file to be parsed.");
-        options.addOption("s", "service",true,"The name of the service to be handled.");
-        options.addOption("p", "project", true,"The name (stem actually) of the project folders to place the classes.");
-        options.addOption("v", "verbose",false,"Shows logs.");
-        options.addOption("d","delete", false, "Deletes the classes related to the declared service.");
+        OptionsProcessor optionsProcessor = new OptionsProcessor(args);
+        OptionsProcessor.CmdData cmdData = optionsProcessor.processOptions();
 
-
-        CommandLineParser cmdParser = new DefaultParser();
-        CommandLine cmd = cmdParser.parse(options, args);
-
-        HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp("isc", "",options, "\nex: isc -x " +
-                        ".\\EuroBankiSeriesJCA.xml -s GetPropertyFireInsurance\n",
-                true);
-
-        if (!cmd.hasOption("xml") && !cmd.hasOption("service")){
-            System.out.println("Please enter lala");
-            System.exit(-1);
-        }
-        //todo:exception handling here
-        String project = cmd.hasOption("project")?
-                cmd.getOptionValue("project"):
-                getDirectoriesRoots().get(getXmlFileName(cmd.getOptionValue("xml")));
-
-
-
-        System.out.println("stem " + project);
-
-        String filename = cmd.getOptionValue("xml");
-        serviceName = cmd.getOptionValue("service");
-
-        //test
-        System.out.println(filename);
-        System.out.println(serviceName);
         logger.log(Level.INFO, "Sample logging-------------");
         //TODO: Logging and Exception system
 
-        /*String filename = null;
-
-        if(args.length != 2) {
-            usage();
-        }
-
-        filename = args[0];
-        serviceName = args[1];
-
-
-        */
-
         // TODO: test the parser here
         /*First Part: Parsing*/
-        SaxParserHandler saxParserHandler = parseXmlFile(filename);
+        SaxParserHandler saxParserHandler = parseXmlFile(cmdData.getFilename(), cmdData.getServiceName());
         BusinessRequestType dataFromXml = saxParserHandler.getRoot();
         Set<String> brmClassNamesSet = saxParserHandler.getAllClassesNames();
 

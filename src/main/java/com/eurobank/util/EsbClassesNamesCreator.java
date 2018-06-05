@@ -1,4 +1,4 @@
-package com.eurobank.generatedclassnamesprocessors;
+package com.eurobank.util;
 
 import static com.eurobank.util.UtilityMethods.*;
 

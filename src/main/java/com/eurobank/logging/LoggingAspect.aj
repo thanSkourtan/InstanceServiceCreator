@@ -1,10 +1,9 @@
-package com.eurobank.aspectj;
+package com.eurobank.logging;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import com.eurobank.saxparser.SaxParserHandler;
+
 import com.sun.codemodel.JPackage;
-import com.eurobank.filegenerators.BReqClassGenerator;
 
 public aspect LoggingAspect {
 

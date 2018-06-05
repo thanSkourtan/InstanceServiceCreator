@@ -1,4 +1,4 @@
-package com.eurobank.directoryrouters;
+package com.eurobank.routing;
 
 import java.util.HashMap;
 import java.util.Map;
