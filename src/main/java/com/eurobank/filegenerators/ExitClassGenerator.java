@@ -78,9 +78,7 @@ public class ExitClassGenerator extends MainFileGenerator{
                 JClass arrayListClass = mainclassdata.getMainModel().ref(ArrayList.class);//narrow if I want generics
                 JVar arrayListJVar = jTryBlock.body().decl(arrayListClass, "tempArrayList", JExpr._new(arrayListClass));
 
-                // For Loop
-                JForLoop forLoop = jTryBlock.body()._for();
-                JVar ivar = forLoop.init(mainclassdata.getMainModel().INT, "i", JExpr.lit(0));
+
 
                 String vectorMethodsName = null;
                 for (Map.Entry<String, JMethod> temp: jClassesMap.get("BResp").getMethodsMap().entrySet()) {
@@ -89,32 +87,38 @@ public class ExitClassGenerator extends MainFileGenerator{
                     }
                 }
 
-                System.out.println(vectorMethodsName);
-                forLoop.test(ivar.lt(JExpr.invoke(declaredJVars1[1], vectorMethodsName).invoke("size")));
-                forLoop.update(ivar.assignPlus(JExpr.lit(1)));
+                if(vectorMethodsName != null) {
+                    // For Loop
+                    JForLoop forLoop = jTryBlock.body()._for();
+                    JVar ivar = forLoop.init(mainclassdata.getMainModel().INT, "i", JExpr.lit(0));
 
-                //todo : see here what happens in case of two DTOs, IF SUCH CASE CAN EXIST
-                JType tempJtype = jClassesMap.get("BRMDTO").getjDefinedClass();
-                JVar entryJVar = forLoop.body().decl(tempJtype,"currentEntry");
-                entryJVar.init(JExpr.cast(tempJtype, JExpr.invoke(declaredJVars1[1], vectorMethodsName).invoke("get").arg(ivar)));
-                forLoop.body().invoke(arrayListJVar,"add").arg(entryJVar);
+                    forLoop.test(ivar.lt(JExpr.invoke(declaredJVars1[1], vectorMethodsName).invoke("size")));
+                    forLoop.update(ivar.assignPlus(JExpr.lit(1)));
+
+                    //todo : see here what happens in case of two DTOs, IF SUCH CASE CAN EXIST
+                    JType tempJtype = jClassesMap.get("BRMDTO").getjDefinedClass();
+                    JVar entryJVar = forLoop.body().decl(tempJtype,"currentEntry");
+                    entryJVar.init(JExpr.cast(tempJtype, JExpr.invoke(declaredJVars1[1], vectorMethodsName).invoke("get").arg(ivar)));
+                    forLoop.body().invoke(arrayListJVar,"add").arg(entryJVar);
 
 
-                JVar tempDTOArray = jTryBlock.body().decl(tempJtype.array(),
-                        makeFirstCharacterLowercase(tempJtype.name()) + "Array");
-                tempDTOArray.init(JExpr.cast(tempJtype.array() , arrayListJVar.invoke("toArray").arg(JExpr.newArray(tempJtype, arrayListJVar.invoke("size")))));
+                    JVar tempDTOArray = jTryBlock.body().decl(tempJtype.array(),
+                            makeFirstCharacterLowercase(tempJtype.name()) + "Array");
+                    tempDTOArray.init(JExpr.cast(tempJtype.array() , arrayListJVar.invoke("toArray").arg(JExpr.newArray(tempJtype, arrayListJVar.invoke("size")))));
 
 
-                String tempMethodName = null;
+                    String tempMethodName = null;
 
-                for(Map.Entry<String, JMethod> temp : jClassesMap.get("BResp").getMethodsMap().entrySet()) {
-                    if (temp.getValue().params().size()!=0 &&
-                            temp.getValue().params().get(0).type().name()
-                                    .startsWith(getClassName(jClassesMap.get("BRMDTO").getCanonicalName()))) {
-                        tempMethodName = temp.getValue().name();
+                    for(Map.Entry<String, JMethod> temp : jClassesMap.get("BResp").getMethodsMap().entrySet()) {
+                        if (temp.getValue().params().size()!=0 &&
+                                temp.getValue().params().get(0).type().name()
+                                        .startsWith(getClassName(jClassesMap.get("BRMDTO").getCanonicalName()))) {
+                            tempMethodName = temp.getValue().name();
+                        }
                     }
+                    jTryBlock.body().invoke(declaredJVars1[1], tempMethodName).arg(tempDTOArray);
                 }
-                jTryBlock.body().invoke(declaredJVars1[1], tempMethodName).arg(tempDTOArray);
+
 
 
             }

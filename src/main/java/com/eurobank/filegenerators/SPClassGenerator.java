@@ -102,8 +102,14 @@ public class SPClassGenerator extends MainFileGenerator{
 
         Map<String, JMethod> bRespMethodsMap = jClassesMap.get("BResp").getMethodsMap();
 
+
         bRespMethodsMap.forEach((k,v) -> {
-            if(k.startsWith("set") && v.params().size() == 1 &&
+            if(jClassesMap.get("BRMDTO") == null) {
+                if(k.startsWith("set")){
+                    createESBResponseJMethod.body().invoke(respJVar,k).arg(JExpr.invoke(brmRespJVar, k.replace("set", "get")));
+                }
+            }
+            else if(k.startsWith("set") && v.params().size() == 1 &&
                     !v.params().get(0).type().name().equals("Vector") &&
                             !v.params().get(0).type().name().replace("[]","").equals(getJModelClass(jClassesMap, "BRMDTO").name())){
                 createESBResponseJMethod.body().invoke(respJVar,k).arg(JExpr.invoke(brmRespJVar, k.replace("set", "get")));
