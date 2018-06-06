@@ -22,7 +22,7 @@ public class ModelBuilder {
                                     InstantiationException, InvocationTargetException{
         Map<Integer, String> allClassesNamesSet = addEsbClasses(brmClassNamesSet);
         //keeps the insertion order
-        Map<String, JMainFileClassData> jClassesMap = new LinkedHashMap<>(); //add the jclasses
+        Map<String, JMainFileClassData> jClassesMap = new LinkedHashMap<>();
 
         /*Construct the model*/
         for (Map.Entry<Integer, String> entry : allClassesNamesSet.entrySet()) {

@@ -4,7 +4,6 @@ package com.eurobank;
  * Created by v-askourtaniotis on 16/5/2018. mailTo: thanskourtan@gmail.com
  */
 
-import com.eurobank.JAXBmodel.BusinessRequestType;
 import com.eurobank.jclasses.JMainFileClassData;
 import com.eurobank.saxparser.SaxParserHandler;
 import com.eurobank.util.ModelBuilder;
@@ -27,14 +26,11 @@ public class InstantServiceCreatorMain {
         OptionsProcessor.CmdData cmdData = optionsProcessor.processOptions();
         // logger.log(Level.INFO, "Sample logging-------------");
 
-        // TODO: test the parser here
-        /*First Part: Parsing*/
         SaxParserHandler saxParserHandler = parseXmlFile(cmdData.getFilename(), cmdData.getServiceName());
-        BusinessRequestType dataFromXml = saxParserHandler.getRoot();
-        Set<String> brmClassNamesSet = saxParserHandler.getAllClassesNames();
 
-        ModelBuilder.createModelAndClasses(brmClassNamesSet, dataFromXml);
+        ModelBuilder.createModelAndClasses(saxParserHandler.getAllClassesNames(), saxParserHandler.getRoot());
 
+        //directory placement logic goes here
         JMainFileClassData.getBrmMessagesCodeModel().build(new File("src//main//resources//resources2"));
         JMainFileClassData.getEsbBusinessLogicCodeModel().build(new File("src//main//resources//resources3"));
         JMainFileClassData.getEsbMessagesCodeModel().build(new File("src//main//resources//resources4"));

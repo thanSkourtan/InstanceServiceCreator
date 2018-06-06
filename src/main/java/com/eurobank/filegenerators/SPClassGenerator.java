@@ -101,12 +101,41 @@ public class SPClassGenerator extends MainFileGenerator{
         respJVar.init(JExpr._new(getJModelClass(jClassesMap, "SResp")));
 
         Map<String, JMethod> bRespMethodsMap = jClassesMap.get("BResp").getMethodsMap();
+
         bRespMethodsMap.forEach((k,v) -> {
             if(k.startsWith("set") && v.params().size() == 1 &&
                     !v.params().get(0).type().name().equals("Vector") &&
                             !v.params().get(0).type().name().replace("[]","").equals(getJModelClass(jClassesMap, "BRMDTO").name())){
-                        createESBResponseJMethod.body().invoke(respJVar,k)
-                        .arg(JExpr.invoke(brmRespJVar, k.replace("set", "get")));
+                createESBResponseJMethod.body().invoke(respJVar,k).arg(JExpr.invoke(brmRespJVar, k.replace("set", "get")));
+            } else if (k.startsWith("set") && v.params().size() == 1 &&
+                    v.params().get(0).type().name().replace("[]","").equals(getJModelClass(jClassesMap, "BRMDTO").name())) {
+
+                JInvocation getListJInvocation = JExpr.invoke(brmRespJVar, k.replace("set", "get"));
+
+                JConditional condition = createESBResponseJMethod.body()._if(getListJInvocation.ne(JExpr._null())
+                        .cand(getListJInvocation.ref("length").gt(JExpr.lit(0))));
+
+                JVar esbDTOJVar = condition._then().decl(getJModelClass(jClassesMap, "ESBDTO").array(),
+                        makeFirstCharacterLowercase(getJModelClass(jClassesMap, "ESBDTO").name()));
+
+                esbDTOJVar.init(JExpr.newArray(getJModelClass(jClassesMap, "ESBDTO"), getListJInvocation.ref("length")));
+
+                JForLoop forLoop = condition._then()._for();
+                JVar ivar = forLoop.init(mainclassdata.getMainModel().INT, "i", JExpr.lit(0));
+                forLoop.test(ivar.lt(getListJInvocation).ref("length"));
+                forLoop.update(ivar.assignPlus(JExpr.lit(1)));
+
+                forLoop.body().assign(esbDTOJVar.component(JExpr.ref("i")), JExpr._new(getJModelClass(jClassesMap,"ESBDTO")));
+
+                jClassesMap.get("BRMDTO").getMethodsMap().forEach((key, value) -> {
+                    if(value.name().startsWith("set")){
+                        forLoop.body().invoke(esbDTOJVar.component(JExpr.ref("i")), value).arg(
+                                JExpr.invoke(getListJInvocation.component(JExpr.ref("i")), value.name().replace("set", "get"))
+                        );
+                    }
+                });
+                condition._then().invoke(respJVar, k).arg(esbDTOJVar);
+
             }
 
         });
@@ -115,30 +144,21 @@ public class SPClassGenerator extends MainFileGenerator{
 
 
 
-        JClass listClass = mainclassdata.getMainModel().ref(List.class).narrow(getJModelClass(jClassesMap, "BRMDTO"));
-        JClass arrayListClass = mainclassdata.getMainModel().ref(ArrayList.class).narrow(getJModelClass(jClassesMap, "BRMDTO"));
-        JVar arrayListJVar = createESBResponseJMethod.body()
-                .decl(listClass, makeFirstCharacterLowercase(getJModelClass(jClassesMap, "BRMDTO").name()) + "List");
-        arrayListJVar.init(JExpr._new(arrayListClass));
+//        JClass listClass = mainclassdata.getMainModel().ref(List.class).narrow(getJModelClass(jClassesMap, "BRMDTO"));
+//        JClass arrayListClass = mainclassdata.getMainModel().ref(ArrayList.class).narrow(getJModelClass(jClassesMap, "BRMDTO"));
+//        JVar arrayListJVar = createESBResponseJMethod.body()
+//                .decl(listClass, makeFirstCharacterLowercase(getJModelClass(jClassesMap, "BRMDTO").name()) + "List");
+//        arrayListJVar.init(JExpr._new(arrayListClass));
 
-        JForLoop forLoop = createESBResponseJMethod.body()._for();
-        JVar ivar = forLoop.init(mainclassdata.getMainModel().INT, "i", JExpr.lit(0));
-
-        String vectorMethodsName = null;
-        for (Map.Entry<String, JMethod> temp: jClassesMap.get("BResp").getMethodsMap().entrySet()) {
-            if(temp.getValue().type().isArray() &&
-                    temp.getValue().type().name().replace("[]","")
-                            .equals(getJModelClass(jClassesMap, "BRMDTO").name())){
-                vectorMethodsName = temp.getValue().name();
-            }
-        }
-
-        forLoop.test(ivar.lt(JExpr.invoke(brmRespJVar, vectorMethodsName).ref("length")));
-        forLoop.update(ivar.assignPlus(JExpr.lit(1)));
-
-        JConditional condition = forLoop.body()._if(respJVar.lt(JExpr.lit(42)));
-        condition._then().add(
-                JMainFileClassData.getMainModel().ref(System.class).staticRef("out").invoke("println").arg(JExpr.lit("hello")));
+//        JForLoop forLoop = createESBResponseJMethod.body()._for();
+//        JVar ivar = forLoop.init(mainclassdata.getMainModel().INT, "i", JExpr.lit(0));
+//
+//        forLoop.test(ivar.lt(JExpr.invoke(brmRespJVar, vectorMethodsName).ref("length")));
+//        forLoop.update(ivar.assignPlus(JExpr.lit(1)));
+//
+//        JConditional condition = forLoop.body()._if(respJVar.lt(JExpr.lit(42)));
+//        condition._then().add(
+//                JMainFileClassData.getMainModel().ref(System.class).staticRef("out").invoke("println").arg(JExpr.lit("hello")));
 
 
         //JVar brmRespJVar = createESBResponseJMethod.body().decl(getJModelClass(jClassesMap, "BRMDTO").array(), "");
