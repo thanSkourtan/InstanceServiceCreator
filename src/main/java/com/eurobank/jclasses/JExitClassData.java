@@ -9,9 +9,14 @@ import com.sun.codemodel.JClassAlreadyExistsException;
 public class JExitClassData extends JMainFileClassData{
     private String transactionId;
 
-    public JExitClassData(String canonicalName, BusinessRequestType dataFromXml) throws JClassAlreadyExistsException {
+    public JExitClassData(String canonicalName, BusinessRequestType dataFromXml, Boolean isAltamira) throws JClassAlreadyExistsException {
         super(canonicalName, dataFromXml);
-        this.transactionId = dataFromXml.getService().getISERIESJ2C().getTransactionID();
+        if(isAltamira){
+            this.transactionId = dataFromXml.getService().getBttlu0J2C().getTransactionName();
+        } else {
+            this.transactionId = dataFromXml.getService().getISERIESJ2C().getTransactionID();
+        }
+
     }
 
     @Override

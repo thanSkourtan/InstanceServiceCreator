@@ -7,7 +7,7 @@ import com.sun.codemodel.JClassAlreadyExistsException;
  * Created by v-askourtaniotis on 1/6/2018. mailTo: thanskourtan@gmail.com
  */
 public class JSPClassData extends JMainFileClassData {
-    public JSPClassData(String canonicalName, BusinessRequestType dataFromXml) throws JClassAlreadyExistsException {
+    public JSPClassData(String canonicalName, BusinessRequestType dataFromXml, Boolean isAltamira) throws JClassAlreadyExistsException {
         super(canonicalName, dataFromXml);
     }
 

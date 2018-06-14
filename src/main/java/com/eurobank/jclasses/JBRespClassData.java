@@ -9,7 +9,7 @@ import com.sun.codemodel.JClassAlreadyExistsException;
 public class JBRespClassData extends JRequestResponseObjectsClassData{
 
 
-    public JBRespClassData(String canonicalName, BusinessRequestType dataFromXml) throws JClassAlreadyExistsException {
-        super(canonicalName, dataFromXml);
+    public JBRespClassData(String canonicalName, BusinessRequestType dataFromXml, Boolean isAltamira) throws JClassAlreadyExistsException {
+        super(canonicalName, dataFromXml, isAltamira);
     }
 }

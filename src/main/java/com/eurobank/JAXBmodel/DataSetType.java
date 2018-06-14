@@ -51,6 +51,8 @@ public class DataSetType {
     protected String type;
     @XmlAttribute(name = "FormatAs")
     protected String formatAs;
+    @XmlAttribute(name = "Encode")
+    protected String encode;
     @XmlAttribute(name = "DefaultEncode")
     protected String defaultEncode;
     @XmlAttribute(name = "MatchTargetField")

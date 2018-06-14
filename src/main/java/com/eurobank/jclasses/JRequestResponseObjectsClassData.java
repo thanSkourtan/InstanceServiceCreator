@@ -5,6 +5,7 @@ import com.eurobank.JAXBmodel.DataSetType;
 import com.eurobank.JAXBmodel.FieldType;
 import com.sun.codemodel.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -19,10 +20,13 @@ import static com.eurobank.util.UtilityMethods.*;
 public class JRequestResponseObjectsClassData extends JMainFileClassData{
 
     private String matchDataSetName;
+    private boolean isAltamira;
 
-    public JRequestResponseObjectsClassData(String canonicalName, BusinessRequestType dataFromXml) throws JClassAlreadyExistsException {
+    public JRequestResponseObjectsClassData(String canonicalName, BusinessRequestType dataFromXml, boolean isAltamira) throws JClassAlreadyExistsException {
         super(canonicalName, dataFromXml);
+        this.isAltamira = isAltamira;
         buildJFieldsAndJMethods(dataProcessing());
+
     }
 
     @Override
@@ -45,7 +49,7 @@ public class JRequestResponseObjectsClassData extends JMainFileClassData{
         for (DataSetType d : data) {
             for (FieldType f : d.getField()) {
                 if(f.getMatchDataSetName() == null){
-                    Class<?> fieldClass = getFieldClass(f);
+                    Class<?> fieldClass = isAltamira ? getAltamiraFieldClass(f) : getNonAltamiraFieldClass(f);
                     JFieldVar tempVar1 = jDefinedClass.field(JMod.PRIVATE, fieldClass, f.getName());
                     fieldsMap.put(f.getName(), tempVar1);
                     createGettersAndSettersMethods(jDefinedClass, tempVar1);
@@ -60,13 +64,26 @@ public class JRequestResponseObjectsClassData extends JMainFileClassData{
 
     }
 
-    public Class<?> getFieldClass(FieldType f) {
+    private Class<?> getNonAltamiraFieldClass(FieldType f) {
         if (f.getFormatClassParm().startsWith("X")) {
             return String.class;
         } else if (f.getFormatClassParm().startsWith("9") && f.getFormatClassParm().contains("V9")) {
             return Double.class;
         } else if (f.getFormatClassParm().startsWith("9")) {
             return Integer.class;
+        } else {
+            //todo: throw application exception
+        }
+        return null;
+    }
+
+    private Class<?> getAltamiraFieldClass(FieldType f) {
+        if (f.getFormatClassParm().startsWith("CHAR")) {
+            return String.class;
+        } else if (f.getFormatClassParm().startsWith("DATE")) {
+            return Date.class;
+        } else if (f.getFormatClassParm().startsWith("DOUBLE")) {
+            return Double.class;
         } else {
             //todo: throw application exception
         }

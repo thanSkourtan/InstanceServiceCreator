@@ -5,7 +5,7 @@ import com.sun.codemodel.JClassAlreadyExistsException;
 
 public class JBReqClassData extends JRequestResponseObjectsClassData{
 
-    public JBReqClassData(String canonicalName, BusinessRequestType dataFromXml) throws JClassAlreadyExistsException {
-        super(canonicalName, dataFromXml);
+    public JBReqClassData(String canonicalName, BusinessRequestType dataFromXml, Boolean isAltamira) throws JClassAlreadyExistsException {
+        super(canonicalName, dataFromXml, isAltamira);
     }
 }

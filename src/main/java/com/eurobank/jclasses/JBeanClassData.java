@@ -8,7 +8,7 @@ import com.sun.codemodel.JClassAlreadyExistsException;
  */
 public class JBeanClassData  extends JMainFileClassData{
 
-    public JBeanClassData(String canonicalName, BusinessRequestType dataFromXml) throws JClassAlreadyExistsException {
+    public JBeanClassData(String canonicalName, BusinessRequestType dataFromXml, Boolean isAltamira) throws JClassAlreadyExistsException {
         super(canonicalName, dataFromXml);
     }
 

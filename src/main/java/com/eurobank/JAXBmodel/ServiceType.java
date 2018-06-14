@@ -1,10 +1,15 @@
 
 package com.eurobank.JAXBmodel;
 
+import com.eurobank.JAXBmodel.*;
+import com.eurobank.JAXBmodel.BTTLU0J2CType;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -35,6 +40,9 @@ public class ServiceType {
     @XmlElement(name = "ISERIESJ2C", required = true)
     protected ISERIESJ2CType iseriesj2C;
 
+    @XmlElement(name = "BTTLU0J2C")
+    protected BTTLU0J2CType bttlu0J2C;
+
     /**
      * Gets the value of the iseriesj2C property.
      * 
@@ -59,4 +67,7 @@ public class ServiceType {
         this.iseriesj2C = value;
     }
 
+    public BTTLU0J2CType getBttlu0J2C() {
+        return bttlu0J2C;
+    }
 }
