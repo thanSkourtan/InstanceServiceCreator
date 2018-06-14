@@ -19,6 +19,7 @@ public class OptionsProcessor {
     public class CmdData{
         private String serviceName;
         private String filename;
+        private String project;
 
         public String getServiceName() {
             return serviceName;
@@ -34,6 +35,14 @@ public class OptionsProcessor {
 
         public void setFilename(String filename) {
             this.filename = filename;
+        }
+
+        public String getProject() {
+            return project;
+        }
+
+        public void setProject(String project) {
+            this.project = project;
         }
     }
 

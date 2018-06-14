@@ -11,6 +11,7 @@ import static com.eurobank.saxparser.SaxParserInitializer.*;
 import static com.eurobank.routing.PlacementDirectory.*;
 
 import java.io.*;
+import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,6 +30,14 @@ public class InstantServiceCreatorMain {
         SaxParserHandler saxParserHandler = parseXmlFile(cmdData.getFilename(), cmdData.getServiceName());
 
         ModelBuilder.createModelAndClasses(saxParserHandler.getAllClassesNames(), saxParserHandler.getRoot(), saxParserHandler.isAnAltamira());
+
+        /****************************************************************/
+        Properties props = new Properties();
+        String resourceName = "application.properties";
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        try(InputStream resourceStream = loader.getResourceAsStream(resourceName)) {
+            props.load(resourceStream);
+        }
 
         //directory placement logic goes here
         JMainFileClassData.getBrmMessagesCodeModel().build(new File("src//main//resources//resources2"));
