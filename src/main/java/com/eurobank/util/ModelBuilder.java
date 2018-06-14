@@ -34,7 +34,7 @@ public class ModelBuilder {
         /*Construct the classes*/
         for (Map.Entry<Integer, String> entry : allClassesNamesSet.entrySet()) {
             Class<?> tempClass = Class.forName("com.eurobank.filegenerators." + getTypeofClass(entry.getValue()) + "ClassGenerator");
-            tempClass.getConstructor(Map.class, String.class).newInstance(jClassesMap, entry.getValue());
+            tempClass.getConstructor(Map.class, String.class, Boolean.class).newInstance(jClassesMap, entry.getValue(), isAltamira);
         }
 
 

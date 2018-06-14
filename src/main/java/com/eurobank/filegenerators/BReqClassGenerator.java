@@ -15,10 +15,12 @@ public class BReqClassGenerator extends MainFileGenerator{
 
     private JPackage outerPackage1;
     private Map<String, JMainFileClassData> jClassesMap;
+    private Boolean isAltamira;
 
-    public BReqClassGenerator( Map<String, JMainFileClassData> jClassesMap, String canonicalName) throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
+    public BReqClassGenerator( Map<String, JMainFileClassData> jClassesMap, String canonicalName, Boolean isAltamira) throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
         super(jClassesMap.get(getTypeofClassExpanded(canonicalName)));
         this.jClassesMap = jClassesMap;
+        this.isAltamira = isAltamira;
         generateAll();
     }
 
@@ -35,7 +37,9 @@ public class BReqClassGenerator extends MainFileGenerator{
 
     @Override
     public void generateInheritance() throws JClassAlreadyExistsException {
-        JDefinedClass superclass = outerPackage1._class("ABaseAS400InputDataBean");
+        JDefinedClass superclass = isAltamira ?
+                outerPackage1._class("ABaseAS400InputDataBean") :
+                outerPackage1._class("ABaseAltamiraInputDataBean");
         mainclassdata.getjDefinedClass()._extends(superclass);
     }
 

@@ -16,10 +16,12 @@ public class BRespClassGenerator extends MainFileGenerator{
 
     private JPackage outerPackage1;
     private Map<String, JMainFileClassData> jClassesMap;
+    private Boolean isAltamira;
 
-    public BRespClassGenerator( Map<String, JMainFileClassData> jClassesMap, String canonicalName) throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
+    public BRespClassGenerator( Map<String, JMainFileClassData> jClassesMap, String canonicalName, Boolean isAltamira) throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
         super(jClassesMap.get(getTypeofClassExpanded(canonicalName)));
         this.jClassesMap = jClassesMap;
+        this.isAltamira = isAltamira;
         generateAll();
     }
 
@@ -70,7 +72,9 @@ public class BRespClassGenerator extends MainFileGenerator{
 
     @Override
     public void generateInheritance() throws JClassAlreadyExistsException {
-        JDefinedClass superclass = outerPackage1._class("ABaseAS400OutputDataBean");
+        JDefinedClass superclass = isAltamira ?
+                outerPackage1._class("ABaseAS400OutputDataBean") :
+                outerPackage1._class("ABaseAltamiraOutputDataBean");
         mainclassdata.getjDefinedClass()._extends(superclass);
     }
 

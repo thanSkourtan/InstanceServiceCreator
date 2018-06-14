@@ -14,11 +14,13 @@ public class BeanClassGenerator extends MainFileGenerator{
     private JPackage outerPackage1;
     private Map<String, JMainFileClassData> jClassesMap;
     private String canonicalName;
+    private Boolean isAltamira;
 
-    public BeanClassGenerator( Map<String, JMainFileClassData> jClassesMap, String canonicalName) throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
+    public BeanClassGenerator( Map<String, JMainFileClassData> jClassesMap, String canonicalName, Boolean isAltamira) throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
         super(jClassesMap.get(getTypeofClassExpanded(canonicalName)));
         this.jClassesMap = jClassesMap;
         this.canonicalName = canonicalName;
+        this.isAltamira = isAltamira;
         generateAll();
     }
 
@@ -73,7 +75,10 @@ public class BeanClassGenerator extends MainFileGenerator{
 
     @Override
     public void generateInheritance() throws JClassAlreadyExistsException {
-        JDefinedClass superclass = outerPackage1._class("ABaseAS400Bean");
+
+        JDefinedClass superclass = isAltamira ?
+                outerPackage1._class("ABaseAltamiraBean") :
+                outerPackage1._class("ABaseAS400Bean");
         mainclassdata.getjDefinedClass()._extends(superclass);
     }
 }

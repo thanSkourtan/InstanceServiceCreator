@@ -25,7 +25,7 @@ public class ExitClassGenerator extends MainFileGenerator{
     private JPackage outerPackage7;
     private Map<String, JMainFileClassData> jClassesMap;
 
-    public ExitClassGenerator(Map<String, JMainFileClassData> jClassesMap, String canonicalName) throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
+    public ExitClassGenerator(Map<String, JMainFileClassData> jClassesMap, String canonicalName, Boolean isAltamira) throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
         super(jClassesMap.get(getTypeofClassExpanded(canonicalName)));
         this.jClassesMap = jClassesMap;
         generateAll();

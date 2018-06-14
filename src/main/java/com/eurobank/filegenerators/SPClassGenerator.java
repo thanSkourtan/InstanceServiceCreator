@@ -21,7 +21,7 @@ public class SPClassGenerator extends MainFileGenerator{
     private JPackage outerPackage6;
     private Map<String, JMainFileClassData> jClassesMap;
 
-    public SPClassGenerator( Map<String, JMainFileClassData> jClassesMap, String canonicalName) throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
+    public SPClassGenerator( Map<String, JMainFileClassData> jClassesMap, String canonicalName, Boolean isAltamira) throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
         super(jClassesMap.get(getTypeofClassExpanded(canonicalName)));
         this.jClassesMap = jClassesMap;
         generateAll();
