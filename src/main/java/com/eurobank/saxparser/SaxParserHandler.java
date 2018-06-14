@@ -5,6 +5,7 @@ package com.eurobank.saxparser;
  */
 
 import com.eurobank.JAXBmodel.BusinessRequestType;
+import com.eurobank.JAXBmodel.FieldType;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.*;
@@ -26,6 +27,7 @@ public class SaxParserHandler extends DefaultHandler {
     private boolean serviceFound;
     private BusinessRequestType root;// the root is a tree with pointers only from parents to children. so we cannot go backwards
     private Deque<Object> orderedXmlElementsStack; // this is why we need a second structrure, which is a stack
+    private boolean isAnAltamira;
 
 
     public void startDocument() throws SAXException {
@@ -113,6 +115,9 @@ public class SaxParserHandler extends DefaultHandler {
                     myList = new ArrayList<>();
                 }
                 myList.add(xmlElementObject);
+                if(localName.equals("Field")) {
+                    isAnAltamira = isAnAltamiraTransaction((FieldType) xmlElementObject);
+                }
 
                 previousElementField.setAccessible(true);
                 previousElementField.set(previousElementObject, myList);
@@ -161,5 +166,13 @@ public class SaxParserHandler extends DefaultHandler {
 
     public Set<String> getAllClassesNames() {
         return allClassesNames;
+    }
+
+    public boolean isAnAltamira() {
+        return isAnAltamira;
+    }
+
+    public void setAnAltamira(boolean anAltamira) {
+        isAnAltamira = anAltamira;
     }
 }

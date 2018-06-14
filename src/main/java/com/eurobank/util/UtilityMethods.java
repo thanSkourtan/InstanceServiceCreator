@@ -1,6 +1,7 @@
 package com.eurobank.util;
 
 import com.eurobank.JAXBmodel.DataSetType;
+import com.eurobank.JAXBmodel.FieldType;
 import com.eurobank.jclasses.JMainFileClassData;
 import com.sun.codemodel.JDefinedClass;
 
@@ -164,6 +165,9 @@ public class UtilityMethods {
         return jClassesMap.get(x).getjDefinedClass();
     }
 
+    public static boolean isAnAltamiraTransaction(FieldType ft){
+        return ft.getAltamiraId() != null ? true : false;
+    }
 
 
 }

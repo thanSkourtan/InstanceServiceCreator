@@ -28,7 +28,7 @@ public class InstantServiceCreatorMain {
 
         SaxParserHandler saxParserHandler = parseXmlFile(cmdData.getFilename(), cmdData.getServiceName());
 
-        ModelBuilder.createModelAndClasses(saxParserHandler.getAllClassesNames(), saxParserHandler.getRoot());
+        ModelBuilder.createModelAndClasses(saxParserHandler.getAllClassesNames(), saxParserHandler.getRoot(), saxParserHandler.isAnAltamira());
 
         //directory placement logic goes here
         JMainFileClassData.getBrmMessagesCodeModel().build(new File("src//main//resources//resources2"));

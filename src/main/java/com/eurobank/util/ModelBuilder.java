@@ -17,7 +17,7 @@ import static com.eurobank.util.UtilityMethods.getTypeofClassExpanded;
  */
 public class ModelBuilder {
 
-    public static void createModelAndClasses(Set<String> brmClassNamesSet, BusinessRequestType dataFromXml)
+    public static void createModelAndClasses(Set<String> brmClassNamesSet, BusinessRequestType dataFromXml, boolean isAltamira)
                             throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException,
                                     InstantiationException, InvocationTargetException{
         Map<Integer, String> allClassesNamesSet = addEsbClasses(brmClassNamesSet);
@@ -32,9 +32,16 @@ public class ModelBuilder {
             jClassesMap.put(getTypeofClassExpanded(entry.getValue()), tempjClassObject);
         }
 
+
+
+
+
+        String packageName = isAltamira ? "altamirafilegenerators": "as400filegenerators";
+
+
         /*Construct the classes*/
         for (Map.Entry<Integer, String> entry : allClassesNamesSet.entrySet()) {
-            Class<?> tempClass = Class.forName("com.eurobank.filegenerators." + getTypeofClass(entry.getValue()) + "ClassGenerator");
+            Class<?> tempClass = Class.forName("com.eurobank." + packageName + "." + getTypeofClass(entry.getValue()) + "ClassGenerator");
             tempClass.getConstructor(Map.class, String.class).newInstance(jClassesMap, entry.getValue());
         }
 

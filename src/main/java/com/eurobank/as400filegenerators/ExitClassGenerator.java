@@ -1,6 +1,5 @@
-package com.eurobank.filegenerators;
+package com.eurobank.as400filegenerators;
 
-import com.eurobank.JAXBmodel.DataSetType;
 import com.eurobank.jclasses.JExitClassData;
 import com.eurobank.jclasses.JMainFileClassData;
 import com.sun.codemodel.*;
@@ -8,9 +7,7 @@ import static com.eurobank.util.UtilityMethods.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import static com.eurobank.util.UtilityMethods.getTypeofClassExpanded;
 

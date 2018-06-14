@@ -1,19 +1,11 @@
-package com.eurobank.filegenerators;
+package com.eurobank.as400filegenerators;
 
-import com.eurobank.JAXBmodel.BeanType;
-import com.eurobank.JAXBmodel.BusinessRequestType;
 import com.eurobank.jclasses.JMainFileClassData;
-import com.eurobank.jclasses.JRequestResponseObjectsClassData;
 import com.sun.codemodel.*;
 import static com.eurobank.util.UtilityMethods.*;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import com.eurobank.util.UtilityMethods;
 
 /**
  * Created by v-askourtaniotis on 21/5/2018. mailTo: thanskourtan@gmail.com

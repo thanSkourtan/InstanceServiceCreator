@@ -1,12 +1,9 @@
-package com.eurobank.filegenerators;
+package com.eurobank.as400filegenerators;
 
-import com.eurobank.jclasses.JRequestResponseObjectsClassData;
 import com.eurobank.jclasses.JMainFileClassData;
 import com.sun.codemodel.*;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
 
 /**

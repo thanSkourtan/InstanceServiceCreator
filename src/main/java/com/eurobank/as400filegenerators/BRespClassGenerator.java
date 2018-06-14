@@ -1,4 +1,4 @@
-package com.eurobank.filegenerators;
+package com.eurobank.as400filegenerators;
 
 import com.eurobank.jclasses.JMainFileClassData;
 import com.eurobank.jclasses.JRequestResponseObjectsClassData;

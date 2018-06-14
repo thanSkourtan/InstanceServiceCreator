@@ -39,6 +39,8 @@ public class FieldType {
     protected String value;
     @XmlAttribute(name = "Name")
     protected String name;
+    @XmlAttribute(name = "AltamiraId")
+    protected String altamiraId;
     @XmlAttribute(name = "HostFormatAs")
     protected String hostFormatAs;
     @XmlAttribute(name = "FormatClassParm")
@@ -97,12 +99,37 @@ public class FieldType {
     }
 
     /**
-     * Gets the value of the hostFormatAs property.
+     * Gets the value of the altamiraId property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
+     */
+
+    public String getAltamiraId() {
+        return altamiraId;
+    }
+
+    /**
+     * Sets the value of the altamiraId property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *
+     */
+    public void setAltamiraId(String value) {
+        this.altamiraId = value;
+    }
+
+    /**
+     * Gets the value of the hostFormatAs property.
+     *
+     * @return
+     *     possible object is
+     *     {@link String }
+     *
      */
     public String getHostFormatAs() {
         return hostFormatAs;
