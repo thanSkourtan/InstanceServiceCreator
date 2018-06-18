@@ -21,13 +21,13 @@ public abstract class MainFileGenerator {
     }
 
     public abstract void generateOuterPackages();
-    public abstract void generateOuterFieldsAndMethods() throws JClassAlreadyExistsException;
+    public abstract void generateOuterFieldsAndMethods() throws JClassAlreadyExistsException, NoSuchMethodException;
     public abstract void generateInheritance() throws JClassAlreadyExistsException;
     public void generateJavadocs(){
         mainclassdata.getjDefinedClass().javadoc().add("Automatically created by Instant Service Creator.");
     }
 
-    public void generateAll() throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
+    public void generateAll() throws JClassAlreadyExistsException, IOException, ClassNotFoundException, NoSuchMethodException {
         generateOuterPackages();
         generateOuterFieldsAndMethods();
         generateInheritance();

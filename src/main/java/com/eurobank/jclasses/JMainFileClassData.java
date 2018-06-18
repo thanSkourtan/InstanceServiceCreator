@@ -44,11 +44,11 @@ public abstract class JMainFileClassData {
     // Todo:not finished!! check if these rules are the correct ones
     private void _defineJCodeModel(){
 
-        if(isABReqClassName(canonicalName) || isABRespClassName(canonicalName) || isABRMDTOClassName(canonicalName)) {
+        if(isABReqClassName(canonicalName) || isABRespClassName(canonicalName) || isABRMDTOClassName(canonicalName)|| isABeanClassName(canonicalName)) {
             mainModel = brmMessagesCodeModel;
         } else if (isAnSReqClassName(canonicalName) || isAnSRespClassName(canonicalName)|| isAnESBDTOClassName(canonicalName)) {
             mainModel = esbMessagesCodeModel;
-        } else if (isAnExitClassName(canonicalName) || isABeanClassName(canonicalName)) {
+        } else if (isAnExitClassName(canonicalName)) {
             mainModel = brmBusinessLogicCodeModel;
         } else if (isAnSPClassName(canonicalName)){
             mainModel = esbBusinessLogicCodeModel;

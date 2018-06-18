@@ -15,7 +15,7 @@ public class DTOClassGenerator extends MainFileGenerator{
     private JPackage outerPackage1;
     private Map<String, JMainFileClassData> jClassesMap;
 
-    public DTOClassGenerator(Map<String, JMainFileClassData> jClassesMap, String canonicalName, Boolean isAltamira) throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
+    public DTOClassGenerator(Map<String, JMainFileClassData> jClassesMap, String canonicalName, Boolean isAltamira) throws JClassAlreadyExistsException, IOException, ClassNotFoundException, NoSuchMethodException {
         super(jClassesMap.get(getTypeofClassExpanded(canonicalName)));
         this.jClassesMap = jClassesMap;
         generateAll();
@@ -33,6 +33,6 @@ public class DTOClassGenerator extends MainFileGenerator{
     @Override
     public void generateInheritance() throws JClassAlreadyExistsException {
         JDefinedClass superclass = outerPackage1._class("Serializable");
-        mainclassdata.getjDefinedClass()._extends(superclass);
+        mainclassdata.getjDefinedClass()._implements(superclass);
     }
 }

@@ -17,7 +17,7 @@ public class BReqClassGenerator extends MainFileGenerator{
     private Map<String, JMainFileClassData> jClassesMap;
     private Boolean isAltamira;
 
-    public BReqClassGenerator( Map<String, JMainFileClassData> jClassesMap, String canonicalName, Boolean isAltamira) throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
+    public BReqClassGenerator( Map<String, JMainFileClassData> jClassesMap, String canonicalName, Boolean isAltamira) throws JClassAlreadyExistsException, IOException, ClassNotFoundException, NoSuchMethodException {
         super(jClassesMap.get(getTypeofClassExpanded(canonicalName)));
         this.jClassesMap = jClassesMap;
         this.isAltamira = isAltamira;

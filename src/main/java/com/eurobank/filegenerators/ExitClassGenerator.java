@@ -25,7 +25,7 @@ public class ExitClassGenerator extends MainFileGenerator{
     private JPackage outerPackage7;
     private Map<String, JMainFileClassData> jClassesMap;
 
-    public ExitClassGenerator(Map<String, JMainFileClassData> jClassesMap, String canonicalName, Boolean isAltamira) throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
+    public ExitClassGenerator(Map<String, JMainFileClassData> jClassesMap, String canonicalName, Boolean isAltamira) throws JClassAlreadyExistsException, IOException, ClassNotFoundException, NoSuchMethodException {
         super(jClassesMap.get(getTypeofClassExpanded(canonicalName)));
         this.jClassesMap = jClassesMap;
         generateAll();
@@ -43,7 +43,7 @@ public class ExitClassGenerator extends MainFileGenerator{
     }
 
     @Override
-    public void generateOuterFieldsAndMethods() throws JClassAlreadyExistsException {
+    public void generateOuterFieldsAndMethods() throws JClassAlreadyExistsException, NoSuchMethodException {
         JExitClassData tempMainClass = (JExitClassData) mainclassdata;
         JDefinedClass brmExceptionClass = outerPackage2._class("BRMException");
         JDefinedClass exceptionClass = outerPackage3._class("Exception");
@@ -154,10 +154,13 @@ public class ExitClassGenerator extends MainFileGenerator{
 
     }
 
-    public JVar[] fillInBlock (JBlock body) throws JClassAlreadyExistsException {
+    public JVar[] fillInBlock (JBlock body) throws JClassAlreadyExistsException, NoSuchMethodException {
 
-        JMethod tempMethod1 = jClassesMap.get("Bean").getjDefinedClass().method(JMod.PUBLIC, jClassesMap.get("BResp").getjDefinedClass(), "getSend");
-        JMethod tempMethod2 = jClassesMap.get("Bean").getjDefinedClass().method(JMod.PUBLIC, jClassesMap.get("BResp").getjDefinedClass(), "getReceive");
+//        JMethod tempMethod1 = jClassesMap.get("Bean").getjDefinedClass().method(JMod.PUBLIC, jClassesMap.get("BResp").getjDefinedClass(), "getSend");
+//        JMethod tempMethod2 = jClassesMap.get("Bean").getjDefinedClass().method(JMod.PUBLIC, jClassesMap.get("BResp").getjDefinedClass(), "getReceive");
+
+        JMethod tempMethod1 = jClassesMap.get("Bean").getjDefinedClass().getMethod("getSend" , new JDefinedClass[0]);
+        JMethod tempMethod2 = jClassesMap.get("Bean").getjDefinedClass().getMethod("getReceive", new JDefinedClass[0]);
 
         JVar myBeanJVar = body.decl(jClassesMap.get("Bean").getjDefinedClass(), "myBean");
         myBeanJVar.init(JExpr.cast(jClassesMap.get("Bean").getjDefinedClass() , JExpr.ref("mainBean")));

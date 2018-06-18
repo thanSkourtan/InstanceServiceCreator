@@ -16,7 +16,7 @@ public class BeanClassGenerator extends MainFileGenerator{
     private String canonicalName;
     private Boolean isAltamira;
 
-    public BeanClassGenerator( Map<String, JMainFileClassData> jClassesMap, String canonicalName, Boolean isAltamira) throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
+    public BeanClassGenerator( Map<String, JMainFileClassData> jClassesMap, String canonicalName, Boolean isAltamira) throws JClassAlreadyExistsException, IOException, ClassNotFoundException, NoSuchMethodException {
         super(jClassesMap.get(getTypeofClassExpanded(canonicalName)));
         this.jClassesMap = jClassesMap;
         this.canonicalName = canonicalName;
@@ -37,7 +37,7 @@ public class BeanClassGenerator extends MainFileGenerator{
         //Fields, Getters and Setters
 
         JFieldVar sendField = mainClassTempInstance.field(JMod.PRIVATE, jClassesMap.get("BReq").getjDefinedClass(), "send");
-        JFieldVar receiveField = mainClassTempInstance.field(JMod.PRIVATE, jClassesMap.get("BReq").getjDefinedClass(), "receive");
+        JFieldVar receiveField = mainClassTempInstance.field(JMod.PRIVATE, jClassesMap.get("BResp").getjDefinedClass(), "receive");
 
         JMethod getSendMethod = mainClassTempInstance.method(JMod.PUBLIC, sendField.type(), "getSend");
         getSendMethod.body()._return(sendField);

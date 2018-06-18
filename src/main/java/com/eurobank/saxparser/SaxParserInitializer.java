@@ -9,6 +9,9 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Properties;
 
 /**
  * Created by v-askourtaniotis on 5/6/2018. mailTo: thanskourtan@gmail.com
@@ -39,8 +42,30 @@ public class SaxParserInitializer {
         XMLReader xmlReader = saxParser.getXMLReader();
         SaxParserHandler saxParserHandler = new SaxParserHandler(serviceName);
         xmlReader.setContentHandler(saxParserHandler);
-        xmlReader.parse(convertToFileURL(filename));
+
+        if(filename != null) {
+            xmlReader.parse(convertToFileURL(filename));
+        } else {
+            Properties props = new Properties();
+            String resourceName = "application.properties";
+            ClassLoader loader = Thread.currentThread().getContextClassLoader();
+            try(InputStream resourceStream = loader.getResourceAsStream(resourceName)) {
+                props.load(resourceStream);
+            }
+            File xmlDirectory = new File((String) props.get("xml_dir"));
+
+            File[] xmlFiles = xmlDirectory.listFiles(x -> x.getName().endsWith("xml"));
+
+            for(int i = 0; i < xmlFiles.length; i++) {
+                xmlReader.parse(convertToFileURL(xmlFiles[i].getAbsolutePath()));
+            }
+        }
+
+
+
         xmlReader.setErrorHandler(new SaxParserErrorHandler(System.err));
+
+
 
         return saxParserHandler;
     }

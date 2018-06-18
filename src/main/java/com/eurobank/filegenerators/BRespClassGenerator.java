@@ -18,7 +18,7 @@ public class BRespClassGenerator extends MainFileGenerator{
     private Map<String, JMainFileClassData> jClassesMap;
     private Boolean isAltamira;
 
-    public BRespClassGenerator( Map<String, JMainFileClassData> jClassesMap, String canonicalName, Boolean isAltamira) throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
+    public BRespClassGenerator( Map<String, JMainFileClassData> jClassesMap, String canonicalName, Boolean isAltamira) throws JClassAlreadyExistsException, IOException, ClassNotFoundException, NoSuchMethodException {
         super(jClassesMap.get(getTypeofClassExpanded(canonicalName)));
         this.jClassesMap = jClassesMap;
         this.isAltamira = isAltamira;
@@ -65,7 +65,7 @@ public class BRespClassGenerator extends MainFileGenerator{
 
         mainclassdata.getMethodsMap().put("get" + makeFirstCharacterCapitalcase(x.name()), tempGetter);
         tempSetter.param(x.type(), x.name());
-        tempSetter.body().assign(JExpr._this().ref("get" + makeFirstCharacterCapitalcase(x.name())), JExpr.ref(x.name()));
+        tempSetter.body().assign(JExpr._this().ref(x.name()), JExpr.ref(x.name()));
         mainclassdata.getMethodsMap().put("set" + makeFirstCharacterCapitalcase(x.name()), tempSetter);
 
     }

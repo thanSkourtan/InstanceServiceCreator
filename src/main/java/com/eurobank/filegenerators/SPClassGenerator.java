@@ -21,7 +21,7 @@ public class SPClassGenerator extends MainFileGenerator{
     private JPackage outerPackage6;
     private Map<String, JMainFileClassData> jClassesMap;
 
-    public SPClassGenerator( Map<String, JMainFileClassData> jClassesMap, String canonicalName, Boolean isAltamira) throws JClassAlreadyExistsException, IOException, ClassNotFoundException {
+    public SPClassGenerator( Map<String, JMainFileClassData> jClassesMap, String canonicalName, Boolean isAltamira) throws JClassAlreadyExistsException, IOException, ClassNotFoundException, NoSuchMethodException {
         super(jClassesMap.get(getTypeofClassExpanded(canonicalName)));
         this.jClassesMap = jClassesMap;
         generateAll();
@@ -143,40 +143,13 @@ public class SPClassGenerator extends MainFileGenerator{
 
         });
 
-
-
-
-
-//        JClass listClass = mainclassdata.getMainModel().ref(List.class).narrow(getJModelClass(jClassesMap, "BRMDTO"));
-//        JClass arrayListClass = mainclassdata.getMainModel().ref(ArrayList.class).narrow(getJModelClass(jClassesMap, "BRMDTO"));
-//        JVar arrayListJVar = createESBResponseJMethod.body()
-//                .decl(listClass, makeFirstCharacterLowercase(getJModelClass(jClassesMap, "BRMDTO").name()) + "List");
-//        arrayListJVar.init(JExpr._new(arrayListClass));
-
-//        JForLoop forLoop = createESBResponseJMethod.body()._for();
-//        JVar ivar = forLoop.init(mainclassdata.getMainModel().INT, "i", JExpr.lit(0));
-//
-//        forLoop.test(ivar.lt(JExpr.invoke(brmRespJVar, vectorMethodsName).ref("length")));
-//        forLoop.update(ivar.assignPlus(JExpr.lit(1)));
-//
-//        JConditional condition = forLoop.body()._if(respJVar.lt(JExpr.lit(42)));
-//        condition._then().add(
-//                JMainFileClassData.getMainModel().ref(System.class).staticRef("out").invoke("println").arg(JExpr.lit("hello")));
-
-
-        //JVar brmRespJVar = createESBResponseJMethod.body().decl(getJModelClass(jClassesMap, "BRMDTO").array(), "");
-
-
-
-
-
         createESBResponseJMethod.body()._return(respJVar);
 
     }
 
     @Override
     public void generateInheritance() throws JClassAlreadyExistsException {
-        JDefinedClass implementingInterface = outerPackage1._class("AbstractBRMSP");
-        mainclassdata.getjDefinedClass()._implements(implementingInterface);
+        JDefinedClass extendingClass= outerPackage1._class("AbstractBRMSP");
+        mainclassdata.getjDefinedClass()._extends(extendingClass);
     }
 }

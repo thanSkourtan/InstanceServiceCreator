@@ -71,6 +71,9 @@ public class OptionsProcessor {
             System.out.println("Please enter lala");
             System.exit(-1);
         }
+
+
+
         //todo:exception handling here
         String project = cmd.hasOption("project")?
                 cmd.getOptionValue("project"):
