@@ -88,7 +88,8 @@ public class UtilityMethods {
         return brmClassName.replace("brm","esb")
                 .replace("userExits", "services")
                 .replace("OperationExit", "SP")
-                .replace("UserExit", "SP");
+                .replace("UserExit", "SP")
+                .replace("Exit", "SP");
     }
 
     public static String convertBrmObjectClassToEsbClass(String brmClassName) {
