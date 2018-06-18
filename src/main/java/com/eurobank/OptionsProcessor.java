@@ -76,12 +76,10 @@ public class OptionsProcessor {
                 cmd.getOptionValue("project"):
                 getDirectoriesRoots().get(getXmlFileName(cmd.getOptionValue("xml")));
 
-        System.out.println("stem " + project);
-
-
         cmdData = this.new CmdData();
         cmdData.filename = cmd.getOptionValue("xml");
         cmdData.serviceName = cmd.getOptionValue("service");
+        cmdData.project = project;
 
         return cmdData;
     }
