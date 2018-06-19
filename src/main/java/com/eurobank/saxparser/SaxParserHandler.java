@@ -28,6 +28,7 @@ public class SaxParserHandler extends DefaultHandler {
     private BusinessRequestType root;// the root is a tree with pointers only from parents to children. so we cannot go backwards
     private Deque<Object> orderedXmlElementsStack; // this is why we need a second structrure, which is a stack
     private boolean isAnAltamira;
+    private String xmlFile;
 
 
     public void startDocument() throws SAXException {
@@ -174,5 +175,13 @@ public class SaxParserHandler extends DefaultHandler {
 
     public void setAnAltamira(boolean anAltamira) {
         isAnAltamira = anAltamira;
+    }
+
+    public String getXmlFile() {
+        return xmlFile;
+    }
+
+    public void setXmlFile(String xmlFile) {
+        this.xmlFile = xmlFile;
     }
 }

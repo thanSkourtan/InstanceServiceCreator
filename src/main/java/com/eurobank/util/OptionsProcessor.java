@@ -82,9 +82,10 @@ public class OptionsProcessor {
         }
 
         //todo:exception handling here
-        String project = cmd.hasOption("project")?
-                cmd.getOptionValue("project"):
-                getDirectoriesRoots().get(getXmlFileName(cmd.getOptionValue("xml")));
+        String project = null;
+        if(cmd.hasOption("project")) {
+            project = cmd.getOptionValue("project");
+        }
 
         cmdData = this.new CmdData();
         cmdData.filename = cmd.getOptionValue("xml");

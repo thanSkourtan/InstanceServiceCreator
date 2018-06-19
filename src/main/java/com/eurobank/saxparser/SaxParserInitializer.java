@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Properties;
+import static com.eurobank.util.UtilityMethods.*;
 
 /**
  * Created by v-askourtaniotis on 5/6/2018. mailTo: thanskourtan@gmail.com
@@ -28,11 +29,6 @@ public class SaxParserInitializer {
             path = "/" + path;
         }
         return "file:" + path;
-    }
-
-    private static void usage() {
-        System.err.println("Usage: java jar <name_of_jar> <file.xml> <service_name>");
-        System.exit(1);
     }
 
     public static SaxParserHandler parseXmlFile(String filename, String serviceName, Properties props) throws IOException, SAXException, ParserConfigurationException {
@@ -53,7 +49,12 @@ public class SaxParserInitializer {
 
             for(int i = 0; i < xmlFiles.length; i++) {
                 xmlReader.parse(convertToFileURL(xmlFiles[i].getAbsolutePath()));
+                if(saxParserHandler.getRoot() != null) {
+                    saxParserHandler.setXmlFile(getXmlFileName(xmlFiles[i].getName()));
+                    break;
+                }
             }
+            //todo: error handling here in case we do not find the service
         }
 
 
