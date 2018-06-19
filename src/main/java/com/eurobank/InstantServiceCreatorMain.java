@@ -30,18 +30,7 @@ public class InstantServiceCreatorMain {
 
         SaxParserHandler saxParserHandler = parseXmlFile(cmdData.getFilename(), cmdData.getServiceName(), propertiesGetter.props);
 
-        if(cmdData.getProject() == null) {
-            String xmlFile = saxParserHandler.getXmlFile();
-            String project = PlacementDirectory.getDirectoriesRoots().get(xmlFile);
-
-            if(project != null) {
-                cmdData.setProject(project);
-            } else {
-                //todo:error handling
-            }
-
-        }
-
+        optionsProcessor.setProjectAfterParsing(cmdData, saxParserHandler.getXmlFile());
 
         if(cmdData.isDelete()) {
             deleteServiceClasses(saxParserHandler.getAllClassesNames(), cmdData.getProject(), propertiesGetter.props);

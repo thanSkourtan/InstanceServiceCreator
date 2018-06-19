@@ -1,5 +1,6 @@
 package com.eurobank.util;
 
+import com.eurobank.routing.PlacementDirectory;
 import org.apache.commons.cli.*;
 
 import static com.eurobank.routing.PlacementDirectory.getDirectoriesRoots;
@@ -94,5 +95,19 @@ public class OptionsProcessor {
         cmdData.delete = cmd.hasOption("delete");
 
         return cmdData;
+    }
+
+    public void setProjectAfterParsing(OptionsProcessor.CmdData cmdData, String xmlFileName) {
+        if(cmdData.getProject() == null) {
+            String xmlFile = xmlFileName;
+            String project = PlacementDirectory.getDirectoriesRoots().get(xmlFile);
+
+            if(project != null) {
+                cmdData.setProject(project);
+            } else {
+                //todo:error handling
+            }
+
+        }
     }
 }
