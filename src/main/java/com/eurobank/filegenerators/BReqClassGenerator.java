@@ -38,8 +38,8 @@ public class BReqClassGenerator extends MainFileGenerator{
     @Override
     public void generateInheritance() throws JClassAlreadyExistsException {
         JDefinedClass superclass = isAltamira ?
-                outerPackage1._class("ABaseAS400InputDataBean") :
-                outerPackage1._class("ABaseAltamiraInputDataBean");
+                outerPackage1._class("ABaseAltamiraInputDataBean") :
+                outerPackage1._class("ABaseAS400InputDataBean");
         mainclassdata.getjDefinedClass()._extends(superclass);
     }
 

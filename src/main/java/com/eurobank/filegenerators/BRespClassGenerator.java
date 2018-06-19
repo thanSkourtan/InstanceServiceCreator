@@ -73,8 +73,8 @@ public class BRespClassGenerator extends MainFileGenerator{
     @Override
     public void generateInheritance() throws JClassAlreadyExistsException {
         JDefinedClass superclass = isAltamira ?
-                outerPackage1._class("ABaseAS400OutputDataBean") :
-                outerPackage1._class("ABaseAltamiraOutputDataBean");
+                outerPackage1._class("ABaseAltamiraOutputDataBean") :
+                outerPackage1._class("ABaseAS400OutputDataBean");
         mainclassdata.getjDefinedClass()._extends(superclass);
     }
 
