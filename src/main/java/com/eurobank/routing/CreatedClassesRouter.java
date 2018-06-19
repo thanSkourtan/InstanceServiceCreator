@@ -19,14 +19,14 @@ import java.util.stream.Collectors;
 public class CreatedClassesRouter {
 
     public List<File> getAllProjectNames (String projectStem, Properties props) {
-        PathMatcher matcher = FileSystems.getDefault().getPathMatcher("regex:" + "^(ESB|BRM){1}"
+        PathMatcher matcher = FileSystems.getDefault().getPathMatcher("regex:" + "^.*\\\\(ESB|BRM){1}"
                 + projectStem + "(Exits|Exit|Impl|)$");
 
         File directory = new File((String) props.get("root"));
 
         File[] files = directory.listFiles(File::isDirectory);
         List<File> projectNames =  Arrays.asList(files).stream()
-                .map(x -> x.toPath().getFileName())
+                .map(File::toPath)
                 .filter(matcher::matches)
                 .map(Path::toFile)
                 .collect(Collectors.toList());
