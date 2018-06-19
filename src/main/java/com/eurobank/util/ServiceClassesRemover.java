@@ -23,7 +23,6 @@ public class ServiceClassesRemover {
         Map<Integer, String> allClassesNamesSet = addEsbClasses(brmClassNamesSet);
         List<File> allProjectNames = new CreatedClassesRouter().getAllProjectNames (projectStem,  props);
 
-        System.out.println(allClassesNamesSet);
         System.out.println(allProjectNames);
 
         allClassesNamesSet.values().stream().forEach(x -> {

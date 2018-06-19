@@ -33,7 +33,7 @@ public abstract class JMainFileClassData {
 
     public JMainFileClassData(String canonicalName, BusinessRequestType dataFromXml) throws JClassAlreadyExistsException {
         this.canonicalName = canonicalName;
-        /*makes mainModel object point to the correct JCodeModel object. In such a way
+        /*makes mainModel object point to the correct JCodeModel object. In such way
         * we have 4 different models for the 4 different packages but 1 access object*/
         _defineJCodeModel();
         this.jPackage = mainModel._package(getPackageName(canonicalName));

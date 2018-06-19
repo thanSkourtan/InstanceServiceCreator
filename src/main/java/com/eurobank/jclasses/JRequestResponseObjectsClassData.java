@@ -84,6 +84,8 @@ public class JRequestResponseObjectsClassData extends JMainFileClassData{
             return Date.class;
         } else if (f.getFormatClassParm().startsWith("DOUBLE")) {
             return Double.class;
+        } else if (f.getFormatClassParm().startsWith("INT")) {
+            return Integer.class;
         } else {
             //todo: throw application exception
         }

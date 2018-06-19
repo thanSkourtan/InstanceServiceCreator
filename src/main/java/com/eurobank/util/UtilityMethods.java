@@ -26,7 +26,12 @@ public class UtilityMethods {
     }
 
     public static String makeFirstCharacterLowercase(String x) {
-        return x.substring(0, 1).toLowerCase() + x.substring(1);
+        if(x.substring(0, 1).equals("_")){
+            return x.substring(1, 2).toLowerCase() + x.substring(2);
+        } else {
+            return x.substring(0, 1).toLowerCase() + x.substring(1);
+        }
+
     }
 
     public static String makeFirstCharacterCapitalcase(String x) {
