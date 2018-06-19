@@ -1,4 +1,4 @@
-package com.eurobank;
+package com.eurobank.util;
 
 import org.apache.commons.cli.*;
 
@@ -20,6 +20,7 @@ public class OptionsProcessor {
         private String serviceName;
         private String filename;
         private String project;
+        private boolean delete;
 
         public String getServiceName() {
             return serviceName;
@@ -44,6 +45,14 @@ public class OptionsProcessor {
         public void setProject(String project) {
             this.project = project;
         }
+
+        public boolean isDelete() {
+            return delete;
+        }
+
+        public void setDelete(boolean delete) {
+            this.delete = delete;
+        }
     }
 
     public OptionsProcessor (String[] args)  {
@@ -67,12 +76,10 @@ public class OptionsProcessor {
                         ".\\EuroBankiSeriesJCA.xml -s GetPropertyFireInsurance\n",
                 true);
 
-        if (!cmd.hasOption("xml") && !cmd.hasOption("service")){
-            System.out.println("Please enter lala");
+        if (!cmd.hasOption("service")){
+            System.out.println("Please enter a service");
             System.exit(-1);
         }
-
-
 
         //todo:exception handling here
         String project = cmd.hasOption("project")?
@@ -83,6 +90,7 @@ public class OptionsProcessor {
         cmdData.filename = cmd.getOptionValue("xml");
         cmdData.serviceName = cmd.getOptionValue("service");
         cmdData.project = project;
+        cmdData.delete = cmd.hasOption("delete");
 
         return cmdData;
     }

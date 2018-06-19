@@ -35,7 +35,7 @@ public class SaxParserInitializer {
         System.exit(1);
     }
 
-    public static SaxParserHandler parseXmlFile(String filename, String serviceName) throws IOException, SAXException, ParserConfigurationException {
+    public static SaxParserHandler parseXmlFile(String filename, String serviceName, Properties props) throws IOException, SAXException, ParserConfigurationException {
         SAXParserFactory spf = SAXParserFactory.newInstance();
         spf.setNamespaceAware(true);
         SAXParser saxParser = spf.newSAXParser();
@@ -46,12 +46,7 @@ public class SaxParserInitializer {
         if(filename != null) {
             xmlReader.parse(convertToFileURL(filename));
         } else {
-            Properties props = new Properties();
-            String resourceName = "application.properties";
-            ClassLoader loader = Thread.currentThread().getContextClassLoader();
-            try(InputStream resourceStream = loader.getResourceAsStream(resourceName)) {
-                props.load(resourceStream);
-            }
+
             File xmlDirectory = new File((String) props.get("xml_dir"));
 
             File[] xmlFiles = xmlDirectory.listFiles(x -> x.getName().endsWith("xml"));
