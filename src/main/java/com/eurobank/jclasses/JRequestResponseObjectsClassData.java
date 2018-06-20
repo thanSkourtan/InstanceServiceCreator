@@ -3,6 +3,7 @@ package com.eurobank.jclasses;
 import com.eurobank.JAXBmodel.BusinessRequestType;
 import com.eurobank.JAXBmodel.DataSetType;
 import com.eurobank.JAXBmodel.FieldType;
+import com.eurobank.exceptions.ApplicationException;
 import com.sun.codemodel.*;
 
 import java.util.Date;
@@ -22,7 +23,7 @@ public class JRequestResponseObjectsClassData extends JMainFileClassData{
     private String matchDataSetName;
     private boolean isAltamira;
 
-    public JRequestResponseObjectsClassData(String canonicalName, BusinessRequestType dataFromXml, boolean isAltamira) throws JClassAlreadyExistsException {
+    public JRequestResponseObjectsClassData(String canonicalName, BusinessRequestType dataFromXml, boolean isAltamira) throws ApplicationException, JClassAlreadyExistsException {
         super(canonicalName, dataFromXml);
         this.isAltamira = isAltamira;
         buildJFieldsAndJMethods(dataProcessing());
@@ -41,7 +42,7 @@ public class JRequestResponseObjectsClassData extends JMainFileClassData{
     }
 
     @Override
-    public void buildJFieldsAndJMethods(Object classSpecificDataSetsList) throws JClassAlreadyExistsException {
+    public void buildJFieldsAndJMethods(Object classSpecificDataSetsList) throws ApplicationException, JClassAlreadyExistsException {
 
         jDefinedClass.field(JMod.PRIVATE | JMod.FINAL | JMod.STATIC, mainModel.LONG, "serialVersionUID", JExpr.lit(1L));
         List<DataSetType> data = (List<DataSetType>) classSpecificDataSetsList;
@@ -64,7 +65,7 @@ public class JRequestResponseObjectsClassData extends JMainFileClassData{
 
     }
 
-    private Class<?> getNonAltamiraFieldClass(FieldType f) {
+    private Class<?> getNonAltamiraFieldClass(FieldType f) throws ApplicationException{
         if (f.getFormatClassParm().startsWith("X")) {
             return String.class;
         } else if (f.getFormatClassParm().startsWith("9") && f.getFormatClassParm().contains("V9")) {
@@ -72,12 +73,11 @@ public class JRequestResponseObjectsClassData extends JMainFileClassData{
         } else if (f.getFormatClassParm().startsWith("9")) {
             return Integer.class;
         } else {
-            //todo: throw application exception
+            throw new ApplicationException("The FormatClassParm attribute of the Field type in the xml file is not formed properly.");
         }
-        return null;
     }
 
-    private Class<?> getAltamiraFieldClass(FieldType f) {
+    private Class<?> getAltamiraFieldClass(FieldType f) throws ApplicationException{
         if (f.getFormatClassParm().startsWith("CHAR")) {
             return String.class;
         } else if (f.getFormatClassParm().startsWith("DATE")) {
@@ -87,9 +87,8 @@ public class JRequestResponseObjectsClassData extends JMainFileClassData{
         } else if (f.getFormatClassParm().startsWith("INT")) {
             return Integer.class;
         } else {
-            //todo: throw application exception
+            throw new ApplicationException("The FormatClassParm attribute of the Field type in the xml file is not formed properly.");
         }
-        return null;
     }
 
     public void createGettersAndSettersMethods (JDefinedClass jDefinedClass, JFieldVar x) {

@@ -1,5 +1,6 @@
 package com.eurobank.util;
 
+import com.eurobank.exceptions.ApplicationException;
 import com.eurobank.routing.PlacementDirectory;
 import org.apache.commons.cli.*;
 
@@ -70,34 +71,31 @@ public class OptionsProcessor {
 
     }
 
-    public CmdData processOptions() throws ParseException{
+    public CmdData processOptions() throws ApplicationException, ParseException{
 
         CommandLine cmd = cmdParser.parse(options, args);
-        formatter.printHelp("isc", "",options, "\nex: isc -x " +
-                        ".\\EuroBankiSeriesJCA.xml -s GetPropertyFireInsurance\n",
-                true);
 
-        if (!cmd.hasOption("service")){
-            System.out.println("Please enter a service");
+        if(cmd.getOptions().length == 0) {
+            formatter.printHelp("isc", "",options, "\nex: isc -s GetPropertyFireInsurance\n",
+                    true);
             System.exit(-1);
         }
 
-        //todo:exception handling here
-        String project = null;
-        if(cmd.hasOption("project")) {
-            project = cmd.getOptionValue("project");
+        if (!cmd.hasOption("service")){
+            throw new ApplicationException("Please enter a service");
         }
 
+        //todo:exception handling here
         cmdData = this.new CmdData();
         cmdData.filename = cmd.getOptionValue("xml");
         cmdData.serviceName = cmd.getOptionValue("service");
-        cmdData.project = project;
+        cmdData.project = cmd.hasOption("project") ? cmd.getOptionValue("project"): null;
         cmdData.delete = cmd.hasOption("delete");
 
         return cmdData;
     }
 
-    public void setProjectAfterParsing(OptionsProcessor.CmdData cmdData, String xmlFileName) {
+    public void setProjectAfterParsing(OptionsProcessor.CmdData cmdData, String xmlFileName) throws ApplicationException {
         if(cmdData.getProject() == null) {
             String xmlFile = xmlFileName;
             String project = PlacementDirectory.getDirectoriesRoots().get(xmlFile);
@@ -105,7 +103,8 @@ public class OptionsProcessor {
             if(project != null) {
                 cmdData.setProject(project);
             } else {
-                //todo:error handling
+                throw new ApplicationException("There is not a default location for Services declared in " + xmlFileName + ". Please provide the " +
+                        "stem of the project name as an argument. For example in \"ESBLoansImpl\" the stem is \"Loans\".");
             }
 
         }

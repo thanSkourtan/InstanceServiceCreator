@@ -1,6 +1,7 @@
 package com.eurobank.jclasses;
 
 import com.eurobank.JAXBmodel.BusinessRequestType;
+import com.eurobank.exceptions.ApplicationException;
 import com.sun.codemodel.*;
 import static com.eurobank.util.UtilityMethods.*;
 
@@ -41,7 +42,6 @@ public abstract class JMainFileClassData {
         this.dataFromXml = dataFromXml;
     }
 
-    // Todo:not finished!! check if these rules are the correct ones
     private void _defineJCodeModel(){
 
         if(isABReqClassName(canonicalName) || isABRespClassName(canonicalName) || isABRMDTOClassName(canonicalName)|| isABeanClassName(canonicalName)) {
@@ -56,7 +56,7 @@ public abstract class JMainFileClassData {
     }
 
     public abstract Object dataProcessing();
-    public abstract void buildJFieldsAndJMethods(Object data) throws JClassAlreadyExistsException;
+    public abstract void buildJFieldsAndJMethods(Object data) throws ApplicationException, JClassAlreadyExistsException;
 
     public JPackage getjPackage() {
         return jPackage;

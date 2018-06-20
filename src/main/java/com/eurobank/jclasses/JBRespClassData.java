@@ -1,6 +1,7 @@
 package com.eurobank.jclasses;
 
 import com.eurobank.JAXBmodel.BusinessRequestType;
+import com.eurobank.exceptions.ApplicationException;
 import com.sun.codemodel.JClassAlreadyExistsException;
 
 /**
@@ -9,7 +10,7 @@ import com.sun.codemodel.JClassAlreadyExistsException;
 public class JBRespClassData extends JRequestResponseObjectsClassData{
 
 
-    public JBRespClassData(String canonicalName, BusinessRequestType dataFromXml, Boolean isAltamira) throws JClassAlreadyExistsException {
+    public JBRespClassData(String canonicalName, BusinessRequestType dataFromXml, Boolean isAltamira) throws ApplicationException, JClassAlreadyExistsException {
         super(canonicalName, dataFromXml, isAltamira);
     }
 }

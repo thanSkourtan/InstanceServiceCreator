@@ -1,6 +1,8 @@
 package com.eurobank.saxparser;
 
+import com.eurobank.exceptions.ApplicationException;
 import com.eurobank.exceptions.exceptionhandlers.SaxParserErrorHandler;
+import javafx.application.Application;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
@@ -10,6 +12,9 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import static com.eurobank.util.UtilityMethods.*;
 
 /**
@@ -29,37 +34,45 @@ public class SaxParserInitializer {
         return "file:" + path;
     }
 
-    public static SaxParserHandler parseXmlFile(String filename, String serviceName, Properties props) throws IOException, SAXException, ParserConfigurationException {
+    public static SaxParserHandler parseXmlFile(String filename, String serviceName, Properties props) throws ApplicationException{
         SAXParserFactory spf = SAXParserFactory.newInstance();
         spf.setNamespaceAware(true);
-        SAXParser saxParser = spf.newSAXParser();
-        XMLReader xmlReader = saxParser.getXMLReader();
-        SaxParserHandler saxParserHandler = new SaxParserHandler(serviceName);
-        xmlReader.setContentHandler(saxParserHandler);
+        SAXParser saxParser = null;
+        XMLReader xmlReader = null;
+        SaxParserHandler saxParserHandler = null;
+        try {
+            saxParser = spf.newSAXParser();
+            xmlReader = saxParser.getXMLReader();
+            saxParserHandler = new SaxParserHandler(serviceName);
+            xmlReader.setContentHandler(saxParserHandler);
 
-        if(filename != null) {
-            xmlReader.parse(convertToFileURL(filename));
-        } else {
+            if(filename != null) {
+                xmlReader.parse(convertToFileURL(filename));
+            } else {
 
-            File xmlDirectory = new File((String) props.get("xml_dir"));
+                File xmlDirectory = new File((String) props.get("xml_dir"));
 
-            File[] xmlFiles = xmlDirectory.listFiles(x -> x.getName().endsWith("xml"));
+                File[] xmlFiles = xmlDirectory.listFiles(x -> x.getName().endsWith("xml"));
 
-            for(int i = 0; i < xmlFiles.length; i++) {
-                xmlReader.parse(convertToFileURL(xmlFiles[i].getAbsolutePath()));
-                if(saxParserHandler.getRoot() != null) {
-                    saxParserHandler.setXmlFile(getXmlFileName(xmlFiles[i].getName()));
-                    break;
+                for(int i = 0; i < xmlFiles.length; i++) {
+                    xmlReader.parse(convertToFileURL(xmlFiles[i].getAbsolutePath()));
+                    if(saxParserHandler.getRoot() != null) {
+                        saxParserHandler.setXmlFile(getXmlFileName(xmlFiles[i].getName()));
+                        break;
+                    }
+                }
+                if(saxParserHandler.getRoot() == null) {
+                    throw new ApplicationException("No service with the name " + serviceName + " found.");
                 }
             }
-            //todo: error handling here in case we do not find the service
+
+        } catch (ParserConfigurationException | SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Could not find the xml file.");
+            System.exit(-1);
         }
-
-
-
         xmlReader.setErrorHandler(new SaxParserErrorHandler(System.err));
-
-
 
         return saxParserHandler;
     }

@@ -31,7 +31,7 @@ public class CreatedClassesRouter {
                 .map(Path::toFile)
                 .collect(Collectors.toList());
 
-        System.out.println("projectNames: " + projectNames);
+        System.out.println("The projectNames are: " + projectNames + "\n");
         return projectNames;
     }
 

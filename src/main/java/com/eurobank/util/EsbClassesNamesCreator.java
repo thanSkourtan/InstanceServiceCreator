@@ -16,7 +16,6 @@ public class EsbClassesNamesCreator {
             else return 0;
         });
 
-        //TODO: Exception handling, replace the exception
         //Todo: test a case with two DTO objects
 
         brmClassNamesSet.forEach(x -> {

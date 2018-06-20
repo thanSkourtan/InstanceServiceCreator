@@ -34,11 +34,6 @@ public class PlacementDirectory {
         return directoriesRoots;
     }
 
-    // Unfortunately there is not a default location for Services declared in ___.xml Please provide the
-// stem(root) of the project name as third argument. For example if you want the several files of you Service to be located
-// into the packages BRMEstatements, BRMEStatementsExits, ESBEstatements and ESBEstatementsImpl the write
-// java jar .... <nameofxmlfile> <servicename> <Estatements>. Do the same if for any reason you want to override the default location.
-
 
 
 }
