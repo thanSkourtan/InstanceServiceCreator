@@ -59,11 +59,11 @@ public class OptionsProcessor {
 
     public OptionsProcessor (String[] args)  {
         options = new Options();
-        options.addOption("x", "xml", true, "The path of the xml file to be parsed.");
-        options.addOption("s", "service", true, "The name of the service to be handled.");
-        options.addOption("p", "project", true, "The name (stem actually) of the project folders to place the classes.");
+        options.addOption("x", "xml", true, "Optional. The path of the xml file to be parsed.");
+        options.addOption("s", "service", true, "Compulsory. The name of the service to be handled.");
+        options.addOption("p", "project", true, "Optional. The name (stem actually) of the project folders to place the classes.");
 //        options.addOption("v", "verbose", false, "Shows logs.");
-        options.addOption("d", "delete", false, "Deletes the classes related to the declared service.");
+        options.addOption("d", "delete", false, "Optional. Deletes the classes related to the declared service.");
 
         cmdParser = new DefaultParser();
         this.args = args;
