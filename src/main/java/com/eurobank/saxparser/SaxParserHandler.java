@@ -6,6 +6,7 @@ package com.eurobank.saxparser;
 
 import com.eurobank.JAXBmodel.BusinessRequestType;
 import com.eurobank.JAXBmodel.FieldType;
+import com.eurobank.exceptions.ApplicationException;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.*;
@@ -71,8 +72,18 @@ public class SaxParserHandler extends DefaultHandler {
                     attachCurrentElementToTree(localName, xmlElementClass, xmlElementObject);
                 }
 
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
+            } catch (InstantiationException e) {
+                System.out.println(e);
+            } catch (InvocationTargetException e) {
+                System.out.println(e);
+            } catch (NoSuchMethodException e) {
+                System.out.println("3");
+            } catch (IllegalAccessException e) {
+                System.out.println("4");
+            } catch (NoSuchFieldException e) {
+                System.out.println("The program fell into an xml element it had never seen before. Keeping on though, probably we will not use it in class construction/erasure.");
+            } catch (ClassNotFoundException e) {
+                System.out.println("6");
             }
 
         }
@@ -90,17 +101,15 @@ public class SaxParserHandler extends DefaultHandler {
         try {
             previousElementObject = orderedXmlElementsStack.peek();
             previousElementClass = previousElementObject.getClass();
-        } catch (EmptyStackException e) {
-            System.err.println("Bad structure in the xml file!");
-            e.printStackTrace();
-            System.exit(-1);
+        } catch (NullPointerException e) {
+            System.out.println("The program fell into an xml element it had never seen before. Keeping on though, probably we will not use it in class construction/erasure.");
         }
 
         Field[] previousElementFields = previousElementClass.getDeclaredFields();
 
         Optional<Field> previousElementAttribute = Arrays.asList(previousElementFields)
                 .stream()
-                .filter(x -> x.getName().equalsIgnoreCase(localName))
+                .filter(x -> x.getName().equalsIgnoreCase(localName) || x.getName().equalsIgnoreCase("_" + localName) )
                 .findAny();
 
         if(previousElementAttribute.isPresent()){

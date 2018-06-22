@@ -41,6 +41,8 @@ public class StepType {
     protected String serviceName;
     @XmlAttribute(name = "OnSuccess")
     protected String onSuccess;
+    @XmlAttribute(name = "OnFailure")
+    protected String onFailure;
 
     /**
      * Gets the value of the value property.
@@ -138,4 +140,11 @@ public class StepType {
         this.onSuccess = value;
     }
 
+    public String getOnFailure() {
+        return onFailure;
+    }
+
+    public void setOnFailure(String onFailure) {
+        this.onFailure = onFailure;
+    }
 }

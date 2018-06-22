@@ -49,6 +49,8 @@ public class FieldType {
     protected String mandatory;
     @XmlAttribute(name = "MatchDataSetName")
     protected String matchDataSetName;
+    @XmlAttribute(name = "Default")
+    protected String _default;
 
     /**
      * Gets the value of the value property.
@@ -219,4 +221,11 @@ public class FieldType {
         this.matchDataSetName = value;
     }
 
+    public String get_default() {
+        return _default;
+    }
+
+    public void set_default(String _default) {
+        this._default = _default;
+    }
 }
