@@ -1,5 +1,6 @@
 package com.eurobank.routing;
 
+import com.eurobank.exceptions.ApplicationException;
 import com.eurobank.jclasses.JMainFileClassData;
 
 import java.io.File;
@@ -36,7 +37,7 @@ public class CreatedClassesRouter {
     }
 
 
-    public void route(String projectStem, Properties props) throws IOException{
+    public void route(String projectStem, Properties props) throws IOException, ApplicationException {
 
         //directory placement logic goes here
 //        JMainFileClassData.getBrmMessagesCodeModel().build(new File("src//main//resources//resources2"));
@@ -44,25 +45,25 @@ public class CreatedClassesRouter {
 //        JMainFileClassData.getEsbMessagesCodeModel().build(new File("src//main//resources//resources4"));
 //        JMainFileClassData.getBrmBusinessLogicCodeModel().build(new File("src//main//resources//resources1"));
 
-        //todo: replace with if statement
+        //todo: replace with for - if statement
         List<File> projectNames = getAllProjectNames(projectStem, props);
 
         JMainFileClassData.getBrmMessagesCodeModel().build(new File(projectNames.stream()
                 .filter(x->x.getName().startsWith("BRM") && !x.getName().endsWith("Exits"))
                 .findFirst()
-                .orElseThrow(NullPointerException::new), "src"));
+                .orElseThrow(() -> new ApplicationException("There is no project with the provided stem")), "src"));
         JMainFileClassData.getEsbBusinessLogicCodeModel().build(new File(projectNames.stream()
                 .filter(x->x.getName().endsWith("Impl"))
                 .findFirst()
-                .orElseThrow(NullPointerException::new), "src"));
+                .orElseThrow(() -> new ApplicationException("There is no project with the provided stem")), "src"));
         JMainFileClassData.getEsbMessagesCodeModel().build(new File(projectNames.stream()
                 .filter(x->x.getName().startsWith("ESB") && !x.getName().endsWith("Impl"))
                 .findFirst()
-                .orElseThrow(NullPointerException::new), "src"));
+                .orElseThrow(() -> new ApplicationException("There is no project with the provided stem")), "src"));
         JMainFileClassData.getBrmBusinessLogicCodeModel().build(new File(projectNames.stream()
                 .filter(x->x.getName().endsWith("Exits"))
                 .findFirst()
-                .orElseThrow(NullPointerException::new), "src"));
+                .orElseThrow(() -> new ApplicationException("There is no project with the provided stem")), "src"));
     }
 
 
