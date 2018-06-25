@@ -66,7 +66,8 @@ public class ServiceClassesRemover {
                 }
 
             } catch (IOException | ApplicationException e) {
-                e.printStackTrace();
+                System.out.println(e);
+                System.exit(-1);
             }
 
 
